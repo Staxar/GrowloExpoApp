@@ -1,6 +1,7 @@
 export const Colors = {
-  primary100: "#2DV064",
+  primary100: "#2DB064",
   primary500: "#171717",
+  primary600: "#7a7a7a",
   primary800: "#D6D6D6",
   error100: "#fcdcbf",
   error500: "#f37c13",
@@ -21,14 +22,14 @@ export const Typography = {
   },
   bigDescription: {
     fontSize: 24,
-    fontWeight: "lighter",
+    color: Colors.primary600,
   },
   normalDescription: {
     fontSize: 12,
-    fontWeight: "lighter",
+    color: Colors.primary600,
   },
   smallDescription: {
     fontSize: 8,
-    fontWeight: "lighter",
+    color: Colors.primary600,
   },
 };

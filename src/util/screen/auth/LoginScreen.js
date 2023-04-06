@@ -1,16 +1,25 @@
-import { View, Text } from "react-native";
-import Ionicons from "@expo/vector-icons/Ionicons";
+import { View, StyleSheet } from "react-native";
 import AuthContent from "../../../components/Auth/AuthContent";
 
 function LoginScreen() {
   console.log("LoginScreen");
   return (
-    <AuthContent
-      title={"Let's Sign You In"}
-      description={"Welcome back, you've been miessed!"}
-      type={"login"}
-    />
+    <View style={styles.container}>
+      <AuthContent
+        title={"Let's Sign You In"}
+        description={"Welcome back, you've been miessed!"}
+        type={"login"}
+      />
+    </View>
   );
 }
 
 export default LoginScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 8,
+    margin: 8,
+  },
+});
