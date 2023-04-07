@@ -1,9 +1,9 @@
 import { Pressable, StyleSheet, View, Text } from "react-native";
 import LeftIconInput from "../ui/LeftIconInput";
-
 import { useState } from "react";
 import CustomButton from "../ui/CustomButton";
 import TextButton from "../ui/TextButton";
+
 function AuthForm({ type, onsubmit }) {
   const [enteredEmail, setEnteredEmail] = useState("");
   const [enteredUsername, setEnteredUsername] = useState("");
@@ -13,7 +13,6 @@ function AuthForm({ type, onsubmit }) {
     switch (inputType) {
       case "email":
         setEnteredEmail(enteredValue);
-        console.log("update", enteredEmail, enteredUsername, enteredPassword);
         break;
       case "username":
         setEnteredUsername(enteredValue);
@@ -25,7 +24,6 @@ function AuthForm({ type, onsubmit }) {
   }
 
   function submitHandler() {
-    console.log("OnSubmit");
     onsubmit({
       email: enteredEmail,
       password: enteredPassword,
