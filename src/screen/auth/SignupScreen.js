@@ -10,7 +10,7 @@ function SignupScreen({ navigation, route }) {
 
   function signupHandler({ email, password }) {
     setIsAuthenticating(true);
-    console.log("SignUp: ", email, password);
+    "SignUp: ", email, password;
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     createUserWithEmailAndPassword(auth, email, password)
@@ -18,7 +18,7 @@ function SignupScreen({ navigation, route }) {
         // Signed in
         const user = userCredential.user;
         // ...
-        console.log("Create user: ", user);
+        "Create user: ", user;
       })
       .catch((error) => {
         Alert.alert(

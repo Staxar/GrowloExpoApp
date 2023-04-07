@@ -14,4 +14,6 @@ export const firebaseConfig = {
   messagingSenderId: "488931900046",
   appId: "1:488931900046:web:6d73747ef319a1c065a7df",
   measurementId: "G-C224BGMCYQ",
+  databaseURL:
+    "https://growlo-38066-default-rtdb.europe-west1.firebasedatabase.app/",
 };

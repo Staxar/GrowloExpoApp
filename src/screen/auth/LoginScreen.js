@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Alert } from "react-native";
 import AuthContent from "../../components/Auth/AuthContent";
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "../../../firebaseConfig";
@@ -31,7 +31,7 @@ function LoginScreen({ navigation, route }) {
         // ..
       });
     setIsAuthenticating(false);
-    console.log("CONTEXT LOGNI: ", authCtx);
+    "CONTEXT LOGNI: ", authCtx;
   }
   return (
     <View style={styles.container}>

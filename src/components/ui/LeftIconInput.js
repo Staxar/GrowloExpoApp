@@ -9,6 +9,7 @@ function LeftIconInput({
   keyboardType,
   onUpdateValue,
   value,
+  maxLength,
 }) {
   return (
     <View style={styles.container}>
@@ -19,7 +20,7 @@ function LeftIconInput({
           style={styles.inputText}
           textContentType={contentType}
           secureTextEntry={secure}
-          maxLength={16}
+          maxLength={maxLength}
           keyboardType={keyboardType}
           onChangeText={onUpdateValue}
           value={value}

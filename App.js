@@ -1,16 +1,18 @@
 import { useContext, useEffect, useState } from "react";
+import { Button, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { StatusBar } from "expo-status-bar";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import AuthContextProvider, { AuthContext } from "./src/store/auth-context";
-import { Button, View } from "react-native";
 import LoginScreen from "./src/screen/auth/LoginScreen";
 import SignupScreen from "./src/screen/auth/SignupScreen";
 import WelcomeScreen from "./src/screen/WelcomeScreen";
+import ProfileScreen from "./src/screen/ProfileScreen";
 
 const Stack = createNativeStackNavigator();
-
+const Tab = createBottomTabNavigator();
 function AuthStack() {
   return (
     <Stack.Navigator>
@@ -23,8 +25,8 @@ function AuthStack() {
 function AuthenticatedStack() {
   const authCtx = useContext(AuthContext);
   return (
-    <Stack.Navigator>
-      <Stack.Screen
+    <Tab.Navigator>
+      <Tab.Screen
         name="Welcome"
         component={WelcomeScreen}
         options={{
@@ -38,7 +40,8 @@ function AuthenticatedStack() {
           ),
         }}
       />
-    </Stack.Navigator>
+      <Tab.Screen name="Profile" component={ProfileScreen} />
+    </Tab.Navigator>
   );
 }
 
@@ -57,14 +60,14 @@ function Root() {
   const [isTryingLogin, setIsTryingLogin] = useState(true);
 
   const authCtx = useContext(AuthContext);
-  console.log("CONTEXT: ", AsyncStorage.getItem("token"));
+  "CONTEXT: ", AsyncStorage.getItem("token");
   useEffect(() => {
     async function fetchToken() {
       const storedToken = await AsyncStorage.getItem("token");
-      console.log("store: ", storedToken);
+      "store: ", storedToken;
       if (storedToken) {
         authCtx.authenticate(storedToken);
-        console.log("storedToken: ", authCtx);
+        "storedToken: ", authCtx;
       }
 
       setIsTryingLogin(false);
