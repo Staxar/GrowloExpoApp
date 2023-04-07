@@ -1,7 +1,15 @@
 import { View, Text, TextInput, StyleSheet } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Colors, Typography } from "../../constans/styles";
-function LeftIconInput({ textValue, iconName, contentType, secure }) {
+function LeftIconInput({
+  textValue,
+  iconName,
+  contentType,
+  secure,
+  keyboardType,
+  onUpdateValue,
+  value,
+}) {
   return (
     <View style={styles.container}>
       <Text style={Typography.normalDescription}>{textValue}</Text>
@@ -12,6 +20,9 @@ function LeftIconInput({ textValue, iconName, contentType, secure }) {
           textContentType={contentType}
           secureTextEntry={secure}
           maxLength={16}
+          keyboardType={keyboardType}
+          onChangeText={onUpdateValue}
+          value={value}
         />
       </View>
     </View>

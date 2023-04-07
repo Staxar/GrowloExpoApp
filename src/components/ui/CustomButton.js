@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { Colors } from "../../constans/styles";
 
-function CustomButton({ titleButton }) {
+function CustomButton({ titleButton, onPress }) {
   return (
     <View style={styles.container}>
       <Pressable
@@ -9,6 +9,7 @@ function CustomButton({ titleButton }) {
           styles.pressableContainer,
           pressed ? styles.buttonPressed : null,
         ]}
+        onPress={onPress}
       >
         <Text style={styles.pressableText}>{titleButton}</Text>
       </Pressable>

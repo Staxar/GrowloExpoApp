@@ -1,11 +1,17 @@
 import { View, Text, Pressable, StyleSheet } from "react-native";
 import { Typography } from "../../constans/styles";
+import { useNavigation } from "@react-navigation/native";
 
-function TextButton({ pressed, titleButton, titleDescription }) {
+function TextButton({ type, titleButton, titleDescription }) {
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
       <Text style={Typography.normalDescription}>{titleDescription}</Text>
-      <Pressable>
+      <Pressable
+        onPress={() =>
+          navigation.navigate(type === "login" ? "SignUp" : "Login")
+        }
+      >
         <Text style={styles.pressableText}>{titleButton}</Text>
       </Pressable>
     </View>
