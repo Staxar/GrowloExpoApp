@@ -19,7 +19,8 @@ export default LoginScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 8,
-    margin: 8,
+    padding: 12,
+    marginHorizontal: 12,
+    marginVertical: 24,
   },
 });

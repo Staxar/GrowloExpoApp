@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
   pressableContainer: {
     alignItems: "center",
     justifyContent: "center",
-    padding: 8,
+    padding: 12,
     backgroundColor: Colors.primary100,
     borderRadius: 16,
     flexDirection: "row",

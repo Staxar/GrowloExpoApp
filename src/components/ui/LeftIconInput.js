@@ -34,5 +34,6 @@ const styles = StyleSheet.create({
   inputText: {
     padding: 4,
     marginLeft: 4,
+    width: "80%",
   },
 });

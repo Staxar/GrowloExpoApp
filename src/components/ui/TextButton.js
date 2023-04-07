@@ -1,4 +1,4 @@
-import { View, Button, Text, Pressable, StyleSheet } from "react-native";
+import { View, Text, Pressable, StyleSheet } from "react-native";
 import { Typography } from "../../constans/styles";
 
 function TextButton({ pressed, titleButton, titleDescription }) {
