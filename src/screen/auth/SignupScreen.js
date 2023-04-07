@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native";
+import { Alert, StyleSheet, View } from "react-native";
 import AuthContent from "../../components/Auth/AuthContent";
 import { useState } from "react";
 import LoadingOverlay from "../../components/ui/LoadingOverlay";
@@ -21,6 +21,10 @@ function SignupScreen({ navigation, route }) {
         console.log("Create user: ", user);
       })
       .catch((error) => {
+        Alert.alert(
+          "Authentication failed!",
+          "Could not log you in. Please check your credentials or try again later!"
+        );
         const errorCode = error.code;
         const errorMessage = error.message;
         // ..
