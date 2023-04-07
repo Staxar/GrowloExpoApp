@@ -14,19 +14,16 @@ function AuthContent({ title, description, type }) {
           <Pressable>
             <Text>Forgot password?"</Text>
           </Pressable>
-          <View style={styles.buttonContainer}>
-            <CustomButton
-              titleButton={"Sign In"}
-              iconName={"arrow-forward-outline"}
-            />
-          </View>
+
+          <CustomButton titleButton={"Sign In"} />
+
           <TextButton
-            titleButton={"Sign up"}
+            titleButton={"Sign Up"}
             titleDescription={"Don't have an account?"}
           />
         </>
       ) : type === "signup" ? (
-        <>
+        <View style={styles.outerContainer}>
           <TextButton
             titleDescription={"By creating an account, you agree to our"}
             titleButton={"Term & Condition"}
@@ -35,10 +32,10 @@ function AuthContent({ title, description, type }) {
           <CustomButton titleButton={"Sign Up"} />
 
           <TextButton
-            titleButton={"Sign Up"}
+            titleButton={"Sign In"}
             titleDescription={"Already have an account?"}
           />
-        </>
+        </View>
       ) : (
         <></>
       )}
@@ -51,5 +48,9 @@ export default AuthContent;
 const styles = StyleSheet.create({
   buttonContainer: {
     marginVertical: 24,
+  },
+  outerContainer: {
+    flexDirection: "column",
+    gap: 24,
   },
 });

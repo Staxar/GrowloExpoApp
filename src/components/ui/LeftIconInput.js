@@ -6,7 +6,7 @@ function LeftIconInput({ textValue, iconName, contentType, secure }) {
     <View style={styles.container}>
       <Text style={Typography.normalDescription}>{textValue}</Text>
       <View style={styles.inputContainer}>
-        <Ionicons name={iconName} />
+        <Ionicons name={iconName} style={styles.icon} />
         <TextInput
           style={styles.inputText}
           textContentType={contentType}
@@ -35,5 +35,10 @@ const styles = StyleSheet.create({
     padding: 4,
     marginLeft: 4,
     width: "80%",
+  },
+  icon: {
+    width: 12,
+    height: 12,
+    marginHorizontal: 4,
   },
 });

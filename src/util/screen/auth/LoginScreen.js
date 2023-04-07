@@ -2,7 +2,6 @@ import { View, StyleSheet } from "react-native";
 import AuthContent from "../../../components/Auth/AuthContent";
 
 function LoginScreen() {
-  console.log("LoginScreen");
   return (
     <View style={styles.container}>
       <AuthContent
