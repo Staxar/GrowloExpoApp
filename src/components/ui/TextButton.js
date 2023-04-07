@@ -9,7 +9,7 @@ function TextButton({ type, titleButton, titleDescription }) {
       <Text style={Typography.normalDescription}>{titleDescription}</Text>
       <Pressable
         onPress={() =>
-          navigation.navigate(type === "login" ? "SignUp" : "Login")
+          navigation.navigate(type === "login" ? "Signup" : "Login")
         }
       >
         <Text style={styles.pressableText}>{titleButton}</Text>
