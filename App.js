@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { Button, View } from "react-native";
+import { Button, Pressable, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -11,6 +11,8 @@ import LoginScreen from "./src/screen/auth/LoginScreen";
 import SignupScreen from "./src/screen/auth/SignupScreen";
 import WelcomeScreen from "./src/screen/WelcomeScreen";
 import ProfileScreen from "./src/screen/ProfileScreen";
+import AddProductScreen from "./src/screen/AddProductScreen";
+import { Colors } from "./src/constans/styles";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -32,19 +34,39 @@ function AuthenticatedStack() {
         component={WelcomeScreen}
         options={{
           headerRight: () => (
-            <Button
-              title="Logout"
-              icon="exit"
-              size={24}
-              onPress={authCtx.logout}
-            />
+            <Pressable onPress={authCtx.logout}>
+              <Ionicons
+                size={24}
+                name="exit-outline"
+                style={{ marginRight: 15, color: "#ffff" }}
+              />
+            </Pressable>
           ),
           tabBarIcon: () => (
-            <Ionicons name="home-outline" color={"black"} size={20} />
+            <Ionicons name="home-outline" color={"black"} size={18} />
           ),
+          headerStyle: {
+            backgroundColor: Colors.primary100,
+            height: 100,
+            borderRadius: 18,
+          },
+          headerTitle: "Welcome",
         }}
       />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen
+        name="Add"
+        component={AddProductScreen}
+        options={{
+          tabBarIcon: () => <Ionicons name="add-circle-outline" size={18} />,
+        }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          tabBarIcon: () => <Ionicons name="person-outline" size={18} />,
+        }}
+      />
     </Tab.Navigator>
   );
 }
@@ -70,7 +92,6 @@ function Root() {
       if (storedToken) {
         authCtx.authenticate(storedToken);
       }
-
       setIsTryingLogin(false);
     }
 

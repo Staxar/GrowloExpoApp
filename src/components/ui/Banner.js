@@ -15,7 +15,6 @@ export default Banner;
 
 const styles = StyleSheet.create({
   container: {
-    marginHorizontal: 4,
-    marginVertical: 20,
+    padding: 20,
   },
 });

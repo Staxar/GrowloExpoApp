@@ -19,6 +19,7 @@ function LoginScreen({ navigation, route }) {
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredencial) => {
         const user = userCredencial.user;
+        console.log(user);
         authCtx.authenticate(user.stsTokenManager.accessToken);
       })
       .catch((error) => {

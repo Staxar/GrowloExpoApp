@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { AuthContext } from "../store/auth-context";
 import Banner from "../components/ui/Banner";
 import ProductGroup from "../components/ui/ProductGroup";
@@ -10,11 +10,11 @@ function WelcomeScreen() {
 
   return (
     <SafeAreaView style={styles.outerContainer}>
-      <View style={styles.innerContainer}>
+      <ScrollView style={styles.innerContainer}>
         <Banner />
         <ProductGroup title={"Best Deals"} />
-        <Text>WelcomeScreen</Text>
-      </View>
+        <ProductGroup title={"Newtest"} />
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -26,8 +26,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   innerContainer: {
-    padding: 12,
-    marginHorizontal: 12,
     marginVertical: 24,
   },
 });

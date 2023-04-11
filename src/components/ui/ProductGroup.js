@@ -8,7 +8,11 @@ function ProductGroup({ title }) {
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={Typography.normalTitle}>{title}</Text>
-        <Text style={Typography.normalDescription}>View All</Text>
+        <Text
+          style={[Typography.normalDescription, { color: Colors.primary100 }]}
+        >
+          View All
+        </Text>
       </View>
       <View style={styles.contentContainer}>
         <FlatList
@@ -37,8 +41,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 0,
     borderTopLeftRadius: 0,
     borderTopColor: Colors.primary800,
-    marginHorizontal: 12,
-    marginVertical: 24,
+    marginVertical: 4,
     borderRadius: 8,
     flexDirection: "column",
   },
@@ -46,9 +49,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    margin: 2,
+    marginVertical: 2,
+    marginVertical: 15,
+    paddingHorizontal: 15,
   },
-  contentContainer: {
-    padding: 1,
-  },
+  contentContainer: {},
 });

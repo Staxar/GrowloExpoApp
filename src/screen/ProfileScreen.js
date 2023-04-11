@@ -1,9 +1,9 @@
-import { Button, StyleSheet, Text, View } from "react-native";
+import { Alert, Button, StyleSheet, Text, View } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import LeftIconInput from "../components/ui/LeftIconInput";
 
-import { useEffect, useState } from "react";
-import { getAuth } from "firebase/auth";
+import { useState } from "react";
+import { getAuth, updateProfile } from "firebase/auth";
 import { getDatabase, onValue, ref, set } from "firebase/database";
 function ProfileScreen() {
   const [email, setEmail] = useState("");
@@ -36,26 +36,39 @@ function ProfileScreen() {
       adress: enteredAdress,
       phone: enteredPhone,
     };
+
     const auth = getAuth();
-    const myUserId = auth.currentUser.uid;
-    writeUserData(
-      myUserId,
-      payload.username,
-      payload.email,
-      payload.adress,
-      payload.phone
+    // const myUserId = auth.currentUser.uid; Get UserID
+    updateUserHandler(
+      payload.username
+      // payload.email,
+      // payload.adress,
+      // payload.phone
     );
   }
-  function writeUserData(userId, username, email, adress, phone) {
-    console.log("db");
-    const db = getDatabase();
-    set(ref(db, "users/" + userId), {
-      username: username,
-      email: email,
-      adress: adress,
-      phone: phone,
-    });
+  function updateUserHandler(username) {
+    const auth = getAuth();
+    updateProfile(auth.currentUser, {
+      displayName: username,
+    })
+      .then(() => {
+        Alert.alert("Profile updated!");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
+
+  // function writeUserData(userId, username, email, adress, phone) {
+  //   console.log("db");
+  //   const db = getDatabase();
+  //   set(ref(db, "users/" + userId), {
+  //     username: username,
+  //     email: email,
+  //     adress: adress,
+  //     phone: phone,
+  //   });
+  // }
 
   return (
     <View style={styles.rootContainer}>
@@ -75,6 +88,7 @@ function ProfileScreen() {
           onUpdateValue={updateInputValueHandler.bind(this, "phone")}
           value={enteredPhone}
           iconName={"call-outline"}
+          contentType={"telephoneNumber"}
         />
         <LeftIconInput
           textValue={"Adress"}
