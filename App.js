@@ -4,6 +4,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { StatusBar } from "expo-status-bar";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import AuthContextProvider, { AuthContext } from "./src/store/auth-context";
 import LoginScreen from "./src/screen/auth/LoginScreen";
@@ -38,6 +39,9 @@ function AuthenticatedStack() {
               onPress={authCtx.logout}
             />
           ),
+          tabBarIcon: () => (
+            <Ionicons name="home-outline" color={"black"} size={20} />
+          ),
         }}
       />
       <Tab.Screen name="Profile" component={ProfileScreen} />
@@ -60,14 +64,11 @@ function Root() {
   const [isTryingLogin, setIsTryingLogin] = useState(true);
 
   const authCtx = useContext(AuthContext);
-  "CONTEXT: ", AsyncStorage.getItem("token");
   useEffect(() => {
     async function fetchToken() {
       const storedToken = await AsyncStorage.getItem("token");
-      "store: ", storedToken;
       if (storedToken) {
         authCtx.authenticate(storedToken);
-        "storedToken: ", authCtx;
       }
 
       setIsTryingLogin(false);

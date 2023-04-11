@@ -15,7 +15,7 @@ function LeftIconInput({
     <View style={styles.container}>
       <Text style={Typography.normalDescription}>{textValue}</Text>
       <View style={styles.inputContainer}>
-        <Ionicons name={iconName} style={styles.icon} />
+        <Ionicons name={iconName} style={styles.icon} size={12} />
         <TextInput
           style={styles.inputText}
           textContentType={contentType}

@@ -17,7 +17,7 @@ export const Typography = {
     fontWeight: "bold",
   },
   smallTitle: {
-    fontSize: 9,
+    fontSize: 12,
     fontWeight: "bold",
   },
   bigDescription: {
@@ -29,7 +29,7 @@ export const Typography = {
     color: Colors.primary600,
   },
   smallDescription: {
-    fontSize: 8,
+    fontSize: 10,
     color: Colors.primary600,
   },
 };
