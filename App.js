@@ -13,6 +13,7 @@ import WelcomeScreen from "./src/screen/WelcomeScreen";
 import ProfileScreen from "./src/screen/ProfileScreen";
 import AddProductScreen from "./src/screen/AddProductScreen";
 import { Colors } from "./src/constans/styles";
+import MapScreen from "./src/screen/MapScreen";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -25,7 +26,7 @@ function AuthStack() {
   );
 }
 
-function AuthenticatedStack() {
+function RootTabNavigators() {
   const authCtx = useContext(AuthContext);
   return (
     <Tab.Navigator>
@@ -48,7 +49,7 @@ function AuthenticatedStack() {
           headerStyle: {
             backgroundColor: Colors.primary100,
             height: 85,
-            borderRadius: 18,
+            borderRadius: 8,
           },
           headerTintColor: "#ffff",
           headerTitle: "Growlo",
@@ -69,6 +70,23 @@ function AuthenticatedStack() {
         }}
       />
     </Tab.Navigator>
+  );
+}
+
+function AuthenticatedStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Root"
+        component={RootTabNavigators}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Map"
+        component={MapScreen}
+        options={{ headerShown: true }}
+      />
+    </Stack.Navigator>
   );
 }
 

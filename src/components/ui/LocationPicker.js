@@ -2,60 +2,58 @@ import { Alert, View, StyleSheet, Image, Text } from "react-native";
 import * as Location from "expo-location";
 import { Colors } from "../../constans/styles";
 import OutlinedButton from "./OutlinedButton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getMapPreview } from "../../util/location";
+import { useIsFocused, useNavigation, useRoute } from "@react-navigation/core";
 
 function LocationPicker() {
-  const [pickedLocation, setPickedLocation] = useState();
-  const [locationPermissionInformation, requestPermission] =
-    Location.useForegroundPermissions();
+  const [location, setLocation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+  const isFocused = useIsFocused();
+  const navigation = useNavigation();
+  const route = useRoute();
 
-  async function verifyPermissions() {
-    if (
-      locationPermissionInformation.status ===
-      Location.PermissionStatus.UNDETERMINED
-    ) {
-      const permissionResponse = await requestPermission();
-
-      return permissionResponse.granted;
+  useEffect(() => {
+    if (isFocused && route.params) {
+      const mapPickedLocation = {
+        lat: route.params.pickedLat,
+        lng: route.params.pickedLng,
+      };
+      setLocation(mapPickedLocation);
     }
-
-    if (
-      locationPermissionInformation.status === Location.PermissionStatus.DENIED
-    ) {
-      Alert.alert(
-        "Insufficient Permissions!",
-        "You need to grant location permissions to use this app."
-      );
-      return false;
-    }
-
-    return true;
-  }
+  }, [route, isFocused]);
 
   async function getLocationHandler() {
-    const hasPermission = await verifyPermissions();
-
-    if (!hasPermission) {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== "granted") {
+      setErrorMsg("Permission to access location was denied");
       return;
     }
-
-    const location = await Location.getCurrentPositionAsync();
-    setPickedLocation({
+    let location = await Location.getCurrentPositionAsync({});
+    setLocation({
       lat: location.coords.latitude,
       lng: location.coords.longitude,
     });
   }
 
-  function pickOnMapHandler() {}
+  let text = "Waiting..";
+  if (errorMsg) {
+    text = errorMsg;
+  } else if (location) {
+    text = "No location taken yet.";
+  }
 
-  let locationPreview = <Text>No location picked yet.</Text>;
+  function pickOnMapHandler() {
+    navigation.navigate("Map");
+  }
 
-  if (pickedLocation) {
+  let locationPreview = <Text>{text}</Text>;
+
+  if (location) {
     locationPreview = (
       <Image
         source={{
-          uri: getMapPreview(pickedLocation.lat, pickedLocation.lng),
+          uri: getMapPreview(location.lat, location.lng),
         }}
         style={styles.mapPreviewImage}
       />
@@ -96,5 +94,6 @@ const styles = StyleSheet.create({
   mapPreviewImage: {
     width: "100%",
     height: "100%",
+    borderRadius: 4,
   },
 });
