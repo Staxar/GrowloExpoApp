@@ -47,14 +47,15 @@ function AuthenticatedStack() {
           ),
           headerStyle: {
             backgroundColor: Colors.primary100,
-            height: 100,
+            height: 85,
             borderRadius: 18,
           },
-          headerTitle: "Welcome",
+          headerTintColor: "#ffff",
+          headerTitle: "Growlo",
         }}
       />
       <Tab.Screen
-        name="Add"
+        name="Add Product"
         component={AddProductScreen}
         options={{
           tabBarIcon: () => <Ionicons name="add-circle-outline" size={18} />,
