@@ -7,7 +7,7 @@ function Button({ onPress, children }) {
       style={({ pressed }) => [styles.button, pressed && styles.pressed]}
       onPress={onPress}
     >
-      <Text>{children}</Text>
+      <Text style={styles.text}>{children}</Text>
     </Pressable>
   );
 }
@@ -16,7 +16,7 @@ export default Button;
 
 const styles = StyleSheet.create({
   button: {
-    paddingHorizontal: 12,
+    paddingHorizontal: 14,
     paddingVertical: 8,
     margin: 4,
     backgroundColor: Colors.primary100,
@@ -26,6 +26,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 1, height: 1 },
     shadowRadius: 2,
     borderRadius: 4,
+    height: 40,
   },
   pressed: {
     opacity: 0.7,

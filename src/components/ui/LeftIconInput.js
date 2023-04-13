@@ -1,6 +1,7 @@
 import { View, Text, TextInput, StyleSheet } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Colors, Typography } from "../../constans/styles";
+import TitleForm from "./TitleForm";
 function LeftIconInput({
   textValue,
   iconName,
@@ -10,23 +11,30 @@ function LeftIconInput({
   onUpdateValue,
   value,
   maxLength,
+  multiline,
+  placeholder,
 }) {
   return (
-    <View style={styles.container}>
-      <Text style={Typography.normalDescription}>{textValue}</Text>
+    <TitleForm title={textValue}>
       <View style={styles.inputContainer}>
-        <Ionicons name={iconName} style={styles.icon} size={12} />
+        {iconName && <Ionicons name={iconName} style={styles.icon} size={12} />}
         <TextInput
-          style={styles.inputText}
+          style={[
+            styles.inputText,
+            Typography.bigDescription,
+            multiline ? styles.multiline : null,
+          ]}
           textContentType={contentType}
           secureTextEntry={secure}
           maxLength={maxLength}
           keyboardType={keyboardType}
           onChangeText={onUpdateValue}
           value={value}
+          multiline={multiline}
+          placeholder={placeholder}
         />
       </View>
-    </View>
+    </TitleForm>
   );
 }
 
@@ -36,6 +44,7 @@ const styles = StyleSheet.create({
   container: {
     padding: 8,
     margin: 8,
+    width: "100%",
   },
   inputContainer: {
     flexDirection: "row",
@@ -46,11 +55,14 @@ const styles = StyleSheet.create({
   inputText: {
     padding: 4,
     marginLeft: 4,
-    width: "80%",
+    width: "100%",
   },
   icon: {
     width: 12,
     height: 12,
     marginHorizontal: 4,
+  },
+  multiline: {
+    height: 120,
   },
 });

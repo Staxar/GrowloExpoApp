@@ -1,13 +1,16 @@
-import { Alert, Button, Image, StyleSheet, Text, View } from "react-native";
+import { Alert, Image, StyleSheet, Text, View } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import { useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import OutlinedButton from "./OutlinedButton";
 import { Colors } from "../../constans/styles";
+import PagerView from "react-native-pager-view";
+import ImageViewer from "./ImageViewer";
 
-function ImagePickerExample({ onTakeImage }) {
+function ImagePickerExample({ onTakeImage, onPickedImage }) {
   const [cameraPermissionInformation, requestPermission] =
     ImagePicker.useCameraPermissions();
-  const [pickedimage, setPickedImage] = useState();
+  const [takenImage, setTakenImage] = useState();
+  const [pickedImage, setPickedImage] = useState([]);
 
   async function verifyPermissions() {
     if (
@@ -32,31 +35,90 @@ function ImagePickerExample({ onTakeImage }) {
     return true;
   }
 
-  async function takeImageHandler() {
+  async function takeImageHandler(props) {
     const hasPermission = await verifyPermissions();
     if (!hasPermission) {
       return;
     }
+    if (props === "camera") {
+      let image = await ImagePicker.launchCameraAsync({
+        allowsEditing: true,
+        aspect: [16, 9],
+        quality: 0.5,
+      });
 
-    let image = await ImagePicker.launchCameraAsync({
-      allowsEditing: true,
-      aspect: [16, 9],
-      quality: 0.5,
-    });
-    console.log(image.assets);
-    setPickedImage(image.assets[0].uri);
-    onTakeImage(image.assets[0].uri);
+      if (image.canceled) {
+        return;
+      }
+      setPickedImage([]);
+      setTakenImage(image.assets[0].uri);
+      onTakeImage(image.assets[0].uri);
+    } else if (props === "image") {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsMultipleSelection: true,
+        selectionLimit: 3,
+        aspect: [4, 3],
+        quality: 0.1,
+      });
+      if (result.canceled) {
+        return;
+      }
+      setTakenImage(null);
+      setPickedImage([]);
+      {
+        result.assets.map((image) => {
+          return setPickedImage((current) => [...current, image.uri]);
+        });
+      }
+    } else {
+      throw new Error("Something went wrong!");
+    }
   }
+
   let imagePreview = <Text>No image taken yet.</Text>;
 
-  if (pickedimage) {
-    imagePreview = <Image style={styles.image} source={{ uri: pickedimage }} />;
+  if (takenImage) {
+    imagePreview = <Image style={styles.image} source={{ uri: takenImage }} />;
+  } else if (!pickedImage.length === 0) {
+    imagePreview = (
+      <PagerView initialPage={0} style={{ height: "100%", width: "100%" }}>
+        {pickedImage.map((image, index) => {
+          return (
+            <View
+              key={index * 10}
+              style={{
+                height: "100%",
+                width: "100%",
+              }}
+            >
+              <ImageViewer selectedImage={image} key={index} />
+              <Text></Text>
+            </View>
+          );
+        })}
+      </PagerView>
+    );
   }
+  useEffect(() => {
+    if (pickedImage) {
+      onPickedImage(pickedImage);
+    } else {
+      console.log("Something went wrong!");
+    }
+  }, [pickedImage, takenImage, takeImageHandler]);
 
   return (
     <View style={{ width: "100%" }}>
       <View style={styles.imagePreview}>{imagePreview}</View>
-      <OutlinedButton icon="camera" onPress={takeImageHandler}>
+      <OutlinedButton icon="camera" onPress={() => takeImageHandler("camera")}>
+        Take Image
+      </OutlinedButton>
+      <Text style={{ alignSelf: "center" }}>Or</Text>
+      <OutlinedButton
+        icon="image-outline"
+        onPress={() => takeImageHandler("image")}
+      >
         Take Image
       </OutlinedButton>
     </View>
@@ -73,7 +135,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: Colors.primary800,
-    borderRadius: 4,
+    borderRadius: 8,
   },
   image: {
     width: "100%",
