@@ -1,12 +1,12 @@
-import { Alert, View, StyleSheet, Image, Text } from "react-native";
+import { View, StyleSheet, Image, Text } from "react-native";
 import * as Location from "expo-location";
 import { Colors } from "../../constans/styles";
 import OutlinedButton from "./OutlinedButton";
 import { useEffect, useState } from "react";
-import { getMapPreview } from "../../util/location";
+import { getAddress, getMapPreview } from "../../util/location";
 import { useIsFocused, useNavigation, useRoute } from "@react-navigation/core";
 
-function LocationPicker() {
+function LocationPicker({ onPickLocation }) {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const isFocused = useIsFocused();
@@ -19,9 +19,20 @@ function LocationPicker() {
         lat: route.params.pickedLat,
         lng: route.params.pickedLng,
       };
+      console.log("SetLocation: ", mapPickedLocation);
       setLocation(mapPickedLocation);
     }
   }, [route, isFocused]);
+
+  useEffect(() => {
+    async function handleLocation() {
+      if (location) {
+        const address = await getAddress(location.lat, location.lng);
+        onPickLocation({ ...location, address: address });
+      }
+    }
+    handleLocation();
+  }, [location, onPickLocation]);
 
   async function getLocationHandler() {
     let { status } = await Location.requestForegroundPermissionsAsync();
@@ -36,11 +47,11 @@ function LocationPicker() {
     });
   }
 
-  let text = "Waiting..";
+  let text = "No location taken yet.";
   if (errorMsg) {
     text = errorMsg;
   } else if (location) {
-    text = "No location taken yet.";
+    text = "Waiting...";
   }
 
   function pickOnMapHandler() {
@@ -83,7 +94,7 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: Colors.primary100,
+    backgroundColor: Colors.primary800,
     borderRadius: 4,
   },
   actions: {

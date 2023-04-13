@@ -63,6 +63,13 @@ function RootTabNavigators() {
         }}
       />
       <Tab.Screen
+        name="All Products"
+        component={AddProductScreen}
+        options={{
+          tabBarIcon: () => <Ionicons name="add-circle-outline" size={18} />,
+        }}
+      />
+      <Tab.Screen
         name="Profile"
         component={ProfileScreen}
         options={{
