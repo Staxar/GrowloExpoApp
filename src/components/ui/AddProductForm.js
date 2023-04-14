@@ -1,4 +1,5 @@
 import {
+  FlatList,
   Modal,
   Pressable,
   ScrollView,
@@ -9,14 +10,17 @@ import {
 import ImagePickerExample from "./ImagePicker";
 import LeftIconInput from "./LeftIconInput";
 import LocationPicker from "./LocationPicker";
-import Button from "./Button";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { SelectList } from "react-native-dropdown-select-list";
 import { data } from "../../../assets/Data/Unit";
 import TitleForm from "./TitleForm";
-import { Colors, Typography } from "../../constans/styles";
+import { Colors } from "../../constans/styles";
 import { Ionicons } from "@expo/vector-icons";
 import PhoneInputForm from "./PhoneInputForm";
+import OutlinedButton from "./OutlinedButton";
+import SearchBar from "./SearchBar";
+import { phoneCodes } from "../../../assets/Data/PhoneCodes";
+import FlagItem from "./FlagItem";
 
 export default function AddProductForm() {
   const [pickedLocation, setPickedLocation] = useState();
@@ -24,6 +28,42 @@ export default function AddProductForm() {
   const [pickedImages, setPickedImages] = useState();
   const [selectedUnit, setSelectedUnit] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
+  const [selectedPhoneCode, setSelectedPhoneCode] = useState({
+    code: phoneCodes[0].code,
+    dial_code: phoneCodes[0].dial_code,
+  });
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredData, setFilteredData] = useState([]);
+
+  useEffect(() => {
+    setFilteredData(phoneCodes);
+  }, []);
+  const onSearch = useCallback(
+    (query) => {
+      console.log(query);
+      if (query) {
+        // Inserted query is not blank
+        // Filter the masterDataSource
+        // Update FilteredDataSource
+        const newData = phoneCodes.filter(function (item) {
+          const itemData = item.name
+            ? item.name.toUpperCase()
+            : "".toUpperCase();
+          const textData = query.toUpperCase();
+          return itemData.indexOf(textData) > -1;
+        });
+        setFilteredData(newData);
+        setSearchQuery(query);
+      } else {
+        // Inserted query is blank
+        // Update FilteredDataSource with masterDataSource
+        setFilteredData(phoneCodes);
+        setSearchQuery(query);
+      }
+    },
+    [filteredData]
+  );
+
   const pickLocationHandler = useCallback((location) => {
     setPickedLocation(location);
   }, []);
@@ -32,6 +72,15 @@ export default function AddProductForm() {
   }
   function pickImageHandler(imageUri) {
     setPickedImages(imageUri);
+  }
+
+  function takePhoneCodeHandler(dial_code, code) {
+    setModalVisible(false);
+    setSelectedPhoneCode({ dial_code: dial_code, code: code });
+  }
+
+  function modalVisableHandler() {
+    setModalVisible(!modalVisible);
   }
 
   function savePlaceHandler() {
@@ -47,6 +96,7 @@ export default function AddProductForm() {
         style={{
           width: "80%",
           alignSelf: "center",
+          height: "100%",
         }}
       >
         <Modal
@@ -59,14 +109,42 @@ export default function AddProductForm() {
           }}
         >
           <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Text style={styles.modalText}>Hello World!</Text>
-              <Pressable
-                style={[styles.button, styles.buttonClose]}
-                onPress={() => setModalVisible(!modalVisible)}
-              >
-                <Text style={styles.textStyle}>Hide Modal</Text>
-              </Pressable>
+            <View style={{ width: "80%" }}>
+              <View style={{ height: 80, marginVertical: 50, padding: 8 }}>
+                <Pressable
+                  style={[styles.button, styles.buttonClose]}
+                  onPress={() => [setModalVisible(!modalVisible), onSearch]}
+                >
+                  <Text style={styles.textStyle}>Hide Modal</Text>
+                </Pressable>
+                <View style={{ height: 60 }}>
+                  <SearchBar
+                    placeholder={"eg. Poland"}
+                    value={searchQuery}
+                    onChangeText={(query) => onSearch(query)}
+                  />
+                </View>
+              </View>
+            </View>
+            <View style={{ width: "80%", padding: 8, flex: 1 }}>
+              <FlatList
+                data={filteredData}
+                renderItem={({ item }) => (
+                  <OutlinedButton
+                    onPress={() =>
+                      takePhoneCodeHandler(item.dial_code, item.code)
+                    }
+                  >
+                    <FlagItem
+                      countryName={item.name}
+                      isoCode={item.code}
+                      dial={item.dial_code}
+                    />
+                  </OutlinedButton>
+                )}
+                keyExtractor={(item) => item.code}
+                extraData={filteredData}
+              />
             </View>
           </View>
         </Modal>
@@ -89,13 +167,13 @@ export default function AddProductForm() {
               search={true}
               save="value"
               boxStyles={{
-                borderWidth: 1,
+                borderWidth: 0.5,
                 padding: 0,
                 margin: 0,
               }}
               arrowicon={<Ionicons name={"chevron-down-outline"} size={24} />}
               dropdownStyles={{ borderWidth: 0 }}
-              dropdownItemStyles={{ borderBottomWidth: 1 }}
+              dropdownItemStyles={{ borderBottomWidth: 0.5 }}
               dropdownTextStyles={{ fontSize: 20, color: Colors.primary600 }}
               inputStyles={{ fontSize: 20, color: Colors.primary600 }}
             />
@@ -123,23 +201,16 @@ export default function AddProductForm() {
             keyboardType={"number-pad"}
             placeholder={"0.00"}
           />
-          {/* <LeftIconInput
-            textValue={"Phone number"}
-            keyboardType={"number-pad"}
-            placeholder={"xxx-xxx-xxx"}
-          /> */}
           <PhoneInputForm
             maxLength={9}
             keyboardType={"number-pad"}
             placeholder={"xxx-xxx-xxx"}
+            data={selectedPhoneCode}
+            onPress={modalVisableHandler}
           />
-          <Pressable
-            style={[styles.button, styles.buttonOpen]}
-            onPress={() => setModalVisible(true)}
-          >
-            <Text style={styles.textStyle}>Show Modal</Text>
-          </Pressable>
-          <Button onPress={savePlaceHandler}>Add Place</Button>
+          <OutlinedButton onPress={savePlaceHandler}>
+            Add product
+          </OutlinedButton>
         </View>
       </View>
     </ScrollView>
@@ -156,7 +227,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22,
+    height: "100%",
+    width: "100%",
+    backgroundColor: "#ffff",
   },
   modalView: {
     margin: 20,
@@ -182,7 +255,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F194FF",
   },
   buttonClose: {
-    backgroundColor: "#2196F3",
+    backgroundColor: Colors.primary100,
   },
   textStyle: {
     color: "white",

@@ -51,7 +51,7 @@ function RootTabNavigators() {
             height: 85,
             borderRadius: 8,
           },
-          headerTintColor: "#ffff",
+          headerTintColor: "#FFFFFF",
           headerTitle: "Growlo",
         }}
       />

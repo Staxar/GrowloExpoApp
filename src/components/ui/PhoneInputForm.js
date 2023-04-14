@@ -1,9 +1,8 @@
-import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
-import CountryFlag from "react-native-country-flag";
+import { Pressable, StyleSheet, TextInput, View } from "react-native";
 import TitleForm from "./TitleForm";
 import { Typography } from "../../constans/styles";
-import { useState } from "react";
-import { phoneCodes } from "../../../assets/Data/PhoneCodes";
+
+import FlagItem from "./FlagItem";
 
 const PhoneInputForm = ({
   maxLength,
@@ -12,17 +11,18 @@ const PhoneInputForm = ({
   contentType,
   value,
   placeholder,
+  data,
+  onPress,
 }) => {
-  const [phoneCode, setPhoneCode] = useState({
-    code: phoneCodes[0].code,
-    dial: phoneCodes[0].dial_code,
-  });
   return (
     <TitleForm title={"Phone number"}>
       <View style={styles.container}>
-        <Pressable style={styles.flagContainer}>
-          <CountryFlag isoCode={phoneCode.code} size={24} />
-          <Text>{phoneCode.dial}</Text>
+        <Pressable onPress={onPress}>
+          <FlagItem
+            dial={data.dial_code}
+            isoCode={data.code}
+            onPress={onPress}
+          />
         </Pressable>
         <TextInput
           maxLength={maxLength}
@@ -31,7 +31,14 @@ const PhoneInputForm = ({
           textContentType={contentType}
           value={value}
           placeholder={placeholder}
-          style={[Typography.bigDescription, { flex: 1, width: "100%" }]}
+          style={{
+            marginLeft: 20,
+            flex: 1,
+            width: "100%",
+            alignContent: "center",
+            alignItems: "center",
+            fontSize: 24,
+          }}
         />
       </View>
     </TitleForm>
@@ -42,15 +49,9 @@ export default PhoneInputForm;
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     flexDirection: "row",
+    alignContent: "center",
     alignItems: "center",
-    gap: 10,
-  },
-  flagContainer: {
-    padding: 2,
-    alignItems: "center",
-    // backgroundColor: Colors.primary800,
-    flexDirection: "row",
-    gap: 4,
   },
 });

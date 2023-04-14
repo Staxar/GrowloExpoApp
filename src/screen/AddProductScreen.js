@@ -1,11 +1,11 @@
-import { StyleSheet, Text, View } from "react-native";
+import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import AddProductForm from "../components/ui/AddProductForm";
 
 function AddProductScreen() {
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <AddProductForm />
-    </View>
+    </SafeAreaView>
   );
 }
 
