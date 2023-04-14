@@ -2,9 +2,12 @@ import { SafeAreaView, StyleSheet, Text, View } from "react-native";
 import AddProductForm from "../components/ui/AddProductForm";
 
 function AddProductScreen() {
+  function updateValues(props) {
+    console.log(props);
+  }
   return (
     <SafeAreaView style={styles.container}>
-      <AddProductForm />
+      <AddProductForm update={updateValues} />
     </SafeAreaView>
   );
 }

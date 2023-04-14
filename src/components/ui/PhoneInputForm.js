@@ -1,6 +1,5 @@
 import { Pressable, StyleSheet, TextInput, View } from "react-native";
 import TitleForm from "./TitleForm";
-import { Typography } from "../../constans/styles";
 
 import FlagItem from "./FlagItem";
 

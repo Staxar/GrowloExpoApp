@@ -22,10 +22,11 @@ import SearchBar from "./SearchBar";
 import { phoneCodes } from "../../../assets/Data/PhoneCodes";
 import FlagItem from "./FlagItem";
 
-export default function AddProductForm() {
-  const [pickedLocation, setPickedLocation] = useState();
+export default function AddProductForm({ update }) {
   const [selectedImage, setSelectedImage] = useState();
   const [pickedImages, setPickedImages] = useState();
+  const [pickedLocation, setPickedLocation] = useState();
+  const [enteredTitle, setEnteredTitle] = useState("");
   const [selectedUnit, setSelectedUnit] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedPhoneCode, setSelectedPhoneCode] = useState({
@@ -40,11 +41,7 @@ export default function AddProductForm() {
   }, []);
   const onSearch = useCallback(
     (query) => {
-      console.log(query);
       if (query) {
-        // Inserted query is not blank
-        // Filter the masterDataSource
-        // Update FilteredDataSource
         const newData = phoneCodes.filter(function (item) {
           const itemData = item.name
             ? item.name.toUpperCase()
@@ -55,8 +52,6 @@ export default function AddProductForm() {
         setFilteredData(newData);
         setSearchQuery(query);
       } else {
-        // Inserted query is blank
-        // Update FilteredDataSource with masterDataSource
         setFilteredData(phoneCodes);
         setSearchQuery(query);
       }
@@ -82,12 +77,38 @@ export default function AddProductForm() {
   function modalVisableHandler() {
     setModalVisible(!modalVisible);
   }
+  function updateInputValueHandler(inputType, enteredValue) {
+    switch (inputType) {
+      case "title":
+        setEnteredTitle(enteredValue);
+        break;
+      case "adress":
+        setenteredAdress(enteredValue);
+        break;
+      case "email":
+        setEnteredEmail(enteredValue);
+        break;
+      case "username":
+        setenteredUsername(enteredValue);
+        break;
+    }
+  }
 
   function savePlaceHandler() {
+    const payload = {
+      selectedImage: selectedImage,
+      pickedImages: pickedImages,
+      pickedLocation: pickedLocation,
+      selectedUnit: selectedUnit,
+      selectedPhoneCode: selectedPhoneCode,
+    };
+
     console.log(selectedImage, "image");
     console.log("SELECTED IMAGES: ", pickedImages);
     console.log(pickedLocation, "location");
     console.log(selectedUnit);
+
+    update(payload);
   }
 
   return (
@@ -154,7 +175,12 @@ export default function AddProductForm() {
             onPickedImage={pickImageHandler}
           />
           <LocationPicker onPickLocation={pickLocationHandler} />
-          <LeftIconInput textValue={"Title"} placeholder={"Carrots"} />
+          <LeftIconInput
+            textValue={"title"}
+            placeholder={"Carrots"}
+            onUpdateValue={updateInputValueHandler.bind(this, "title")}
+            maxLength={20}
+          />
           <LeftIconInput
             textValue={"Description"}
             multiline={true}
