@@ -1,7 +1,8 @@
-import { Pressable, StyleSheet, TextInput, View } from "react-native";
+import { Alert, Pressable, StyleSheet, TextInput, View } from "react-native";
 import TitleForm from "./TitleForm";
 
 import FlagItem from "./FlagItem";
+import { useState } from "react";
 
 const PhoneInputForm = ({
   maxLength,
@@ -38,6 +39,7 @@ const PhoneInputForm = ({
             alignItems: "center",
             fontSize: 24,
           }}
+          inputMode="numeric"
         />
       </View>
     </TitleForm>

@@ -1,6 +1,6 @@
 import { Alert, Image, StyleSheet, Text, View } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import { useCallback, useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import OutlinedButton from "./OutlinedButton";
 import { Colors } from "../../constans/styles";
 import PagerView from "react-native-pager-view";
@@ -76,30 +76,31 @@ function ImagePickerExample({ onTakeImage, onPickedImage }) {
     }
   }
 
-  let imagePreview = <Text>No image taken yet.</Text>;
+  function ImagePreview() {
+    let imagePreview = <Text>No image taken yet.</Text>;
 
-  if (takenImage) {
-    imagePreview = <Image style={styles.image} source={{ uri: takenImage }} />;
-  } else if (!pickedImage.length === 0) {
-    imagePreview = (
-      <PagerView initialPage={0} style={{ height: "100%", width: "100%" }}>
-        {pickedImage.map((image, index) => {
-          return (
-            <View
-              key={index * 10}
-              style={{
-                height: "100%",
-                width: "100%",
-              }}
-            >
-              <ImageViewer selectedImage={image} key={index} />
-              <Text></Text>
-            </View>
-          );
-        })}
-      </PagerView>
-    );
+    if (takenImage) {
+      // console.log(takenImage);
+      return (imagePreview = (
+        <Image style={styles.image} source={{ uri: takenImage }} />
+      ));
+    } else if (pickedImage.length > 0) {
+      return (imagePreview = (
+        <PagerView initialPage={0} style={{ height: "100%", width: "100%" }}>
+          {pickedImage.map((image, index) => {
+            return (
+              <View key={index * 10} style={styles.image}>
+                <ImageViewer selectedImage={image} key={index} />
+                <Text></Text>
+              </View>
+            );
+          })}
+        </PagerView>
+      ));
+    }
+    return imagePreview;
   }
+
   useEffect(() => {
     if (pickedImage) {
       onPickedImage(pickedImage);
@@ -110,7 +111,7 @@ function ImagePickerExample({ onTakeImage, onPickedImage }) {
 
   return (
     <View style={{ width: "100%" }}>
-      <View style={styles.imagePreview}>{imagePreview}</View>
+      <View style={styles.imagePreview}>{ImagePreview()}</View>
       <OutlinedButton icon="camera" onPress={() => takeImageHandler("camera")}>
         Take Image
       </OutlinedButton>

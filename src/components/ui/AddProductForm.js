@@ -1,4 +1,5 @@
 import {
+  Alert,
   FlatList,
   Modal,
   Pressable,
@@ -28,6 +29,12 @@ export default function AddProductForm({ update }) {
   const [pickedLocation, setPickedLocation] = useState();
   const [enteredTitle, setEnteredTitle] = useState("");
   const [selectedUnit, setSelectedUnit] = useState("");
+  const [description, setDescription] = useState("");
+  const [quantity, setQuantity] = useState("");
+  const [weight, setWeight] = useState("");
+  const [prize, setPrize] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [valid, isValid] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedPhoneCode, setSelectedPhoneCode] = useState({
     code: phoneCodes[0].code,
@@ -62,10 +69,14 @@ export default function AddProductForm({ update }) {
   const pickLocationHandler = useCallback((location) => {
     setPickedLocation(location);
   }, []);
+
+  //Take one Image
   function takeImageHandler(imageUri) {
     setSelectedImage(imageUri);
   }
+  //Take image from Image Gallery - max 3
   function pickImageHandler(imageUri) {
+    // console.log(imageUri);
     setPickedImages(imageUri);
   }
 
@@ -77,10 +88,87 @@ export default function AddProductForm({ update }) {
   function modalVisableHandler() {
     setModalVisible(!modalVisible);
   }
+
+  function validateFormHandler(payload, phoneNumberLenght) {
+    let selectedImage = payload.selectedImage;
+    let pickedImages = payload.pickedImages;
+    let pickedLocation = payload.pickedLocation;
+    let selectedUnit = payload.selectedUnit;
+    let selectedPhoneCode = payload.selectedPhoneCode;
+    let weight = payload.weight;
+    let quantity = payload.quantity;
+    let phoneNumber = payload.phoneNumber;
+    let prize = payload.prize;
+    let enteredTitle = payload.enteredTitle;
+    let description = payload.description;
+    if (
+      isNaN(prize) ||
+      isNaN(phoneNumber) ||
+      isNaN(quantity) ||
+      isNaN(weight)
+    ) {
+      Alert.alert("You enter a NaN value!");
+    } else if (+prize < 0 || +phoneNumber < 0 || +quantity < 0 || +weight < 0) {
+      Alert.alert("You enter a negative number!");
+    } else if (
+      prize === null ||
+      prize === undefined ||
+      prize === "" ||
+      phoneNumber === null ||
+      phoneNumber === undefined ||
+      phoneNumber === "" ||
+      quantity === null ||
+      quantity === undefined ||
+      quantity === "" ||
+      weight === null ||
+      weight === undefined ||
+      weight === "" ||
+      selectedPhoneCode === null ||
+      selectedPhoneCode === undefined ||
+      selectedPhoneCode === "" ||
+      selectedUnit === null ||
+      selectedUnit === undefined ||
+      selectedUnit === "" ||
+      pickedLocation === null ||
+      pickedLocation === undefined ||
+      pickedLocation === "" ||
+      enteredTitle === null ||
+      enteredTitle === undefined ||
+      enteredTitle === "" ||
+      description === null ||
+      description === undefined ||
+      description === "" ||
+      pickedImages === null ||
+      pickedImages === undefined ||
+      pickedImages === "" ||
+      pickedImages === [] ||
+      pickedLocation === null ||
+      pickedLocation === undefined ||
+      pickedLocation === "" ||
+      pickedLocation === [] ||
+      selectedImage === null ||
+      selectedImage === undefined ||
+      selectedImage === "" ||
+      selectedImage === []
+    ) {
+      Alert.alert("You left some input!");
+    } else if (phoneNumberLenght < 9) {
+      Alert.alert("Phone number should have 9 digits!");
+    } else {
+      console.log(pickedImages, selectedImage, pickedLocation);
+      console.log("OK");
+    }
+
+    return;
+  }
+
   function updateInputValueHandler(inputType, enteredValue) {
     switch (inputType) {
       case "title":
         setEnteredTitle(enteredValue);
+        break;
+      case "description":
+        setDescription(enteredValue);
         break;
       case "adress":
         setenteredAdress(enteredValue);
@@ -90,6 +178,18 @@ export default function AddProductForm({ update }) {
         break;
       case "username":
         setenteredUsername(enteredValue);
+        break;
+      case "quantity":
+        setQuantity(enteredValue);
+        break;
+      case "weight":
+        setWeight(enteredValue);
+        break;
+      case "prize":
+        setPrize(enteredValue);
+        break;
+      case "phone":
+        setPhoneNumber(enteredValue);
         break;
     }
   }
@@ -101,14 +201,21 @@ export default function AddProductForm({ update }) {
       pickedLocation: pickedLocation,
       selectedUnit: selectedUnit,
       selectedPhoneCode: selectedPhoneCode,
+      phoneNumber: phoneNumber,
+      weight: weight,
+      quantity: quantity,
+      prize: prize,
+      enteredTitle: enteredTitle,
+      description: description,
     };
-
-    console.log(selectedImage, "image");
-    console.log("SELECTED IMAGES: ", pickedImages);
-    console.log(pickedLocation, "location");
-    console.log(selectedUnit);
-
-    update(payload);
+    let phoneNumberLenght = payload.phoneNumber.length;
+    validateFormHandler(payload, phoneNumberLenght);
+    if (valid) {
+      update(payload);
+    } else {
+      console.log("Not update");
+      return;
+    }
   }
 
   return (
@@ -185,6 +292,7 @@ export default function AddProductForm({ update }) {
             textValue={"Description"}
             multiline={true}
             placeholder={"I have red apples to give away on my plot"}
+            onUpdateValue={updateInputValueHandler.bind(this, "description")}
           />
           <TitleForm title={"Unit"}>
             <SelectList
@@ -215,24 +323,29 @@ export default function AddProductForm({ update }) {
               textValue={"Quantity"}
               keyboardType={"number-pad"}
               placeholder={"100"}
+              onUpdateValue={updateInputValueHandler.bind(this, "quantity")}
             />
             <LeftIconInput
               textValue={"Weight"}
               keyboardType={"number-pad"}
               placeholder={"1"}
+              onUpdateValue={updateInputValueHandler.bind(this, "weight")}
             />
           </View>
           <LeftIconInput
             textValue={"Prize"}
             keyboardType={"number-pad"}
             placeholder={"0.00"}
+            onUpdateValue={updateInputValueHandler.bind(this, "prize")}
           />
           <PhoneInputForm
             maxLength={9}
             keyboardType={"number-pad"}
+            contentType={"telephoneNumber"}
             placeholder={"xxx-xxx-xxx"}
             data={selectedPhoneCode}
             onPress={modalVisableHandler}
+            onUpdateValue={updateInputValueHandler.bind(this, "phone")}
           />
           <OutlinedButton onPress={savePlaceHandler}>
             Add product
