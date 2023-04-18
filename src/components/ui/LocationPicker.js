@@ -19,7 +19,6 @@ function LocationPicker({ onPickLocation }) {
         lat: route.params.pickedLat,
         lng: route.params.pickedLng,
       };
-      console.log("SetLocation: ", mapPickedLocation);
       setLocation(mapPickedLocation);
     }
   }, [route, isFocused]);

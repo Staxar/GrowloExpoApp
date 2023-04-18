@@ -1,4 +1,5 @@
 // Import the functions you need from the SDKs you need
+import { getDatabase } from "@firebase/database";
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -17,3 +18,9 @@ export const firebaseConfig = {
   databaseURL:
     "https://growlo-38066-default-rtdb.europe-west1.firebasedatabase.app/",
 };
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getDatabase();
+
+export { auth, db };

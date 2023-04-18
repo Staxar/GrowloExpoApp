@@ -34,7 +34,6 @@ export default function AddProductForm({ update }) {
   const [weight, setWeight] = useState("");
   const [prize, setPrize] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [valid, isValid] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedPhoneCode, setSelectedPhoneCode] = useState({
     code: phoneCodes[0].code,
@@ -101,6 +100,7 @@ export default function AddProductForm({ update }) {
     let prize = payload.prize;
     let enteredTitle = payload.enteredTitle;
     let description = payload.description;
+
     if (
       isNaN(prize) ||
       isNaN(phoneNumber) ||
@@ -137,29 +137,26 @@ export default function AddProductForm({ update }) {
       enteredTitle === "" ||
       description === null ||
       description === undefined ||
-      description === "" ||
-      pickedImages === null ||
-      pickedImages === undefined ||
-      pickedImages === "" ||
-      pickedImages === [] ||
-      pickedLocation === null ||
-      pickedLocation === undefined ||
-      pickedLocation === "" ||
-      pickedLocation === [] ||
-      selectedImage === null ||
-      selectedImage === undefined ||
-      selectedImage === "" ||
-      selectedImage === []
+      description === ""
     ) {
       Alert.alert("You left some input!");
     } else if (phoneNumberLenght < 9) {
       Alert.alert("Phone number should have 9 digits!");
+    } else if (
+      (pickedImages === null ||
+        pickedImages === undefined ||
+        pickedImages === "" ||
+        pickedImages === []) &&
+      (selectedImage === null ||
+        selectedImage === undefined ||
+        selectedImage === "" ||
+        selectedImage === [])
+    ) {
+      Alert.alert("Take or select images from gallery!");
     } else {
-      console.log(pickedImages, selectedImage, pickedLocation);
-      console.log("OK");
+      return true;
     }
-
-    return;
+    return false;
   }
 
   function updateInputValueHandler(inputType, enteredValue) {
@@ -193,7 +190,6 @@ export default function AddProductForm({ update }) {
         break;
     }
   }
-
   function savePlaceHandler() {
     const payload = {
       selectedImage: selectedImage,
@@ -209,15 +205,15 @@ export default function AddProductForm({ update }) {
       description: description,
     };
     let phoneNumberLenght = payload.phoneNumber.length;
-    validateFormHandler(payload, phoneNumberLenght);
-    if (valid) {
+    const validate = validateFormHandler(payload, phoneNumberLenght);
+    if (validate) {
+      console.log("Update!!!");
       update(payload);
     } else {
       console.log("Not update");
       return;
     }
   }
-
   return (
     <ScrollView>
       <View
