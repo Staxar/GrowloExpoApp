@@ -203,6 +203,7 @@ export default function AddProductForm({ update }) {
       prize: prize,
       enteredTitle: enteredTitle,
       description: description,
+      date: new Date(),
     };
     let phoneNumberLenght = payload.phoneNumber.length;
     const validate = validateFormHandler(payload, phoneNumberLenght);

@@ -1,16 +1,18 @@
 import { SafeAreaView, StyleSheet } from "react-native";
 import AddProductForm from "../components/ui/AddProductForm";
-import { getDatabase, onValue, push, ref, set } from "firebase/database";
-import { getAuth } from "@firebase/auth";
+import { getDatabase, push, ref, set } from "firebase/database";
+import { AuthContext } from "../store/auth-context";
+import { useContext } from "react";
 function AddProductScreen() {
+  const authCtx = useContext(AuthContext);
   function updateValues(props) {
-    const auth = getAuth();
     const db = getDatabase();
     const postListRef = ref(db, "products");
     const newPostRef = push(postListRef);
     set(newPostRef, {
-      uid: auth.currentUser.uid,
+      uid: authCtx.uid,
       description: props.description,
+      date: props.date,
     });
   }
   return (

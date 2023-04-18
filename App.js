@@ -14,6 +14,7 @@ import ProfileScreen from "./src/screen/ProfileScreen";
 import AddProductScreen from "./src/screen/AddProductScreen";
 import { Colors } from "./src/constans/styles";
 import MapScreen from "./src/screen/MapScreen";
+import ProductListScreen from "./src/screen/ProductListScreen";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -63,8 +64,8 @@ function RootTabNavigators() {
         }}
       />
       <Tab.Screen
-        name="All Products"
-        component={AddProductScreen}
+        name="List Products"
+        component={ProductListScreen}
         options={{
           tabBarIcon: () => <Ionicons name="add-circle-outline" size={18} />,
         }}
