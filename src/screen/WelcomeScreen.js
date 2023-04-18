@@ -7,7 +7,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 function WelcomeScreen() {
   const authCtx = useContext(AuthContext);
-
   return (
     <SafeAreaView style={styles.outerContainer}>
       <ScrollView style={styles.innerContainer}>
