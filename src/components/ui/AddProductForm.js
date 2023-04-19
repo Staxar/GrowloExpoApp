@@ -22,9 +22,6 @@ import OutlinedButton from "./OutlinedButton";
 import SearchBar from "./SearchBar";
 import { phoneCodes } from "../../../assets/Data/PhoneCodes";
 import FlagItem from "./FlagItem";
-import { uploadImage } from "../../util/uploadImage";
-import { CloudinaryImage } from "@cloudinary/url-gen";
-import { fill } from "@cloudinary/url-gen/actions/resize";
 
 export default function AddProductForm({ update }) {
   const [selectedImage, setSelectedImage] = useState();
@@ -194,17 +191,6 @@ export default function AddProductForm({ update }) {
     }
   }
 
-  function saveImageHandler(image) {
-    try {
-      const myImage = new CloudinaryImage("sample", {
-        cloudName: "dlhtriebp",
-      }).resize(fill().width(100).height(150));
-      console.log(myImage);
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
   function savePlaceHandler() {
     let timestamp = new Date().toDateString();
     const payload = {
@@ -223,7 +209,6 @@ export default function AddProductForm({ update }) {
     };
     let phoneNumberLenght = payload.phoneNumber.length;
     const validate = validateFormHandler(payload, phoneNumberLenght);
-    const validateImage = saveImageHandler(payload.selectedImage);
     if (validate) {
       update(payload);
     } else {
