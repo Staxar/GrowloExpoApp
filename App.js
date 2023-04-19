@@ -14,7 +14,7 @@ import ProfileScreen from "./src/screen/ProfileScreen";
 import AddProductScreen from "./src/screen/AddProductScreen";
 import { Colors } from "./src/constans/styles";
 import MapScreen from "./src/screen/MapScreen";
-import ProductListScreen from "./src/screen/ProductListScreen";
+import CategoryScreen from "./src/screen/CategoryScreen";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -64,10 +64,17 @@ function RootTabNavigators() {
         }}
       />
       <Tab.Screen
-        name="List Products"
-        component={ProductListScreen}
+        name="Categories"
+        component={CategoryScreen}
         options={{
           tabBarIcon: () => <Ionicons name="add-circle-outline" size={18} />,
+          headerStyle: {
+            backgroundColor: Colors.primary100,
+            height: 85,
+            borderRadius: 8,
+          },
+          headerTintColor: "#FFFFFF",
+          headerTitle: "Categories",
         }}
       />
       <Tab.Screen
