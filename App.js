@@ -15,6 +15,7 @@ import AddProductScreen from "./src/screen/AddProductScreen";
 import { Colors } from "./src/constans/styles";
 import MapScreen from "./src/screen/MapScreen";
 import CategoryScreen from "./src/screen/CategoryScreen";
+import AllProductsScreen from "./src/screen/AllProductsScreen";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -101,6 +102,7 @@ function AuthenticatedStack() {
         component={MapScreen}
         options={{ headerShown: true }}
       />
+      <Stack.Screen name="AllProducts" component={AllProductsScreen} />
     </Stack.Navigator>
   );
 }

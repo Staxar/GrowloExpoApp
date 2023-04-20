@@ -1,27 +1,27 @@
 export const DATA_CATEGORY = [
   {
-    id: "0",
-    category: "Fruits",
+    key: "0",
+    value: "Fruits",
     icon_name: "fruit-grapes-outline",
   },
   {
-    id: "1",
-    category: "Vegetables",
+    key: "1",
+    value: "Vegetables",
     icon_name: "carrot",
   },
   {
-    id: "2",
-    category: "Homemade",
+    key: "2",
+    value: "Homemade",
     icon_name: "cake",
   },
   {
-    id: "3",
-    category: "Delicacies",
+    key: "3",
+    value: "Delicacies",
     icon_name: "food-variant",
   },
   {
-    id: "4",
-    category: "Dairy",
+    key: "4",
+    value: "Dairy",
     icon_name: "cow",
   },
 ];

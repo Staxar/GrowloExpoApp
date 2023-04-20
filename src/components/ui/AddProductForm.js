@@ -22,13 +22,15 @@ import OutlinedButton from "./OutlinedButton";
 import SearchBar from "./SearchBar";
 import { phoneCodes } from "../../../assets/Data/PhoneCodes";
 import FlagItem from "./FlagItem";
-
+import { DATA_CATEGORY } from "../../../assets/Data/DATA_CATEGORY";
+import { useNavigation } from "@react-navigation/native";
 export default function AddProductForm({ update }) {
   const [selectedImage, setSelectedImage] = useState();
   const [pickedImages, setPickedImages] = useState();
   const [pickedLocation, setPickedLocation] = useState();
   const [enteredTitle, setEnteredTitle] = useState("");
   const [selectedUnit, setSelectedUnit] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [description, setDescription] = useState("");
   const [quantity, setQuantity] = useState("");
   const [weight, setWeight] = useState("");
@@ -41,7 +43,6 @@ export default function AddProductForm({ update }) {
   });
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredData, setFilteredData] = useState([]);
-
   useEffect(() => {
     setFilteredData(phoneCodes);
   }, []);
@@ -100,6 +101,7 @@ export default function AddProductForm({ update }) {
     let prize = payload.prize;
     let enteredTitle = payload.enteredTitle;
     let description = payload.description;
+    let selectedCategory = payload.selectedCategory;
 
     if (
       isNaN(prize) ||
@@ -129,6 +131,9 @@ export default function AddProductForm({ update }) {
       selectedUnit === null ||
       selectedUnit === undefined ||
       selectedUnit === "" ||
+      selectedCategory === null ||
+      selectedCategory === undefined ||
+      selectedCategory === "" ||
       pickedLocation === null ||
       pickedLocation === undefined ||
       pickedLocation === "" ||
@@ -198,6 +203,7 @@ export default function AddProductForm({ update }) {
       pickedImages: pickedImages,
       pickedLocation: pickedLocation,
       selectedUnit: selectedUnit,
+      selectedCategory: selectedCategory,
       selectedPhoneCode: selectedPhoneCode,
       phoneNumber: phoneNumber,
       weight: weight,
@@ -217,140 +223,154 @@ export default function AddProductForm({ update }) {
     }
   }
   return (
-    <ScrollView>
-      <View
-        style={{
-          width: "80%",
-          alignSelf: "center",
-          height: "100%",
+    <View
+      style={{
+        width: "80%",
+        alignSelf: "center",
+        height: "100%",
+      }}
+    >
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          setModalVisible(!modalVisible);
         }}
       >
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            Alert.alert("Modal has been closed.");
-            setModalVisible(!modalVisible);
-          }}
-        >
-          <View style={styles.centeredView}>
-            <View style={{ width: "80%" }}>
-              <View style={{ height: 80, marginVertical: 50, padding: 8 }}>
-                <Pressable
-                  style={[styles.button, styles.buttonClose]}
-                  onPress={() => [setModalVisible(!modalVisible), onSearch]}
-                >
-                  <Text style={styles.textStyle}>Hide Modal</Text>
-                </Pressable>
-                <View style={{ height: 60 }}>
-                  <SearchBar
-                    placeholder={"eg. Poland"}
-                    value={searchQuery}
-                    onChangeText={(query) => onSearch(query)}
-                  />
-                </View>
+        <View style={styles.centeredView}>
+          <View style={{ width: "80%" }}>
+            <View style={{ height: 80, marginVertical: 50, padding: 8 }}>
+              <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => [setModalVisible(!modalVisible), onSearch]}
+              >
+                <Text style={styles.textStyle}>Hide Modal</Text>
+              </Pressable>
+              <View style={{ height: 60 }}>
+                <SearchBar
+                  placeholder={"eg. Poland"}
+                  value={searchQuery}
+                  onChangeText={(query) => onSearch(query)}
+                />
               </View>
             </View>
-            <View style={{ width: "80%", padding: 8, flex: 1 }}>
-              <FlatList
-                data={filteredData}
-                renderItem={({ item }) => (
-                  <OutlinedButton
-                    onPress={() =>
-                      takePhoneCodeHandler(item.dial_code, item.code)
-                    }
-                  >
-                    <FlagItem
-                      countryName={item.name}
-                      isoCode={item.code}
-                      dial={item.dial_code}
-                    />
-                  </OutlinedButton>
-                )}
-                keyExtractor={(item) => item.code}
-                extraData={filteredData}
-              />
-            </View>
           </View>
-        </Modal>
-        <View style={styles.innerContainer}>
-          <ImagePickerExample
-            onTakeImage={takeImageHandler}
-            onPickedImage={pickImageHandler}
-          />
-          <LocationPicker onPickLocation={pickLocationHandler} />
-          <LeftIconInput
-            textValue={"title"}
-            placeholder={"Carrots"}
-            onUpdateValue={updateInputValueHandler.bind(this, "title")}
-            maxLength={20}
-          />
-          <LeftIconInput
-            textValue={"Description"}
-            multiline={true}
-            placeholder={"I have red apples to give away on my plot"}
-            onUpdateValue={updateInputValueHandler.bind(this, "description")}
-          />
-          <TitleForm title={"Unit"}>
-            <SelectList
-              setSelected={(value) => setSelectedUnit(value)}
-              data={data}
-              search={true}
-              save="value"
-              boxStyles={{
-                borderWidth: 0.5,
-                padding: 0,
-                margin: 0,
-              }}
-              arrowicon={<Ionicons name={"chevron-down-outline"} size={24} />}
-              dropdownStyles={{ borderWidth: 0 }}
-              dropdownItemStyles={{ borderBottomWidth: 0.5 }}
-              dropdownTextStyles={{ fontSize: 20, color: Colors.primary600 }}
-              inputStyles={{ fontSize: 20, color: Colors.primary600 }}
-            />
-          </TitleForm>
-          <View
-            style={{
-              flexDirection: "row",
-              width: "50%",
-              justifyContent: "space-between",
-            }}
-          >
-            <LeftIconInput
-              textValue={"Quantity"}
-              keyboardType={"number-pad"}
-              placeholder={"100"}
-              onUpdateValue={updateInputValueHandler.bind(this, "quantity")}
-            />
-            <LeftIconInput
-              textValue={"Weight"}
-              keyboardType={"number-pad"}
-              placeholder={"1"}
-              onUpdateValue={updateInputValueHandler.bind(this, "weight")}
+          <View style={{ width: "80%", padding: 8, flex: 1 }}>
+            <FlatList
+              data={filteredData}
+              renderItem={({ item }) => (
+                <OutlinedButton
+                  onPress={() =>
+                    takePhoneCodeHandler(item.dial_code, item.code)
+                  }
+                >
+                  <FlagItem
+                    countryName={item.name}
+                    isoCode={item.code}
+                    dial={item.dial_code}
+                  />
+                </OutlinedButton>
+              )}
+              keyExtractor={(item) => item.code}
+              extraData={filteredData}
             />
           </View>
-          <LeftIconInput
-            textValue={"Prize"}
-            keyboardType={"number-pad"}
-            placeholder={"0.00"}
-            onUpdateValue={updateInputValueHandler.bind(this, "prize")}
-          />
-          <PhoneInputForm
-            maxLength={9}
-            keyboardType={"number-pad"}
-            contentType={"telephoneNumber"}
-            placeholder={"xxx-xxx-xxx"}
-            data={selectedPhoneCode}
-            onPress={modalVisableHandler}
-            onUpdateValue={updateInputValueHandler.bind(this, "phone")}
-          />
-          <OutlinedButton onPress={savePlaceHandler}>
-            Add product
-          </OutlinedButton>
         </View>
+      </Modal>
+      <View style={styles.innerContainer}>
+        <ImagePickerExample
+          onTakeImage={takeImageHandler}
+          onPickedImage={pickImageHandler}
+        />
+        <LocationPicker onPickLocation={pickLocationHandler} />
+        <LeftIconInput
+          textValue={"title"}
+          placeholder={"Carrots"}
+          onUpdateValue={() => updateInputValueHandler.bind(this, "title")}
+          maxLength={20}
+        />
+        <LeftIconInput
+          textValue={"Description"}
+          multiline={true}
+          placeholder={"I have red apples to give away on my plot"}
+          onUpdateValue={updateInputValueHandler.bind(this, "description")}
+        />
+        <TitleForm title={"Category"}>
+          <SelectList
+            setSelected={(value) => setSelectedCategory(value)}
+            data={DATA_CATEGORY}
+            search={true}
+            save="value"
+            boxStyles={{
+              borderWidth: 0.5,
+              padding: 0,
+              margin: 0,
+            }}
+            arrowicon={<Ionicons name={"chevron-down-outline"} size={24} />}
+            dropdownStyles={{ borderWidth: 0 }}
+            dropdownItemStyles={{ borderBottomWidth: 0.5 }}
+            dropdownTextStyles={{ fontSize: 20, color: Colors.primary600 }}
+            inputStyles={{ fontSize: 20, color: Colors.primary600 }}
+          />
+        </TitleForm>
+        <TitleForm title={"Unit"}>
+          <SelectList
+            setSelected={(value) => setSelectedUnit(value)}
+            data={data}
+            search={true}
+            save="value"
+            boxStyles={{
+              borderWidth: 0.5,
+              padding: 0,
+              margin: 0,
+            }}
+            arrowicon={<Ionicons name={"chevron-down-outline"} size={24} />}
+            dropdownStyles={{ borderWidth: 0 }}
+            dropdownItemStyles={{ borderBottomWidth: 0.5 }}
+            dropdownTextStyles={{ fontSize: 20, color: Colors.primary600 }}
+            inputStyles={{ fontSize: 20, color: Colors.primary600 }}
+          />
+        </TitleForm>
+        <View
+          style={{
+            flexDirection: "row",
+            width: "50%",
+            justifyContent: "space-between",
+          }}
+        >
+          <LeftIconInput
+            textValue={"Quantity"}
+            keyboardType={"number-pad"}
+            placeholder={"100"}
+            onUpdateValue={updateInputValueHandler.bind(this, "quantity")}
+          />
+          <LeftIconInput
+            textValue={"Weight"}
+            keyboardType={"number-pad"}
+            placeholder={"1"}
+            onUpdateValue={updateInputValueHandler.bind(this, "weight")}
+          />
+        </View>
+        <LeftIconInput
+          textValue={"Prize"}
+          keyboardType={"number-pad"}
+          placeholder={"0.00"}
+          onUpdateValue={updateInputValueHandler.bind(this, "prize")}
+        />
+        <PhoneInputForm
+          maxLength={9}
+          keyboardType={"number-pad"}
+          contentType={"telephoneNumber"}
+          placeholder={"xxx-xxx-xxx"}
+          data={selectedPhoneCode}
+          onPress={modalVisableHandler}
+          onUpdateValue={updateInputValueHandler.bind(this, "phone")}
+        />
+        <OutlinedButton onPress={savePlaceHandler}>Add product</OutlinedButton>
       </View>
-    </ScrollView>
+    </View>
   );
 }
 

@@ -1,4 +1,4 @@
-import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 import { Colors, Typography } from "../../constans/styles";
 import ProductCard from "./ProductCard";
 import { DATA } from "../../../assets/Data/DATA";

@@ -1,19 +1,17 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Text } from "react-native";
+import { Pressable, Text } from "react-native";
 import { StyleSheet } from "react-native";
-import { View } from "react-native";
 
-export default function CategoryItem(props) {
-  console.log(props.item.icon_name);
+export default function CategoryItem({ id, category, icon_name, nav }) {
   return (
-    <View style={styles.container}>
-      <MaterialCommunityIcons
-        name={props.item.icon_name}
-        size={34}
-        color={"black"}
-      />
-      <Text>{props.item.category}</Text>
-    </View>
+    <Pressable
+      style={({ pressed }) => [styles.container, pressed && styles.pressed]}
+      android_ripple={true}
+      onPress={() => nav({ id, category })}
+    >
+      <MaterialCommunityIcons name={icon_name} size={34} />
+      <Text>{category}</Text>
+    </Pressable>
   );
 }
 
@@ -22,10 +20,14 @@ const styles = StyleSheet.create({
     height: 100,
     width: 100,
     borderWidth: 1,
-    borderRadius: 4,
-    padding: 5,
-    margin: 5,
+    borderRadius: 8,
+    margin: 10,
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: "#7cc47c",
+    opacity: 0.6,
+  },
+  pressed: {
+    opacity: 1,
   },
 });
