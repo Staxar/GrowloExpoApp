@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet } from "react-native";
+import { DevSettings, SafeAreaView, StyleSheet } from "react-native";
 import AddProductForm from "../components/ui/AddProductForm";
 import { getDatabase, push, ref, set } from "firebase/database";
 import { AuthContext } from "../store/auth-context";
@@ -28,6 +28,7 @@ function AddProductScreen({ navigation, route }) {
         prize: props.prize,
         title: props.enteredTitle,
       });
+      DevSettings.reload();
       navigation.navigate("Welcome");
     } catch (err) {
       Alert.alert(console.error(err));

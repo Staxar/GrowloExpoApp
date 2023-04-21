@@ -3,11 +3,12 @@ import { get, getDatabase, query, ref } from "firebase/database";
 import { FlatList, SafeAreaView } from "react-native";
 import { StyleSheet, View } from "react-native";
 import ProductCard from "../components/ui/ProductCard";
+import { Text } from "react-native";
+import { Typography } from "../constans/styles";
 
 export default function AllProductsScreen({ route, navigation }) {
   const [data, setData] = useState([]);
   const [category, setCategory] = useState();
-
   useEffect(() => {
     setCategory(route.params.itemParams);
     const db = getDatabase();
@@ -34,11 +35,17 @@ export default function AllProductsScreen({ route, navigation }) {
         return error(error);
       });
   }, [navigation, route]);
-  const filteredProducts = data.filter(
-    (product) => product.category === category
+  const filteredProducts = data.filter((product) =>
+    category === "" ? product : product.category === category
   );
   return (
     <SafeAreaView style={styles.outerContainer}>
+      <View style={{ padding: 20 }}>
+        {category != "" && (
+          <Text style={Typography.smallTitle}>Category: {category}</Text>
+        )}
+      </View>
+
       <View style={styles.innerContainer}>
         {filteredProducts && (
           <FlatList
@@ -48,7 +55,8 @@ export default function AllProductsScreen({ route, navigation }) {
               <ProductCard
                 productName={item.title}
                 productPrize={item.prize}
-                productWeight={item.weight}
+                productUnit={item.unit}
+                productAmount={item.amount}
               />
             )}
             style={{ width: "100%" }}
@@ -66,7 +74,7 @@ const styles = StyleSheet.create({
   innerContainer: {
     width: "100%",
     padding: 10,
-    margin: 10,
     alignItems: "center",
+    marginLeft: "6%",
   },
 });

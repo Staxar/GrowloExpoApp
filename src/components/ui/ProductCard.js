@@ -5,7 +5,7 @@ import AddCustomButton from "./AddCustomButton";
 function ProductCard({
   productPrize,
   productName,
-  productWeight,
+  productAmount,
   productImage,
   productUnit,
   productSpecialPrize,
@@ -52,8 +52,7 @@ function ProductCard({
 
             <View style={styles.rowContentContainer}>
               <Text style={Typography.smallDescription}>
-                {productWeight}
-                {productUnit}
+                {productAmount} {productUnit}
               </Text>
               <AddCustomButton />
             </View>
@@ -71,8 +70,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   outerContainer: {
-    width: 130,
-    height: 200,
+    width: 150,
+    height: 250,
     backgroundColor: "#ffff",
     margin: 4,
     padding: 4,
