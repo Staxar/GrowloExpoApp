@@ -11,41 +11,55 @@ function ProductCard({
   productSpecialPrize,
 }) {
   return (
-    <Pressable style={styles.outerContainer}>
-      <View style={styles.imageContainer}>
-        <Image source={productImage} style={styles.image} />
-      </View>
-      <View style={styles.contentContainer}>
-        <Text style={Typography.smallDescription}>{productName}</Text>
-        <View style={styles.rowPrizeContainer}>
-          <Text style={[Typography.smallTitle, { marginRight: 5 }]}>
-            ${productSpecialPrize}
-          </Text>
-          <Text
-            style={[
-              Typography.smallDescription,
-              { textDecorationLine: "line-through" },
-            ]}
-          >
-            ${productPrize}
-          </Text>
-        </View>
+    <View style={styles.rootContainer}>
+      <Pressable>
+        <View style={styles.outerContainer}>
+          <View style={styles.imageContainer}>
+            <Image
+              source={
+                productImage === undefined
+                  ? require("../../../assets/Images/imagePlaceholder.png")
+                  : productImage
+              }
+              style={styles.image}
+            />
+          </View>
+          <View style={styles.contentContainer}>
+            <Text style={Typography.smallDescription}>{productName}</Text>
+            <View style={styles.rowPrizeContainer}>
+              <Text style={[Typography.smallTitle, { marginRight: 5 }]}>
+                ${productSpecialPrize}
+              </Text>
+              <Text
+                style={[
+                  Typography.smallDescription,
+                  { textDecorationLine: "line-through" },
+                ]}
+              >
+                ${productPrize}
+              </Text>
+            </View>
 
-        <View style={styles.rowContentContainer}>
-          <Text style={Typography.smallDescription}>
-            {productWeight}
-            {productUnit}
-          </Text>
-          <AddCustomButton />
+            <View style={styles.rowContentContainer}>
+              <Text style={Typography.smallDescription}>
+                {productWeight}
+                {productUnit}
+              </Text>
+              <AddCustomButton />
+            </View>
+          </View>
         </View>
-      </View>
-    </Pressable>
+      </Pressable>
+    </View>
   );
 }
 
 export default ProductCard;
 
 const styles = StyleSheet.create({
+  rootContainer: {
+    flex: 1,
+  },
   outerContainer: {
     width: 130,
     height: 200,

@@ -23,7 +23,6 @@ import { phoneCodes } from "../../../assets/Data/PhoneCodes";
 import FlagItem from "./FlagItem";
 import { DATA_CATEGORY } from "../../../assets/Data/DATA_CATEGORY";
 export default function AddProductForm({ update }) {
-  console.log("product form");
   const [selectedImage, setSelectedImage] = useState();
   const [pickedImages, setPickedImages] = useState();
   const [pickedLocation, setPickedLocation] = useState();
