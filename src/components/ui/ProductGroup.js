@@ -1,9 +1,8 @@
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import { Colors, Typography } from "../../constans/styles";
 import ProductCard from "./ProductCard";
-import { DATA } from "../../../assets/Data/DATA";
 
-function ProductGroup({ title }) {
+function ProductGroup({ title, data }) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -17,13 +16,14 @@ function ProductGroup({ title }) {
       <View style={styles.contentContainer}>
         <FlatList
           horizontal
-          data={DATA.slice(0, 5)}
+          data={data.slice(0, 5)}
           renderItem={({ item }) => (
             <ProductCard
               productPrize={item.count}
               productName={item.title}
               productWeight={item.count}
               productImage={item.img}
+              productSpecialPrize={item.specialPrize}
             />
           )}
           keyExtractor={(item) => item.id}
@@ -37,13 +37,13 @@ export default ProductGroup;
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     borderTopWidth: 1,
     borderTopRightRadius: 0,
     borderTopLeftRadius: 0,
     borderTopColor: Colors.primary800,
     marginVertical: 4,
     borderRadius: 8,
-    flexDirection: "column",
   },
   header: {
     flexDirection: "row",
@@ -53,5 +53,8 @@ const styles = StyleSheet.create({
     marginVertical: 15,
     paddingHorizontal: 15,
   },
-  contentContainer: {},
+  contentContainer: {
+    flex: 1,
+    margin: 10,
+  },
 });
