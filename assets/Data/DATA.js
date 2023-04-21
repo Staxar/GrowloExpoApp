@@ -9,7 +9,6 @@ export const DATA = [
     author: "Marcin Domagała",
     category: "Fruits",
     decription: "I will give away apples from my tree in the garden",
-    specialPrize: 16,
   },
   {
     id: "2",
@@ -42,7 +41,6 @@ export const DATA = [
     location: "Hawaii",
     author: "Kuba Kubowski",
     category: "Fruits",
-    specialPrize: 10,
   },
   {
     id: "5",

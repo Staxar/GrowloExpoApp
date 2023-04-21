@@ -35,7 +35,7 @@ export default function AllProductsScreen({ route, navigation }) {
       });
   }, [navigation, route]);
   const filteredProducts = data.filter(
-    (product) => product.selectedCategory === category
+    (product) => product.category === category
   );
   return (
     <SafeAreaView style={styles.outerContainer}>
@@ -46,7 +46,7 @@ export default function AllProductsScreen({ route, navigation }) {
             numColumns={2}
             renderItem={({ item }) => (
               <ProductCard
-                productName={item.enteredTitle}
+                productName={item.title}
                 productPrize={item.prize}
                 productWeight={item.weight}
               />

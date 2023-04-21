@@ -30,8 +30,7 @@ export default function AddProductForm({ update }) {
   const [selectedUnit, setSelectedUnit] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [description, setDescription] = useState("");
-  const [quantity, setQuantity] = useState("");
-  const [weight, setWeight] = useState("");
+  const [amount, setAmount] = useState("");
   const [prize, setPrize] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
@@ -94,36 +93,28 @@ export default function AddProductForm({ update }) {
     let pickedLocation = payload.pickedLocation;
     let selectedUnit = payload.selectedUnit;
     let selectedPhoneCode = payload.selectedPhoneCode;
-    let weight = payload.weight;
-    let quantity = payload.quantity;
+    let amount = payload.amount;
     let phoneNumber = payload.phoneNumber;
     let prize = payload.prize;
     let enteredTitle = payload.enteredTitle;
     let description = payload.description;
     let selectedCategory = payload.selectedCategory;
 
-    if (
-      isNaN(prize) ||
-      isNaN(phoneNumber) ||
-      isNaN(quantity) ||
-      isNaN(weight)
-    ) {
+    if (isNaN(prize) || isNaN(phoneNumber) || isNaN(amount)) {
       Alert.alert("You enter a NaN value!");
-    } else if (+prize < 0 || +phoneNumber < 0 || +quantity < 0 || +weight < 0) {
+    } else if (+prize < 0 || +phoneNumber < 0 || +amount < 0) {
       Alert.alert("You enter a negative number!");
     } else if (
+      //TO FIX!
       prize === null ||
       prize === undefined ||
       prize === "" ||
       phoneNumber === null ||
       phoneNumber === undefined ||
       phoneNumber === "" ||
-      quantity === null ||
-      quantity === undefined ||
-      quantity === "" ||
-      weight === null ||
-      weight === undefined ||
-      weight === "" ||
+      amount === null ||
+      amount === undefined ||
+      amount === "" ||
       selectedPhoneCode === null ||
       selectedPhoneCode === undefined ||
       selectedPhoneCode === "" ||
@@ -180,11 +171,8 @@ export default function AddProductForm({ update }) {
       case "username":
         setenteredUsername(enteredValue);
         break;
-      case "quantity":
-        setQuantity(enteredValue);
-        break;
-      case "weight":
-        setWeight(enteredValue);
+      case "amount":
+        setAmount(enteredValue);
         break;
       case "prize":
         setPrize(enteredValue);
@@ -205,8 +193,7 @@ export default function AddProductForm({ update }) {
       selectedCategory: selectedCategory,
       selectedPhoneCode: selectedPhoneCode,
       phoneNumber: phoneNumber,
-      weight: weight,
-      quantity: quantity,
+      amount: amount,
       prize: prize,
       enteredTitle: enteredTitle,
       description: description,
@@ -241,21 +228,21 @@ export default function AddProductForm({ update }) {
         }}
       >
         <View style={styles.centeredView}>
-          <View style={{ width: "80%" }}>
-            <View style={{ height: 80, marginVertical: 50, padding: 8 }}>
-              <Pressable
-                style={[styles.button, styles.buttonClose]}
-                onPress={() => [setModalVisible(!modalVisible), onSearch]}
-              >
-                <Text style={styles.textStyle}>Hide Modal</Text>
-              </Pressable>
-              <View style={{ height: 60 }}>
-                <SearchBar
-                  placeholder={"eg. Poland"}
-                  value={searchQuery}
-                  onChangeText={(query) => onSearch(query)}
-                />
-              </View>
+          <View
+            style={{ height: 80, marginVertical: 50, padding: 8, width: "80%" }}
+          >
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => [setModalVisible(!modalVisible), onSearch]}
+            >
+              <Text style={styles.textStyle}>Hide Modal</Text>
+            </Pressable>
+            <View style={{ height: 60 }}>
+              <SearchBar
+                placeholder={"eg. Poland"}
+                value={searchQuery}
+                onChangeText={(query) => onSearch(query)}
+              />
             </View>
           </View>
           <View style={{ width: "80%", padding: 8, flex: 1 }}>
@@ -334,30 +321,17 @@ export default function AddProductForm({ update }) {
             inputStyles={{ fontSize: 20, color: Colors.primary600 }}
           />
         </TitleForm>
-        <View
-          style={{
-            flexDirection: "row",
-            width: "50%",
-            justifyContent: "space-between",
-          }}
-        >
-          <LeftIconInput
-            textValue={"Quantity"}
-            keyboardType={"number-pad"}
-            placeholder={"100"}
-            onUpdateValue={updateInputValueHandler.bind(this, "quantity")}
-          />
-          <LeftIconInput
-            textValue={"Weight"}
-            keyboardType={"number-pad"}
-            placeholder={"1"}
-            onUpdateValue={updateInputValueHandler.bind(this, "weight")}
-          />
-        </View>
+
+        <LeftIconInput
+          textValue={"Amount"}
+          keyboardType={"number-pad"}
+          placeholder={"100"}
+          onUpdateValue={updateInputValueHandler.bind(this, "amount")}
+        />
         <LeftIconInput
           textValue={"Prize"}
           keyboardType={"number-pad"}
-          placeholder={"0.00"}
+          placeholder={"50"}
           onUpdateValue={updateInputValueHandler.bind(this, "prize")}
         />
         <PhoneInputForm

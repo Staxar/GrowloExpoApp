@@ -32,6 +32,7 @@ function LeftIconInput({
           value={value}
           multiline={multiline}
           placeholder={placeholder}
+          placeholderTextColor={Colors.primary800}
         />
       </View>
     </TitleForm>

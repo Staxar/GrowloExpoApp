@@ -12,7 +12,7 @@ function ProductCard({
 }) {
   return (
     <View style={styles.rootContainer}>
-      <Pressable>
+      <Pressable android_ripple={true} style={{}}>
         <View style={styles.outerContainer}>
           <View style={styles.imageContainer}>
             <Image
@@ -27,17 +27,27 @@ function ProductCard({
           <View style={styles.contentContainer}>
             <Text style={Typography.smallDescription}>{productName}</Text>
             <View style={styles.rowPrizeContainer}>
-              <Text style={[Typography.smallTitle, { marginRight: 5 }]}>
-                ${productSpecialPrize}
-              </Text>
-              <Text
-                style={[
-                  Typography.smallDescription,
-                  { textDecorationLine: "line-through" },
-                ]}
-              >
-                ${productPrize}
-              </Text>
+              {productSpecialPrize ? (
+                <>
+                  <Text style={[Typography.smallTitle, { marginRight: 5 }]}>
+                    ${productSpecialPrize}
+                  </Text>
+                  <Text
+                    style={[
+                      Typography.smallDescription,
+                      {
+                        textDecorationLine: "line-through",
+                      },
+                    ]}
+                  >
+                    ${productPrize}
+                  </Text>
+                </>
+              ) : (
+                <Text style={[Typography.smallTitle, { marginRight: 5 }]}>
+                  ${productPrize}
+                </Text>
+              )}
             </View>
 
             <View style={styles.rowContentContainer}>

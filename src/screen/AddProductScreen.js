@@ -20,14 +20,13 @@ function AddProductScreen({ navigation, route }) {
         selectedImage: props.selectedImage,
         pickedImages: props.pickedImages,
         pickedLocation: props.pickedLocation,
-        selectedUnit: props.selectedUnit,
-        selectedCategory: props.selectedCategory,
-        selectedPhoneCode: props.selectedPhoneCode,
+        unit: props.selectedUnit,
+        category: props.selectedCategory,
+        phoneCode: props.selectedPhoneCode,
         phoneNumber: props.phoneNumber,
-        weight: props.weight,
-        quantity: props.quantity,
+        amount: props.amount,
         prize: props.prize,
-        enteredTitle: props.enteredTitle,
+        title: props.enteredTitle,
       });
       navigation.navigate("Welcome");
     } catch (err) {
