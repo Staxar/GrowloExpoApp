@@ -57,6 +57,7 @@ export default function AllProductsScreen({ route, navigation }) {
                 productPrize={item.prize}
                 productUnit={item.unit}
                 productAmount={item.amount}
+                productId={item.id}
               />
             )}
             style={{ width: "100%" }}

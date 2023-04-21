@@ -1,6 +1,7 @@
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { Typography } from "../../constans/styles";
 import AddCustomButton from "./AddCustomButton";
+import { useNavigation } from "@react-navigation/native";
 
 function ProductCard({
   productPrize,
@@ -9,10 +10,19 @@ function ProductCard({
   productImage,
   productUnit,
   productSpecialPrize,
+  productId,
 }) {
+  const navigation = useNavigation();
+  function navigateToDetailsHandler(id) {
+    navigation.navigate("Details", id);
+  }
+
   return (
     <View style={styles.rootContainer}>
-      <Pressable android_ripple={true} style={{}}>
+      <Pressable
+        android_ripple={true}
+        onPress={() => navigateToDetailsHandler(productId)}
+      >
         <View style={styles.outerContainer}>
           <View style={styles.imageContainer}>
             <Image
