@@ -1,29 +1,40 @@
 import { useEffect, useState } from "react";
-import { child, get, getDatabase, ref } from "firebase/database";
-import { Button, FlatList, SafeAreaView } from "react-native";
+import {
+  child,
+  equalTo,
+  get,
+  getDatabase,
+  orderByChild,
+  query,
+  ref,
+} from "firebase/database";
+import { Button, FlatList, SafeAreaView, Text } from "react-native";
 import { StyleSheet, View } from "react-native";
-import { Text } from "react-native";
+import ProductCard from "../components/ui/ProductCard";
 
 export default function AllProductsScreen({ route, navigation }) {
-  const [filteredData, setFilteredData] = useState([]);
-
-  // function filterDataHandler(res) {
-  //   res.forEach((response) => {
-  //     console.log("RESPONSE: ", response);
-  //     setFilteredData({ ...filteredData, description: response.description });
-  //   });
-  // }
+  const [filteredData, setFilteredData] = useState({});
+  const [data, setData] = useState([]);
+  const [category, setCategory] = useState(route.params.itemParams);
 
   useEffect(() => {
-    const dbRef = ref(getDatabase());
-    get(child(dbRef, `products`))
+    const db = getDatabase();
+    const getCategoryData = query(ref(db, "products"));
+
+    get(getCategoryData)
       .then((snapshot) => {
         if (snapshot.exists()) {
-          const response = Object.values(snapshot.val());
-          // response.forEach((res) => {
-          //   // if(res.description )
-          // });
-          setFilteredData(response);
+          // const response = Object.values(snapshot.val());
+          const data = snapshot.val();
+          const productArray = Object.keys(data).map((key) => ({
+            id: key,
+            ...data[key],
+          }));
+          try {
+            setData(productArray);
+          } catch (e) {
+            console.log(e);
+          }
         } else {
           console.log("No data available");
         }
@@ -31,29 +42,38 @@ export default function AllProductsScreen({ route, navigation }) {
       .catch((error) => {
         return error(error);
       });
-  }, [route, navigation]);
-
+  }, []);
+  const filteredProducts = data.filter(
+    (product) => product.selectedCategory === category
+  );
   return (
     <SafeAreaView
       style={{
         flex: 1,
-        padding: 20,
+        padding: 10,
       }}
     >
-      <View>
-        <View>
-          <Text>
-            {/* <FlatList 
-              data={filteredData}
-            />
-
-
-            {filteredData.map((item) => {
-              console.log("ITEM: ", item);
-            })} */}
-          </Text>
-          <Button title="Press ME" />
-        </View>
+      <View
+        style={{
+          flex: 1,
+          alignItems: "center",
+          padding: 10,
+          margin: 10,
+        }}
+      >
+        {filteredProducts && (
+          <FlatList
+            data={filteredProducts}
+            numColumns={2}
+            renderItem={({ item }) => (
+              <ProductCard
+                productName={item.enteredTitle}
+                productPrize={item.prize}
+                productWeight={item.weight}
+              />
+            )}
+          />
+        )}
       </View>
     </SafeAreaView>
   );

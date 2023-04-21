@@ -3,7 +3,6 @@ import {
   FlatList,
   Modal,
   Pressable,
-  ScrollView,
   StyleSheet,
   Text,
   View,
@@ -23,8 +22,8 @@ import SearchBar from "./SearchBar";
 import { phoneCodes } from "../../../assets/Data/PhoneCodes";
 import FlagItem from "./FlagItem";
 import { DATA_CATEGORY } from "../../../assets/Data/DATA_CATEGORY";
-import { useNavigation } from "@react-navigation/native";
 export default function AddProductForm({ update }) {
+  console.log("product form");
   const [selectedImage, setSelectedImage] = useState();
   const [pickedImages, setPickedImages] = useState();
   const [pickedLocation, setPickedLocation] = useState();
@@ -43,6 +42,7 @@ export default function AddProductForm({ update }) {
   });
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredData, setFilteredData] = useState([]);
+
   useEffect(() => {
     setFilteredData(phoneCodes);
   }, []);
@@ -215,6 +215,7 @@ export default function AddProductForm({ update }) {
     };
     let phoneNumberLenght = payload.phoneNumber.length;
     const validate = validateFormHandler(payload, phoneNumberLenght);
+
     if (validate) {
       update(payload);
     } else {
@@ -222,6 +223,7 @@ export default function AddProductForm({ update }) {
       return;
     }
   }
+
   return (
     <View
       style={{
@@ -288,7 +290,7 @@ export default function AddProductForm({ update }) {
         <LeftIconInput
           textValue={"title"}
           placeholder={"Carrots"}
-          onUpdateValue={() => updateInputValueHandler.bind(this, "title")}
+          onUpdateValue={updateInputValueHandler.bind(this, "title")}
           maxLength={20}
         />
         <LeftIconInput

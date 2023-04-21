@@ -7,6 +7,7 @@ import { Alert } from "react-native";
 import { ScrollView } from "react-native";
 function AddProductScreen({ navigation, route }) {
   const authCtx = useContext(AuthContext);
+
   function updateValues(props) {
     const db = getDatabase();
     const postListRef = ref(db, "products");
