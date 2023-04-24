@@ -53,6 +53,7 @@ function ImagePickerExample({ onTakeImage, onPickedImage }) {
       setPickedImage([]);
       setTakenImage(image.assets[0].uri);
       onTakeImage(image.assets[0].uri);
+      return;
     } else if (props === "image") {
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -63,17 +64,19 @@ function ImagePickerExample({ onTakeImage, onPickedImage }) {
       });
       if (result.canceled) {
         return;
-      }
-      setTakenImage(null);
-      setPickedImage([]);
-      {
-        result.assets.map((image) => {
-          return setPickedImage((current) => [...current, image.uri]);
-        });
+      } else {
+        setTakenImage(null);
+        setPickedImage([]);
+        {
+          result.assets.map((image) => {
+            return setPickedImage((current) => [...current, image.uri]);
+          });
+        }
       }
     } else {
       throw new Error("Something went wrong!");
     }
+    return;
   }
 
   function ImagePreview() {
@@ -102,12 +105,12 @@ function ImagePickerExample({ onTakeImage, onPickedImage }) {
   }
 
   useEffect(() => {
-    if (pickedImage) {
+    if (pickedImage.length > 0) {
       onPickedImage(pickedImage);
     } else {
       console.log("Something went wrong!");
     }
-  }, [pickedImage, takenImage, takeImageHandler]);
+  }, [pickedImage, takenImage, takeImageHandler, setPickedImage]);
 
   return (
     <View style={{ width: "100%" }}>

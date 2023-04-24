@@ -22,9 +22,8 @@ import SearchBar from "./SearchBar";
 import { phoneCodes } from "../../../assets/Data/PhoneCodes";
 import FlagItem from "./FlagItem";
 import { DATA_CATEGORY } from "../../../assets/Data/DATA_CATEGORY";
-import { KeyboardAvoidingView } from "react-native";
 export default function AddProductForm({ update }) {
-  const [selectedImage, setSelectedImage] = useState([]);
+  const [selectedImage, setSelectedImage] = useState();
   const [pickedImages, setPickedImages] = useState();
   const [pickedLocation, setPickedLocation] = useState();
   const [enteredTitle, setEnteredTitle] = useState("");
@@ -72,10 +71,11 @@ export default function AddProductForm({ update }) {
   //Take one Image
   function takeImageHandler(imageUri) {
     setSelectedImage(imageUri);
+    return;
   }
   //Take image from Image Gallery - max 3
   function pickImageHandler(imageUri) {
-    setSelectedImage(imageUri);
+    return setSelectedImage(imageUri);
   }
 
   function takePhoneCodeHandler(dial_code, code) {
@@ -88,6 +88,7 @@ export default function AddProductForm({ update }) {
   }
 
   function validateFormHandler(payload, phoneNumberLenght) {
+    console.log("payload", payload);
     let selectedImage = payload.selectedImage;
     let pickedLocation = payload.pickedLocation;
     let selectedUnit = payload.selectedUnit;
@@ -194,7 +195,7 @@ export default function AddProductForm({ update }) {
     const validate = validateFormHandler(payload, phoneNumberLenght);
 
     if (validate) {
-      console.log(payload);
+      console.log(validate);
       update(payload);
     } else {
       console.log("Not update!");
