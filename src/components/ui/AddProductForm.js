@@ -22,6 +22,7 @@ import SearchBar from "./SearchBar";
 import { phoneCodes } from "../../../assets/Data/PhoneCodes";
 import FlagItem from "./FlagItem";
 import { DATA_CATEGORY } from "../../../assets/Data/DATA_CATEGORY";
+import { uploadImage } from "../../util/uploadImage";
 export default function AddProductForm({ update }) {
   const [selectedImage, setSelectedImage] = useState();
   const [pickedImages, setPickedImages] = useState();
@@ -124,9 +125,6 @@ export default function AddProductForm({ update }) {
       selectedCategory === null ||
       selectedCategory === undefined ||
       selectedCategory === "" ||
-      pickedLocation === null ||
-      pickedLocation === undefined ||
-      pickedLocation === "" ||
       enteredTitle === null ||
       enteredTitle === undefined ||
       enteredTitle === "" ||
@@ -143,6 +141,12 @@ export default function AddProductForm({ update }) {
       pickedLocation === ""
     ) {
       Alert.alert("No location taken yet!");
+    } else if (
+      selectedImage === null ||
+      selectedImage === undefined ||
+      selectedImage === ""
+    ) {
+      Alert.alert("No image taken yet!");
     } else {
       return true;
     }
@@ -193,9 +197,9 @@ export default function AddProductForm({ update }) {
     };
     let phoneNumberLenght = payload.phoneNumber.length;
     const validate = validateFormHandler(payload, phoneNumberLenght);
-
-    if (validate) {
-      console.log(validate);
+    const imageUpdate = uploadImage(selectedImage);
+    if (validate && imageUpdate) {
+      console.log(validate, imageUpdate);
       update(payload);
     } else {
       console.log("Not update!");

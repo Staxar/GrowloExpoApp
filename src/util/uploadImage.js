@@ -1,14 +1,10 @@
-import {
-  CLOUDINARY_CLOUD_NAME,
-  CLOUDINARY_API_KEY,
-  CLOUDINARY_UPLOAD_PRESETS,
-} from "@env";
+import { CLOUDINARY_CLOUD_NAME, CLOUDINARY_UPLOAD_PRESETS } from "@env";
+
 export async function uploadImage(image) {
   const url = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
-  console.log("URL: ", url);
-  console.log("IMAGE: ", image);
+  console.log("IMAGE: ", image[0]);
   const formData = new FormData();
-  formData.append("file", image);
+  formData.append("file", image[0]);
   formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESETS);
   const response = await fetch(url, {
     method: "POST",
@@ -20,8 +16,4 @@ export async function uploadImage(image) {
   if (!response.ok) {
     throw new Error("Failed to fetch adress!");
   }
-
-  const data = await response.json();
-  console.log("DATA: ", data);
-  return address;
 }

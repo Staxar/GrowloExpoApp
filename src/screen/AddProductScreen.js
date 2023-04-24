@@ -27,8 +27,9 @@ function AddProductScreen({ navigation, route }) {
         prize: props.prize,
         title: props.enteredTitle,
       }).then(() => {
-        DevSettings.reload();
         navigation.navigate("Welcome");
+        DevSettings.reload();
+
         console.log("Success!");
       });
     } catch (err) {
