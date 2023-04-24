@@ -107,13 +107,11 @@ function ImagePickerExample({ onTakeImage, onPickedImage }) {
   useEffect(() => {
     if (pickedImage.length > 0) {
       onPickedImage(pickedImage);
-    } else {
-      console.log("Something went wrong!");
     }
   }, [pickedImage, takenImage, takeImageHandler, setPickedImage]);
 
   return (
-    <View style={{ width: "100%" }}>
+    <View style={styles.container}>
       <View style={styles.imagePreview}>{ImagePreview()}</View>
       <OutlinedButton icon="camera" onPress={() => takeImageHandler("camera")}>
         Take Image
@@ -132,6 +130,9 @@ function ImagePickerExample({ onTakeImage, onPickedImage }) {
 export default ImagePickerExample;
 
 const styles = StyleSheet.create({
+  container: {
+    width: "100%",
+  },
   imagePreview: {
     width: "100%",
     height: 200,
