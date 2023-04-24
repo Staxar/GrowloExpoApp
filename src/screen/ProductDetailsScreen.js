@@ -6,6 +6,7 @@ import { Colors, Typography } from "../constans/styles";
 import { Image } from "react-native";
 import { getMapPreview } from "../util/location";
 import DetailProductComponent from "../components/ui/DetailProductComponent";
+import { ActivityIndicator } from "react-native";
 
 export default function ProductDetailsScreen({ navigation, route }) {
   const [data, setData] = useState([]);
@@ -20,7 +21,7 @@ export default function ProductDetailsScreen({ navigation, route }) {
         if (snapshot.exists()) {
           const data = snapshot.val();
           try {
-            return setData(data);
+            setData(data);
           } catch (e) {
             console.log(e);
           }
@@ -31,10 +32,16 @@ export default function ProductDetailsScreen({ navigation, route }) {
       .catch((error) => {
         return error(error);
       });
-  }, [navigation, route]);
+  }, []);
 
-  return (
-    <View style={{ flex: 1, padding: 20 }}>
+  let componentPreview = (
+    <ActivityIndicator color={Colors.primary100} size={"large"} />
+  );
+
+  if (data === []) {
+    console.log("Something goes wrong!", data);
+  } else {
+    componentPreview = (
       <DetailProductComponent
         id={id}
         title={data.title}
@@ -44,8 +51,9 @@ export default function ProductDetailsScreen({ navigation, route }) {
         pickedLocation={data.pickedLocation}
         selectedImage={data.selectedImage}
       />
-    </View>
-  );
+    );
+  }
+  return <View style={{ flex: 1, padding: 20 }}>{componentPreview}</View>;
 }
 
 const styles = StyleSheet.create({});
