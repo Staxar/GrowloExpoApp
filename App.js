@@ -70,7 +70,7 @@ function RootTabNavigators() {
         name="Categories"
         component={CategoryScreen}
         options={{
-          tabBarIcon: () => <Ionicons name="add-circle-outline" size={18} />,
+          tabBarIcon: () => <Ionicons name="folder-open-outline" size={18} />,
           headerStyle: {
             backgroundColor: Colors.primary100,
             height: 85,
