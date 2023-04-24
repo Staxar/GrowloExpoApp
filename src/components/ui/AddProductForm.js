@@ -22,8 +22,9 @@ import SearchBar from "./SearchBar";
 import { phoneCodes } from "../../../assets/Data/PhoneCodes";
 import FlagItem from "./FlagItem";
 import { DATA_CATEGORY } from "../../../assets/Data/DATA_CATEGORY";
+import { KeyboardAvoidingView } from "react-native";
 export default function AddProductForm({ update }) {
-  const [selectedImage, setSelectedImage] = useState();
+  const [selectedImage, setSelectedImage] = useState([]);
   const [pickedImages, setPickedImages] = useState();
   const [pickedLocation, setPickedLocation] = useState();
   const [enteredTitle, setEnteredTitle] = useState("");
@@ -74,8 +75,7 @@ export default function AddProductForm({ update }) {
   }
   //Take image from Image Gallery - max 3
   function pickImageHandler(imageUri) {
-    // console.log(imageUri);
-    setPickedImages(imageUri);
+    setSelectedImage(imageUri);
   }
 
   function takePhoneCodeHandler(dial_code, code) {
@@ -89,7 +89,6 @@ export default function AddProductForm({ update }) {
 
   function validateFormHandler(payload, phoneNumberLenght) {
     let selectedImage = payload.selectedImage;
-    let pickedImages = payload.pickedImages;
     let pickedLocation = payload.pickedLocation;
     let selectedUnit = payload.selectedUnit;
     let selectedPhoneCode = payload.selectedPhoneCode;
@@ -138,16 +137,11 @@ export default function AddProductForm({ update }) {
     } else if (phoneNumberLenght < 9) {
       Alert.alert("Phone number should have 9 digits!");
     } else if (
-      (pickedImages === null ||
-        pickedImages === undefined ||
-        pickedImages === "" ||
-        pickedImages === []) &&
-      (selectedImage === null ||
-        selectedImage === undefined ||
-        selectedImage === "" ||
-        selectedImage === [])
+      pickedLocation === null ||
+      pickedLocation === undefined ||
+      pickedLocation === ""
     ) {
-      Alert.alert("Take or select images from gallery!");
+      Alert.alert("No location taken yet!");
     } else {
       return true;
     }
@@ -164,9 +158,6 @@ export default function AddProductForm({ update }) {
         break;
       case "adress":
         setenteredAdress(enteredValue);
-        break;
-      case "email":
-        setEnteredEmail(enteredValue);
         break;
       case "username":
         setenteredUsername(enteredValue);
@@ -187,7 +178,7 @@ export default function AddProductForm({ update }) {
     let timestamp = new Date().toDateString();
     const payload = {
       selectedImage: selectedImage,
-      pickedImages: pickedImages,
+      // pickedImages: pickedImages,
       pickedLocation: pickedLocation,
       selectedUnit: selectedUnit,
       selectedCategory: selectedCategory,
@@ -203,6 +194,7 @@ export default function AddProductForm({ update }) {
     const validate = validateFormHandler(payload, phoneNumberLenght);
 
     if (validate) {
+      console.log(payload);
       update(payload);
     } else {
       console.log("Not update!");
@@ -343,6 +335,7 @@ export default function AddProductForm({ update }) {
           onPress={modalVisableHandler}
           onUpdateValue={updateInputValueHandler.bind(this, "phone")}
         />
+
         <OutlinedButton onPress={savePlaceHandler}>Add product</OutlinedButton>
       </View>
     </View>
@@ -362,6 +355,9 @@ const styles = StyleSheet.create({
     height: "100%",
     width: "100%",
     backgroundColor: "#ffff",
+  },
+  container: {
+    flex: 1,
   },
   modalView: {
     margin: 20,

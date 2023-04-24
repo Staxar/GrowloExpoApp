@@ -17,6 +17,7 @@ import MapScreen from "./src/screen/MapScreen";
 import CategoryScreen from "./src/screen/CategoryScreen";
 import AllProductsScreen from "./src/screen/AllProductsScreen";
 import ProductDetailsScreen from "./src/screen/ProductDetailsScreen";
+import { Text } from "react-native";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -104,7 +105,21 @@ function AuthenticatedStack() {
         options={{ headerShown: true }}
       />
       <Stack.Screen name="AllProducts" component={AllProductsScreen} />
-      <Stack.Screen name="Details" component={ProductDetailsScreen} />
+      <Stack.Screen
+        name="Details"
+        component={ProductDetailsScreen}
+        options={{
+          headerRight: () => (
+            <Pressable>
+              <Ionicons
+                size={24}
+                name="heart-outline"
+                style={{ marginRight: 15, color: "#000" }}
+              />
+            </Pressable>
+          ),
+        }}
+      />
     </Stack.Navigator>
   );
 }

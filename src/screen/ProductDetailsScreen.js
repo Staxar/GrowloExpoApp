@@ -1,6 +1,11 @@
 import { StyleSheet, Text, View } from "react-native";
 import { useEffect, useState } from "react";
 import { child, get, getDatabase, query, ref } from "firebase/database";
+import { Colors, Typography } from "../constans/styles";
+
+import { Image } from "react-native";
+import { getMapPreview } from "../util/location";
+import DetailProductComponent from "../components/ui/DetailProductComponent";
 
 export default function ProductDetailsScreen({ navigation, route }) {
   const [data, setData] = useState([]);
@@ -14,13 +19,8 @@ export default function ProductDetailsScreen({ navigation, route }) {
       .then((snapshot) => {
         if (snapshot.exists()) {
           const data = snapshot.val();
-          //   const productArray = Object.keys(data).map((key) => ({
-          //     id: key,
-          //     ...data[key],
-          //   }));
-
           try {
-            setData(productArray);
+            return setData(data);
           } catch (e) {
             console.log(e);
           }
@@ -34,8 +34,16 @@ export default function ProductDetailsScreen({ navigation, route }) {
   }, [navigation, route]);
 
   return (
-    <View>
-      <Text></Text>
+    <View style={{ flex: 1, padding: 20 }}>
+      <DetailProductComponent
+        id={id}
+        title={data.title}
+        prize={data.prize}
+        unit={data.unit}
+        description={data.description}
+        pickedLocation={data.pickedLocation}
+        selectedImage={data.selectedImage}
+      />
     </View>
   );
 }

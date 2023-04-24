@@ -18,7 +18,7 @@ function AddProductScreen({ navigation, route }) {
         description: props.description,
         timestamp: props.timestamp,
         selectedImage: props.selectedImage,
-        pickedImages: props.pickedImages,
+        // pickedImages: props.pickedImages,
         pickedLocation: props.pickedLocation,
         unit: props.selectedUnit,
         category: props.selectedCategory,
@@ -28,8 +28,9 @@ function AddProductScreen({ navigation, route }) {
         prize: props.prize,
         title: props.enteredTitle,
       });
-      DevSettings.reload();
-      navigation.navigate("Welcome");
+      // console.log("updated!");
+      // DevSettings.reload();
+      // navigation.navigate("Welcome");
     } catch (err) {
       Alert.alert(console.error(err));
     }

@@ -31,6 +31,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderWidth: 1,
     borderColor: Colors.primary500,
+    borderRadius: 4,
   },
   pressed: {
     opacity: 0.7,
