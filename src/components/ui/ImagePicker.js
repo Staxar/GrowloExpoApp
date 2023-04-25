@@ -5,7 +5,7 @@ import OutlinedButton from "./OutlinedButton";
 import { Colors } from "../../constans/styles";
 import PagerView from "react-native-pager-view";
 import ImageViewer from "./ImageViewer";
-
+import { manipulateAsync } from "expo-image-manipulator";
 function ImagePickerExample({ onTakeImage, onPickedImage }) {
   const [cameraPermissionInformation, requestPermission] =
     ImagePicker.useCameraPermissions();
@@ -51,8 +51,12 @@ function ImagePickerExample({ onTakeImage, onPickedImage }) {
         return;
       }
       setPickedImage([]);
-      setTakenImage(image.assets[0].uri);
-      onTakeImage(image.assets[0].uri);
+      const result = await manipulateAsync(image.assets[0].uri, [
+        { resize: { width: 640, height: 480 } },
+      ]);
+      setTakenImage(result.uri);
+      onTakeImage(result.uri);
+
       return;
     } else if (props === "image") {
       let result = await ImagePicker.launchImageLibraryAsync({
@@ -67,9 +71,13 @@ function ImagePickerExample({ onTakeImage, onPickedImage }) {
       } else {
         setTakenImage(null);
         setPickedImage([]);
+
         {
-          result.assets.map((image) => {
-            return setPickedImage((current) => [...current, image.uri]);
+          result.assets.map(async (image) => {
+            const result = await manipulateAsync(image.uri, [
+              { resize: { width: 640, height: 480 } },
+            ]);
+            return setPickedImage((current) => [...current, result.uri]);
           });
         }
       }
