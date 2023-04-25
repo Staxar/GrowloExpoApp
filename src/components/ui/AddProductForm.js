@@ -22,9 +22,9 @@ import SearchBar from "./SearchBar";
 import { phoneCodes } from "../../../assets/Data/PhoneCodes";
 import FlagItem from "./FlagItem";
 import { DATA_CATEGORY } from "../../../assets/Data/DATA_CATEGORY";
-import { uploadImage } from "../../util/uploadImage";
+import { uploadImages } from "../../util/uploadImage";
 export default function AddProductForm({ update }) {
-  const [selectedImage, setSelectedImage] = useState();
+  const [selectedImage, setSelectedImage] = useState([]);
   const [pickedImages, setPickedImages] = useState();
   const [pickedLocation, setPickedLocation] = useState();
   const [enteredTitle, setEnteredTitle] = useState("");
@@ -71,8 +71,7 @@ export default function AddProductForm({ update }) {
 
   //Take one Image
   function takeImageHandler(imageUri) {
-    setSelectedImage(imageUri);
-    return;
+    return setSelectedImage((current) => [...current, imageUri]);
   }
   //Take image from Image Gallery - max 3
   function pickImageHandler(imageUri) {
@@ -178,12 +177,13 @@ export default function AddProductForm({ update }) {
         break;
     }
   }
-
+  async function setImage(file) {
+    await uploadImages(file);
+  }
   function savePlaceHandler() {
     let timestamp = new Date().toDateString();
     const payload = {
       selectedImage: selectedImage,
-      // pickedImages: pickedImages,
       pickedLocation: pickedLocation,
       selectedUnit: selectedUnit,
       selectedCategory: selectedCategory,
@@ -197,7 +197,10 @@ export default function AddProductForm({ update }) {
     };
     let phoneNumberLenght = payload.phoneNumber.length;
     const validate = validateFormHandler(payload, phoneNumberLenght);
-    const imageUpdate = uploadImage(selectedImage);
+    const imageUpdate = selectedImage.map((file) => {
+      setImage(file);
+    });
+    console.log("imageUpdate", imageUpdate);
     if (validate && imageUpdate) {
       console.log(validate, imageUpdate);
       update(payload);

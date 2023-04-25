@@ -5,6 +5,7 @@ import { AuthContext } from "../store/auth-context";
 import { useContext } from "react";
 import { Alert } from "react-native";
 import { ScrollView } from "react-native";
+import { uploadImages } from "../util/uploadImage";
 function AddProductScreen({ navigation, route }) {
   const authCtx = useContext(AuthContext);
 
@@ -27,10 +28,13 @@ function AddProductScreen({ navigation, route }) {
         prize: props.prize,
         title: props.enteredTitle,
       }).then(() => {
+        // try{
+        //   uploadImages(props.selectedImage)
+        // } catch(e) {
+        //   console.log(e)
+        // }
         navigation.navigate("Welcome");
         DevSettings.reload();
-
-        console.log("Success!");
       });
     } catch (err) {
       Alert.alert(console.error(err));
