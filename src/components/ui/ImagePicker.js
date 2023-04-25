@@ -97,10 +97,10 @@ function ImagePickerExample({ onTakeImage, onPickedImage }) {
       ));
     } else if (pickedImage.length > 0) {
       return (imagePreview = (
-        <PagerView initialPage={0} style={{ height: "100%", width: "100%" }}>
+        <PagerView initialPage={0} style={styles.image}>
           {pickedImage.map((image, index) => {
             return (
-              <View key={index * 10} style={styles.image}>
+              <View key={index * 10} style={{ flex: 1 }}>
                 <ImageViewer selectedImage={image} key={index} />
                 <Text></Text>
               </View>
