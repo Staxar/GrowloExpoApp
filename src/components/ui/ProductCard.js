@@ -16,7 +16,8 @@ function ProductCard({
   function navigateToDetailsHandler(id) {
     navigation.navigate("Details", id);
   }
-
+  let image = productImage[0];
+  console.log(typeof image);
   return (
     <View style={styles.rootContainer}>
       <Pressable
@@ -25,19 +26,16 @@ function ProductCard({
       >
         <View style={styles.outerContainer}>
           <View style={styles.imageContainer}>
-            {/* {productImage &&
-              productImage.map((item) => {
-                retrun(
-                  <Image
-                    source={
-                      productImage === undefined
-                        ? require("../../../assets/Images/imagePlaceholder.png")
-                        : productImage
+            <Image
+              source={
+                image !== undefined
+                  ? {
+                      uri: image,
                     }
-                    style={styles.image}
-                  />
-                );
-              })} */}
+                  : require("../../../assets/Images/imagePlaceholder.png")
+              }
+              style={styles.image}
+            />
           </View>
           <View style={styles.contentContainer}>
             <Text style={Typography.smallDescription}>{productName}</Text>

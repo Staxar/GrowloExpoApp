@@ -11,7 +11,7 @@ function WelcomeScreen() {
     <SafeAreaView style={styles.outerContainer}>
       <ScrollView style={styles.innerContainer}>
         <Banner />
-        <ProductGroup title={"Best Deals"} data={DATA} />
+        {/* <ProductGroup title={"Best Deals"} data={DATA} /> */}
       </ScrollView>
     </SafeAreaView>
   );
