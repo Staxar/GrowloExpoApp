@@ -22,10 +22,8 @@ import SearchBar from "./SearchBar";
 import { phoneCodes } from "../../../assets/Data/PhoneCodes";
 import FlagItem from "./FlagItem";
 import { DATA_CATEGORY } from "../../../assets/Data/DATA_CATEGORY";
-import { uploadImages } from "../../util/uploadImage";
 export default function AddProductForm({ update }) {
   const [selectedImage, setSelectedImage] = useState([]);
-  const [pickedImages, setPickedImages] = useState();
   const [pickedLocation, setPickedLocation] = useState();
   const [enteredTitle, setEnteredTitle] = useState("");
   const [selectedUnit, setSelectedUnit] = useState("");
@@ -71,10 +69,12 @@ export default function AddProductForm({ update }) {
 
   //Take one Image
   function takeImageHandler(imageUri) {
+    setSelectedImage([]);
     return setSelectedImage((current) => [...current, imageUri]);
   }
   //Take image from Image Gallery - max 3
   function pickImageHandler(imageUri) {
+    setSelectedImage([]);
     return setSelectedImage(imageUri);
   }
 
@@ -88,7 +88,6 @@ export default function AddProductForm({ update }) {
   }
 
   function validateFormHandler(payload, phoneNumberLenght) {
-    console.log("payload", payload);
     let selectedImage = payload.selectedImage;
     let pickedLocation = payload.pickedLocation;
     let selectedUnit = payload.selectedUnit;
@@ -177,9 +176,7 @@ export default function AddProductForm({ update }) {
         break;
     }
   }
-  async function setImage(file) {
-    await uploadImages(file);
-  }
+
   function savePlaceHandler() {
     let timestamp = new Date().toDateString();
     const payload = {
@@ -197,12 +194,8 @@ export default function AddProductForm({ update }) {
     };
     let phoneNumberLenght = payload.phoneNumber.length;
     const validate = validateFormHandler(payload, phoneNumberLenght);
-    const imageUpdate = selectedImage.map((file) => {
-      setImage(file);
-    });
-    console.log("imageUpdate", imageUpdate);
-    if (validate && imageUpdate) {
-      console.log(validate, imageUpdate);
+
+    if (validate) {
       update(payload);
     } else {
       console.log("Not update!");

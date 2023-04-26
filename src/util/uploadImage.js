@@ -1,32 +1,55 @@
-import { getStorage, ref, uploadBytes } from "firebase/storage";
+import { getStorage, ref, getDownloadURL, uploadBytes } from "firebase/storage";
 
-// export async function uploadImage(image) {
-//   const url = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
-//   console.log("IMAGE: ", image[0]);
-//   const formData = new FormData();
-//   formData.append("file", image[0]);
-//   formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESETS);
-//   const response = await fetch(url, {
-//     method: "POST",
-//     body: formData,
-//   }).then((response) => {
-//     console.log("RESPONSE: ", response);
-//   });
+async function upload2(blob, storageRef, metadata) {
+  const firstStep = await uploadBytes(storageRef, blob, metadata);
+  const secondStep = await getDownloadURL(firstStep.ref);
+  return secondStep;
+  // uploadBytes(storageRef, blob, metadata).then((snapshot) => {
+  //   console.log("uploadBytesResumable");
+  //   getDownloadURL(snapshot.ref).then((downloadURL) => {
+  //     console.log("File available at: ", downloadURL);
+  //     return downloadURL;
+  //   });
+  // });
+}
 
-//   if (!response.ok) {
-//     throw new Error("Failed to fetch adress!");
-//   }
-// }
-
-export async function uploadImages(file) {
+export async function uploadImage(file) {
+  let fileUrl = "";
   const fileName = file.substring(file.lastIndexOf("/") + 1);
-  console.log("uploadImages: ", file, "FILENAME: ", fileName);
   const response = await fetch(file);
   const blob = await response.blob();
-  console.log("BLOB: ", blob);
   const storage = getStorage();
-  const storageRef = ref(storage, `images/${fileName}`);
-  uploadBytes(storageRef, blob).then((snapshot) => {
-    console.log(snapshot);
-  });
+
+  const metadata = {
+    contentType: "image/jpeg",
+  };
+
+  const storageRef = ref(storage, "images/" + fileName);
+  const res = await upload2(blob, storageRef, metadata);
+  return res;
 }
+
+export async function uploadImages(files) {
+  const imageUrls = [];
+  for (const file of files) {
+    const fileUrl = await uploadImage(file);
+    imageUrls.push(fileUrl);
+  }
+  return imageUrls;
+}
+
+// export async function uploadImages(file) {
+//   const fileName = file.substring(file.lastIndexOf("/") + 1);
+//   console.log("uploadImages: ", file, "FILENAME: ", fileName);
+//   const response = await fetch(file);
+//   const blob = await response.blob();
+//   console.log("BLOB: ", blob);
+//   const storage = getStorage();
+//   const storageRef = ref(storage, `images/${fileName}`);
+//   uploadBytes(storageRef, blob).then((snapshot) => {
+//     getDownloadURL(snapshot.ref).then((downloadURL) => {
+//       const imageUrl = downloadURL;
+//       return imageUrl;
+//     });
+//   });
+// }

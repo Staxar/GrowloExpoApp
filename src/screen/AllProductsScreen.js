@@ -59,6 +59,7 @@ export default function AllProductsScreen({ route, navigation }) {
                 productUnit={item.unit}
                 productAmount={item.amount}
                 productId={item.id}
+                productImage={item.selectedImage}
               />
             )}
             style={{ width: "100%" }}

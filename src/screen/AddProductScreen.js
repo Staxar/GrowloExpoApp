@@ -1,45 +1,27 @@
-import { DevSettings, SafeAreaView, StyleSheet } from "react-native";
+import { SafeAreaView, StyleSheet } from "react-native";
 import AddProductForm from "../components/ui/AddProductForm";
-import { getDatabase, push, ref, set } from "firebase/database";
 import { AuthContext } from "../store/auth-context";
 import { useContext } from "react";
-import { Alert } from "react-native";
 import { ScrollView } from "react-native";
 import { uploadImages } from "../util/uploadImage";
+import { uploadProduct } from "../util/uploadProduct";
+
 function AddProductScreen({ navigation, route }) {
   const authCtx = useContext(AuthContext);
 
-  function updateValues(props) {
-    const db = getDatabase();
-    const postListRef = ref(db, "products");
-    const newPostRef = push(postListRef);
+  async function updateValues(props) {
+    const image = props.selectedImage;
     try {
-      set(newPostRef, {
-        uid: authCtx.uid,
-        description: props.description,
-        timestamp: props.timestamp,
-        selectedImage: props.selectedImage,
-        pickedLocation: props.pickedLocation,
-        unit: props.selectedUnit,
-        category: props.selectedCategory,
-        phoneCode: props.selectedPhoneCode,
-        phoneNumber: props.phoneNumber,
-        amount: props.amount,
-        prize: props.prize,
-        title: props.enteredTitle,
-      }).then(() => {
-        // try{
-        //   uploadImages(props.selectedImage)
-        // } catch(e) {
-        //   console.log(e)
-        // }
-        navigation.navigate("Welcome");
-        DevSettings.reload();
-      });
-    } catch (err) {
-      Alert.alert(console.error(err));
+      const imageUrl = await uploadImages(image);
+      const product = await uploadProduct(props, imageUrl, authCtx.uid);
+      console.log("Product: ", product);
+      navigation.navigate("Welcome");
+      // const product = await uploadProduct(props);
+    } catch (e) {
+      console.log(e);
     }
   }
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>

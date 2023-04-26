@@ -25,14 +25,19 @@ function ProductCard({
       >
         <View style={styles.outerContainer}>
           <View style={styles.imageContainer}>
-            <Image
-              source={
-                productImage === undefined
-                  ? require("../../../assets/Images/imagePlaceholder.png")
-                  : productImage
-              }
-              style={styles.image}
-            />
+            {/* {productImage &&
+              productImage.map((item) => {
+                retrun(
+                  <Image
+                    source={
+                      productImage === undefined
+                        ? require("../../../assets/Images/imagePlaceholder.png")
+                        : productImage
+                    }
+                    style={styles.image}
+                  />
+                );
+              })} */}
           </View>
           <View style={styles.contentContainer}>
             <Text style={Typography.smallDescription}>{productName}</Text>

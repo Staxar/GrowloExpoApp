@@ -91,7 +91,6 @@ function ImagePickerExample({ onTakeImage, onPickedImage }) {
     let imagePreview = <Text>No image taken yet.</Text>;
 
     if (takenImage) {
-      // console.log(takenImage);
       return (imagePreview = (
         <Image style={styles.image} source={{ uri: takenImage }} />
       ));
