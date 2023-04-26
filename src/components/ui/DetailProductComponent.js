@@ -4,6 +4,8 @@ import { Colors, Typography } from "../../constans/styles";
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "react-native";
 import { getMapPreview } from "../../util/location";
+import PagerView from "react-native-pager-view";
+import ImageViewer from "./ImageViewer";
 export default function DetailProductComponent({
   selectedImage,
   title,
@@ -13,10 +15,21 @@ export default function DetailProductComponent({
   id,
   pickedLocation,
 }) {
+  console.log(selectedImage);
   return (
     <ScrollView>
-      <View style={{ height: 150, flex: 1, justifyContent: "space-between" }}>
-        <Text>{selectedImage}</Text>
+      <View style={{ height: 200, flex: 1, justifyContent: "space-between" }}>
+        <PagerView initialPage={0} style={styles.image}>
+          {selectedImage &&
+            selectedImage.map((image, index) => {
+              return (
+                <View key={index} style={{ flex: 1 }}>
+                  <ImageViewer selectedImage={image} key={index} />
+                  <Text></Text>
+                </View>
+              );
+            })}
+        </PagerView>
       </View>
       <View style={{ gap: 10, marginVertical: 5 }}>
         <Text style={Typography.bigDescription}>{title}</Text>
@@ -74,5 +87,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: Colors.primary800,
     borderRadius: 4,
+  },
+  image: {
+    width: "100%",
+    height: "100%",
   },
 });
