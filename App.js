@@ -19,6 +19,7 @@ import AllProductsScreen from "./src/screen/AllProductsScreen";
 import ProductDetailsScreen from "./src/screen/ProductDetailsScreen";
 import { ActivityIndicator } from "react-native";
 import MessageScreen from "./src/screen/MessageScreen";
+import ChatScreen from "./src/screen/ChatScreen";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -89,7 +90,7 @@ function RootTabNavigators() {
         }}
       />
       <Tab.Screen
-        name="Chat"
+        name="Messages"
         component={MessageScreen}
         options={{
           tabBarIcon: () => (
@@ -101,7 +102,7 @@ function RootTabNavigators() {
             borderRadius: 8,
           },
           headerTintColor: "#FFFFFF",
-          headerTitle: "Chat",
+          headerTitle: "Messages",
         }}
       />
       <Tab.Screen
@@ -149,6 +150,13 @@ function AuthenticatedStack() {
               />
             </Pressable>
           ),
+        }}
+      />
+      <Stack.Screen
+        name="Chat"
+        component={ChatScreen}
+        options={{
+          title: "",
         }}
       />
     </Stack.Navigator>

@@ -1,7 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
-import React from "react";
-import UserAvatar from "./UserAvatar";
 import { Colors, Typography } from "../../constans/styles";
+import UserAvatar from "./UserAvatar";
 
 export default function ChatItem({ userName, userImage, message, status }) {
   return (

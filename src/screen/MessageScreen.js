@@ -5,8 +5,9 @@ import { Typography } from "../constans/styles";
 import { USERS } from "../../assets/Data/Users";
 import UserAvatar from "../components/ui/UserAvatar";
 import ChatItem from "../components/ui/ChatItem";
+import { Pressable } from "react-native";
 
-export default function MessageScreen() {
+export default function MessageScreen({ navigation, route }) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.innerContainer}>
@@ -19,13 +20,15 @@ export default function MessageScreen() {
           <FlatList
             data={USERS}
             renderItem={({ item }) => (
-              <UserAvatar
-                userName={item.name}
-                userImage={item.image_path}
-                placeholderImageSource={
-                  "D:ProjectsGrowloExpoAppassetsImagesimagePlaceholder.webp"
-                }
-              />
+              <Pressable onPress={() => navigation.navigate("Chat")}>
+                <UserAvatar
+                  userName={item.name}
+                  userImage={item.image_path}
+                  placeholderImageSource={
+                    "D:ProjectsGrowloExpoAppassetsImagesimagePlaceholder.webp"
+                  }
+                />
+              </Pressable>
             )}
             keyExtractor={(item) => item.key}
             horizontal={true}

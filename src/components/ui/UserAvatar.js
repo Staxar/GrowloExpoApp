@@ -1,5 +1,4 @@
 import { StyleSheet, Text, View } from "react-native";
-import React from "react";
 import { Image } from "react-native";
 import { Typography } from "../../constans/styles";
 
@@ -20,8 +19,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   img: {
-    width: 44,
-    height: 44,
-    borderRadius: 44 / 2,
+    width: 30,
+    height: 30,
+    borderRadius: 30 / 2,
   },
 });

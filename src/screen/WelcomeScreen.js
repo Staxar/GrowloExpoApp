@@ -1,8 +1,8 @@
 import { StyleSheet, ScrollView } from "react-native";
-import Banner from "../components/ui/Banner";
-import ProductGroup from "../components/ui/ProductGroup";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { DATA } from "../../assets/Data/DATA";
+import Banner from "../components/ui/Banner";
+import ProductGroup from "../components/ui/ProductGroup";
 function WelcomeScreen() {
   return (
     <SafeAreaView style={styles.outerContainer}>
