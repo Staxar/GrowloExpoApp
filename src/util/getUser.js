@@ -1,6 +1,7 @@
 import { child, get, getDatabase, ref } from "firebase/database";
 
 export async function getUser(userId) {
+  console.log("USER");
   let result;
   const dbRef = ref(getDatabase());
   await get(child(dbRef, `users/${userId}`))

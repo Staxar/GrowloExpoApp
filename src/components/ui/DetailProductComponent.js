@@ -15,6 +15,7 @@ export default function DetailProductComponent({
   description,
   id,
   pickedLocation,
+  sendMessage,
 }) {
   return (
     <ScrollView>
@@ -40,7 +41,7 @@ export default function DetailProductComponent({
           }}
         >
           <Text style={Typography.bigDescription}>{title}</Text>
-          <OutlinedButton>
+          <OutlinedButton onPress={sendMessage}>
             Send message{" "}
             <Ionicons name="send" size={12} color={Colors.primary100} />
           </OutlinedButton>

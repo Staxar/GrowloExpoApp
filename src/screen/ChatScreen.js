@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import UserAvatar from "../components/ui/UserAvatar";
 import { Colors, Typography } from "../constans/styles";
 import Message from "../components/ui/Message";
@@ -7,29 +7,30 @@ import { KeyboardAvoidingView } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { TextInput } from "react-native";
 import OutlinedButton from "../components/ui/OutlinedButton";
+import { sendMessage } from "../util/messages";
+import { getUser } from "../util/getUser";
 export default function ChatScreen({ navigation, route }) {
+  const [routeParams, setRouteParams] = useState({});
+  const [message, setMessage] = useState("");
+  const [recipient, setRecipiet] = useState({});
+
+  const getUser = async () => {
+    let user = await getUser(route.params.author)
+      .then((res) => console.log(res))
+      .catch((e) => console.log(e));
+    setRecipiet(user);
+  };
   useEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-          }}
-        >
-          <UserAvatar
-            userImage={
-              "https://www.dariuszkempny.pl/wp-content/uploads/2022/03/en-face.jpg"
-            }
-          />
-          <View>
-            <Text style={Typography.smallDescription}>Adriane Watson</Text>
-            <Text style={Typography.smallDescription}>Online</Text>
-          </View>
-        </View>
-      ),
-    });
+    console.log("UserEffect");
+    getUser();
+    console.log("UserEffect2");
   }, []);
+
+  function sendMessageHandler() {
+    sendMessage(routeParams, message);
+    setMessage("");
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.innerContainer}>
@@ -77,9 +78,11 @@ export default function ChatScreen({ navigation, route }) {
               }}
               placeholder="Type somethnig!"
               multiline={true}
+              onChangeText={setMessage}
+              value={message}
             />
             <View style={{ flex: 1 }}>
-              <OutlinedButton>
+              <OutlinedButton onPress={sendMessageHandler}>
                 Send <Ionicons name="send" size={12} />
               </OutlinedButton>
             </View>
