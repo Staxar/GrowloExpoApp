@@ -10,10 +10,24 @@ function AddProductScreen({ navigation, route }) {
   const authCtx = useContext(AuthContext);
 
   async function updateValues(props) {
-    const image = props.selectedImage;
+    let image = props.selectedImage;
     try {
       const imageUrl = await uploadImages(image);
-      await uploadProduct(props, imageUrl, authCtx.uid);
+      const payload = {
+        uid: authCtx.uid,
+        description: props.description,
+        timestamp: props.timestamp,
+        selectedImage: imageUrl,
+        pickedLocation: props.pickedLocation,
+        unit: props.selectedUnit,
+        category: props.selectedCategory,
+        phoneCode: props.selectedPhoneCode,
+        phoneNumber: props.phoneNumber,
+        amount: props.amount,
+        prize: props.prize,
+        title: props.enteredTitle,
+      };
+      await uploadProduct(payload, imageUrl);
       navigation.navigate("Welcome");
     } catch (e) {
       console.log(e);

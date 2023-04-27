@@ -1,23 +1,10 @@
 import { getDatabase, push, ref, set } from "firebase/database";
 
-export async function uploadProduct(props, item, uid) {
+export async function uploadProduct(payload) {
   const db = getDatabase();
   const ProductListRef = ref(db, "products");
   const newProductRef = push(ProductListRef);
-  set(newProductRef, {
-    uid: uid,
-    description: props.description,
-    timestamp: props.timestamp,
-    selectedImage: item,
-    pickedLocation: props.pickedLocation,
-    unit: props.selectedUnit,
-    category: props.selectedCategory,
-    phoneCode: props.selectedPhoneCode,
-    phoneNumber: props.phoneNumber,
-    amount: props.amount,
-    prize: props.prize,
-    title: props.enteredTitle,
-  })
+  set(newProductRef, payload)
     .then(() => {
       console.log("Data saved successfully!");
     })
