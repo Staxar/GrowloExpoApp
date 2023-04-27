@@ -15,7 +15,6 @@ export default function DetailProductComponent({
   id,
   pickedLocation,
 }) {
-  console.log(selectedImage);
   return (
     <ScrollView>
       <View style={{ height: 200, flex: 1, justifyContent: "space-between" }}>

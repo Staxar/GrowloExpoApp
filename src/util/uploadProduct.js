@@ -1,9 +1,6 @@
 import { getDatabase, push, ref, set } from "firebase/database";
 
 export async function uploadProduct(props, item, uid) {
-  console.log("PROPS: ", props);
-  console.log("item: ", item);
-  console.log("uid: ", uid);
   const db = getDatabase();
   const ProductListRef = ref(db, "products");
   const newProductRef = push(ProductListRef);

@@ -13,10 +13,8 @@ function AddProductScreen({ navigation, route }) {
     const image = props.selectedImage;
     try {
       const imageUrl = await uploadImages(image);
-      const product = await uploadProduct(props, imageUrl, authCtx.uid);
-      console.log("Product: ", product);
+      await uploadProduct(props, imageUrl, authCtx.uid);
       navigation.navigate("Welcome");
-      // const product = await uploadProduct(props);
     } catch (e) {
       console.log(e);
     }

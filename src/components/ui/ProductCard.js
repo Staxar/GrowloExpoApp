@@ -17,7 +17,6 @@ function ProductCard({
     navigation.navigate("Details", id);
   }
   let image = productImage[0];
-  console.log(typeof image);
   return (
     <View style={styles.rootContainer}>
       <Pressable

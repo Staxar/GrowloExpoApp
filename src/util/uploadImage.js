@@ -14,7 +14,6 @@ async function upload2(blob, storageRef, metadata) {
 }
 
 export async function uploadImage(file) {
-  let fileUrl = "";
   const fileName = file.substring(file.lastIndexOf("/") + 1);
   const response = await fetch(file);
   const blob = await response.blob();
