@@ -22,6 +22,7 @@ import SearchBar from "./SearchBar";
 import { phoneCodes } from "../../../assets/Data/PhoneCodes";
 import FlagItem from "./FlagItem";
 import { DATA_CATEGORY } from "../../../assets/Data/DATA_CATEGORY";
+import ContainerOutlinedButton from "./ContainerOutlinedButton";
 export default function AddProductForm({ update }) {
   const [selectedImage, setSelectedImage] = useState([]);
   const [pickedLocation, setPickedLocation] = useState();
@@ -91,32 +92,31 @@ export default function AddProductForm({ update }) {
     let selectedImage = payload.selectedImage;
     let pickedLocation = payload.pickedLocation;
     let selectedUnit = payload.selectedUnit;
-    let selectedPhoneCode = payload.selectedPhoneCode;
     let amount = payload.amount;
-    let phoneNumber = payload.phoneNumber;
+    let phoneNumber = {
+      number: payload.phoneNumber.number,
+      code: payload.phoneNumber.code,
+    };
     let prize = payload.prize;
     let enteredTitle = payload.enteredTitle;
     let description = payload.description;
     let selectedCategory = payload.selectedCategory;
 
-    if (isNaN(prize) || isNaN(phoneNumber) || isNaN(amount)) {
+    if (isNaN(prize) || isNaN(phoneNumber.number) || isNaN(amount)) {
       Alert.alert("You enter a NaN value!");
-    } else if (+prize < 0 || +phoneNumber < 0 || +amount < 0) {
+    } else if (+prize < 0 || +phoneNumber.number < 0 || +amount < 0) {
       Alert.alert("You enter a negative number!");
     } else if (
       //TO FIX!
       prize === null ||
       prize === undefined ||
       prize === "" ||
-      phoneNumber === null ||
-      phoneNumber === undefined ||
-      phoneNumber === "" ||
+      phoneNumber.number === null ||
+      phoneNumber.number === undefined ||
+      phoneNumber.number === "" ||
       amount === null ||
       amount === undefined ||
       amount === "" ||
-      selectedPhoneCode === null ||
-      selectedPhoneCode === undefined ||
-      selectedPhoneCode === "" ||
       selectedUnit === null ||
       selectedUnit === undefined ||
       selectedUnit === "" ||
@@ -184,15 +184,14 @@ export default function AddProductForm({ update }) {
       pickedLocation: pickedLocation,
       selectedUnit: selectedUnit,
       selectedCategory: selectedCategory,
-      selectedPhoneCode: selectedPhoneCode,
-      phoneNumber: phoneNumber,
+      phoneNumber: { number: phoneNumber, code: selectedPhoneCode },
       amount: amount,
       prize: prize,
       enteredTitle: enteredTitle,
       description: description,
       timestamp: timestamp,
     };
-    let phoneNumberLenght = payload.phoneNumber.length;
+    let phoneNumberLenght = payload.phoneNumber.number.length;
     const validate = validateFormHandler(payload, phoneNumberLenght);
 
     if (validate) {
@@ -242,7 +241,7 @@ export default function AddProductForm({ update }) {
             <FlatList
               data={filteredData}
               renderItem={({ item }) => (
-                <OutlinedButton
+                <ContainerOutlinedButton
                   onPress={() =>
                     takePhoneCodeHandler(item.dial_code, item.code)
                   }
@@ -252,7 +251,7 @@ export default function AddProductForm({ update }) {
                     isoCode={item.code}
                     dial={item.dial_code}
                   />
-                </OutlinedButton>
+                </ContainerOutlinedButton>
               )}
               keyExtractor={(item) => item.code}
               extraData={filteredData}

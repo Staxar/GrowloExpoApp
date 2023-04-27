@@ -21,7 +21,6 @@ function AddProductScreen({ navigation, route }) {
         pickedLocation: props.pickedLocation,
         unit: props.selectedUnit,
         category: props.selectedCategory,
-        phoneCode: props.selectedPhoneCode,
         phoneNumber: props.phoneNumber,
         amount: props.amount,
         prize: props.prize,

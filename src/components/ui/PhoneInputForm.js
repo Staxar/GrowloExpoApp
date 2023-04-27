@@ -1,6 +1,6 @@
-import { Pressable, StyleSheet, TextInput, View } from "react-native";
+import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import TitleForm from "./TitleForm";
-import FlagItem from "./FlagItem";
+import CountryFlag from "react-native-country-flag";
 const PhoneInputForm = ({
   maxLength,
   keyboardType,
@@ -15,12 +15,9 @@ const PhoneInputForm = ({
     <TitleForm title={"Phone number"}>
       <View style={styles.container}>
         <Pressable onPress={onPress}>
-          <FlagItem
-            dial={data.dial_code}
-            isoCode={data.code}
-            onPress={onPress}
-          />
+          <CountryFlag isoCode={data.code} size={24} />
         </Pressable>
+        <Text>({data.dial_code})</Text>
         <TextInput
           maxLength={maxLength}
           keyboardType={keyboardType}
@@ -51,5 +48,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignContent: "center",
     alignItems: "center",
+    gap: 10,
   },
 });
