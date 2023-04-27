@@ -1,17 +1,19 @@
-import { useContext } from "react";
 import { StyleSheet, ScrollView } from "react-native";
-import { AuthContext } from "../store/auth-context";
 import Banner from "../components/ui/Banner";
 import ProductGroup from "../components/ui/ProductGroup";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { DATA } from "../../assets/Data/DATA";
 function WelcomeScreen() {
-  const authCtx = useContext(AuthContext);
   return (
     <SafeAreaView style={styles.outerContainer}>
       <ScrollView style={styles.innerContainer}>
-        <Banner />
-        {/* <ProductGroup title={"Best Deals"} data={DATA} /> */}
+        <Banner
+          imageSrc={require("../../assets/Images/Banners/GrowloBanner.png")}
+        />
+        <Banner
+          imageSrc={require("../../assets/Images/Banners/WelcomeBanner.png")}
+        />
+        <ProductGroup title={"Best Deals"} data={DATA} />
       </ScrollView>
     </SafeAreaView>
   );
@@ -24,6 +26,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   innerContainer: {
-    marginVertical: 24,
+    marginVertical: 12,
   },
 });

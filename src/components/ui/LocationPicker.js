@@ -5,10 +5,12 @@ import OutlinedButton from "./OutlinedButton";
 import { useEffect, useState } from "react";
 import { getAddress, getMapPreview } from "../../util/location";
 import { useIsFocused, useNavigation, useRoute } from "@react-navigation/core";
+import { ActivityIndicator } from "react-native";
 
 function LocationPicker({ onPickLocation }) {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
+  const [locating, setLocating] = useState(false);
   const isFocused = useIsFocused();
   const navigation = useNavigation();
   const route = useRoute();
@@ -34,12 +36,15 @@ function LocationPicker({ onPickLocation }) {
   }, [location, onPickLocation]);
 
   async function getLocationHandler() {
+    setLocating(true);
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {
+      setLocating(false);
       setErrorMsg("Permission to access location was denied");
       return;
     }
     let location = await Location.getCurrentPositionAsync({});
+    setLocating(false);
     setLocation({
       lat: location.coords.latitude,
       lng: location.coords.longitude,
@@ -67,6 +72,10 @@ function LocationPicker({ onPickLocation }) {
         }}
         style={styles.mapPreviewImage}
       />
+    );
+  } else if (locating) {
+    locationPreview = (
+      <ActivityIndicator size="large" color={Colors.primary100} />
     );
   }
   return (

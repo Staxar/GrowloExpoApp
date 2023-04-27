@@ -1,15 +1,18 @@
-import { SafeAreaView, StyleSheet } from "react-native";
+import { ActivityIndicator, SafeAreaView, StyleSheet } from "react-native";
 import AddProductForm from "../components/ui/AddProductForm";
 import { AuthContext } from "../store/auth-context";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { ScrollView } from "react-native";
 import { uploadImages } from "../util/uploadImage";
 import { uploadProduct } from "../util/uploadProduct";
+import { Colors } from "../constans/styles";
+import { View } from "react-native";
 
 function AddProductScreen({ navigation, route }) {
   const authCtx = useContext(AuthContext);
-
+  const [uploading, setUploading] = useState(false);
   async function updateValues(props) {
+    setUploading(true);
     let image = props.selectedImage;
     try {
       const imageUrl = await uploadImages(image);
@@ -27,16 +30,24 @@ function AddProductScreen({ navigation, route }) {
         title: props.enteredTitle,
       };
       await uploadProduct(payload, imageUrl);
+      setUploading(false);
       navigation.navigate("Welcome");
     } catch (e) {
+      setUploading(false);
       console.log(e);
     }
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView>
       <ScrollView>
-        <AddProductForm update={updateValues} />
+        <View style={styles.container}>
+          {uploading ? (
+            <ActivityIndicator size="large" color={Colors.primary100} />
+          ) : (
+            <AddProductForm update={updateValues} />
+          )}
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -47,6 +58,6 @@ export default AddProductScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: "100%",
+    justifyContent: "center",
   },
 });

@@ -201,7 +201,6 @@ export default function AddProductForm({ update }) {
       return;
     }
   }
-
   return (
     <View
       style={{
@@ -255,6 +254,7 @@ export default function AddProductForm({ update }) {
               )}
               keyExtractor={(item) => item.code}
               extraData={filteredData}
+              removeClippedSubviews={true}
             />
           </View>
         </View>
