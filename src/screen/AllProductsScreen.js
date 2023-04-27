@@ -5,36 +5,23 @@ import { StyleSheet, View } from "react-native";
 import ProductCard from "../components/ui/ProductCard";
 import { Text } from "react-native";
 import { Typography } from "../constans/styles";
+import { getProducts } from "../util/getProducts";
 
 export default function AllProductsScreen({ route, navigation }) {
   const [data, setData] = useState([]);
-  const [category, setCategory] = useState();
+  const [category, setCategory] = useState("");
+
+  async function getData() {
+    await getProducts()
+      .then((res) => setData(res))
+      .catch((e) => console.error(e));
+  }
+
   useEffect(() => {
     setCategory(route.params.itemParams);
-    const db = getDatabase();
-    const getCategoryData = query(ref(db, "products"));
-
-    get(getCategoryData)
-      .then((snapshot) => {
-        if (snapshot.exists()) {
-          const data = snapshot.val();
-          const productArray = Object.keys(data).map((key) => ({
-            id: key,
-            ...data[key],
-          }));
-          try {
-            setData(productArray);
-          } catch (e) {
-            console.log(e);
-          }
-        } else {
-          console.log("No data available");
-        }
-      })
-      .catch((error) => {
-        return error(error);
-      });
+    getData();
   }, [navigation, route]);
+
   const filteredProducts = data.filter((product) =>
     category === "" ? product : product.category === category
   );
