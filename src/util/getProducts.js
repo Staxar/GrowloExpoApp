@@ -1,8 +1,8 @@
 import { get, getDatabase, query, ref } from "firebase/database";
+const db = getDatabase();
 
 export async function getProducts() {
   let result = "";
-  const db = getDatabase();
   const getCategoryData = query(ref(db, "products"));
 
   await get(getCategoryData)
@@ -14,6 +14,25 @@ export async function getProducts() {
           ...data[key],
         }));
         result = productArray;
+        return;
+      } else {
+        console.log("No data available");
+      }
+    })
+    .catch((error) => {
+      return error(error);
+    });
+  return result;
+}
+
+export async function getProduct(id) {
+  let result;
+  const getCategoryData = query(ref(db, "products/" + id));
+
+  await get(getCategoryData)
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        result = snapshot.val();
         return;
       } else {
         console.log("No data available");

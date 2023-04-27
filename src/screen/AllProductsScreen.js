@@ -25,7 +25,6 @@ export default function AllProductsScreen({ route, navigation }) {
   const filteredProducts = data.filter((product) =>
     category === "" ? product : product.category === category
   );
-
   return (
     <SafeAreaView style={styles.outerContainer}>
       <View style={{ padding: 20 }}>

@@ -6,6 +6,7 @@ import { Image } from "react-native";
 import { getMapPreview } from "../../util/location";
 import PagerView from "react-native-pager-view";
 import ImageViewer from "./ImageViewer";
+import OutlinedButton from "./OutlinedButton";
 export default function DetailProductComponent({
   selectedImage,
   title,
@@ -31,10 +32,23 @@ export default function DetailProductComponent({
         </PagerView>
       </View>
       <View style={{ gap: 10, marginVertical: 5 }}>
-        <Text style={Typography.bigDescription}>{title}</Text>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <Text style={Typography.bigDescription}>{title}</Text>
+          <OutlinedButton>
+            Send message{" "}
+            <Ionicons name="send" size={12} color={Colors.primary100} />
+          </OutlinedButton>
+        </View>
         <View style={{ flexDirection: "row", gap: 5 }}>
-          <Text style={Typography.normalTitle}>${prize}</Text>
-          <Text style={Typography.normalTitle}>{unit}</Text>
+          <Text style={Typography.normalTitle}>
+            Prize: ${prize} [ {unit} ]
+          </Text>
         </View>
 
         <Text>Description:</Text>

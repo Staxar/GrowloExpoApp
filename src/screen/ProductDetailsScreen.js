@@ -1,38 +1,29 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Alert, StyleSheet, Text, View } from "react-native";
 import { useEffect, useState } from "react";
-import { child, get, getDatabase, query, ref } from "firebase/database";
-import { Colors, Typography } from "../constans/styles";
+import { Colors } from "../constans/styles";
 
-import { Image } from "react-native";
-import { getMapPreview } from "../util/location";
 import DetailProductComponent from "../components/ui/DetailProductComponent";
 import { ActivityIndicator } from "react-native";
+import { getProduct } from "../util/getProducts";
 
 export default function ProductDetailsScreen({ navigation, route }) {
   const [data, setData] = useState([]);
   const [id, setId] = useState(route.params);
 
-  useEffect(() => {
-    const db = getDatabase();
-    const getCategoryData = query(ref(db, "products/" + id));
+  async function getData() {
+    await getProduct(id)
+      .then((res) => setData(res))
+      .catch((e) => console.error(e));
+  }
 
-    get(getCategoryData)
-      .then((snapshot) => {
-        if (snapshot.exists()) {
-          const data = snapshot.val();
-          try {
-            setData(data);
-          } catch (e) {
-            console.log(e);
-          }
-        } else {
-          console.log("No data available");
-        }
-      })
-      .catch((error) => {
-        return error(error);
-      });
-  }, []);
+  useEffect(() => {
+    if (route.params) {
+      setId(route.params);
+    } else {
+      Alert.alert("Something goes wrong!");
+    }
+    getData();
+  }, [navigation, route]);
 
   let componentPreview = (
     <ActivityIndicator color={Colors.primary100} size={"large"} />
