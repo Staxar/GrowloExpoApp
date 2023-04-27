@@ -5,6 +5,7 @@ export const Colors = {
   primary800: "#D6D6D6",
   error100: "#fcdcbf",
   error500: "#f37c13",
+  error800: "#f33",
 };
 
 export const Typography = {

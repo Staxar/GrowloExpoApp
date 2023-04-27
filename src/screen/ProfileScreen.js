@@ -1,7 +1,6 @@
 import { Alert, Button, StyleSheet, Text, View } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import LeftIconInput from "../components/ui/LeftIconInput";
-
 import { useState } from "react";
 import { getAuth, updateProfile } from "firebase/auth";
 import { getDatabase, onValue, ref, set } from "firebase/database";

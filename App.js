@@ -17,7 +17,8 @@ import MapScreen from "./src/screen/MapScreen";
 import CategoryScreen from "./src/screen/CategoryScreen";
 import AllProductsScreen from "./src/screen/AllProductsScreen";
 import ProductDetailsScreen from "./src/screen/ProductDetailsScreen";
-import { Text } from "react-native";
+import { ActivityIndicator } from "react-native";
+import MessageScreen from "./src/screen/MessageScreen";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -60,13 +61,6 @@ function RootTabNavigators() {
         }}
       />
       <Tab.Screen
-        name="Add Product"
-        component={AddProductScreen}
-        options={{
-          tabBarIcon: () => <Ionicons name="add-circle-outline" size={18} />,
-        }}
-      />
-      <Tab.Screen
         name="Categories"
         component={CategoryScreen}
         options={{
@@ -81,10 +75,47 @@ function RootTabNavigators() {
         }}
       />
       <Tab.Screen
+        name="Add Product"
+        component={AddProductScreen}
+        options={{
+          tabBarIcon: () => <Ionicons name="add-circle-outline" size={18} />,
+          headerStyle: {
+            backgroundColor: Colors.primary100,
+            height: 85,
+            borderRadius: 8,
+          },
+          headerTintColor: "#FFFFFF",
+          headerTitle: "Add Product",
+        }}
+      />
+      <Tab.Screen
+        name="Chat"
+        component={MessageScreen}
+        options={{
+          tabBarIcon: () => (
+            <Ionicons name="chatbubble-ellipses-outline" size={18} />
+          ),
+          headerStyle: {
+            backgroundColor: Colors.primary100,
+            height: 85,
+            borderRadius: 8,
+          },
+          headerTintColor: "#FFFFFF",
+          headerTitle: "Chat",
+        }}
+      />
+      <Tab.Screen
         name="Profile"
         component={ProfileScreen}
         options={{
           tabBarIcon: () => <Ionicons name="person-outline" size={18} />,
+          headerStyle: {
+            backgroundColor: Colors.primary100,
+            height: 85,
+            borderRadius: 8,
+          },
+          headerTintColor: "#FFFFFF",
+          headerTitle: "Profile",
         }}
       />
     </Tab.Navigator>
@@ -153,7 +184,7 @@ function Root() {
   }, []);
 
   if (isTryingLogin) {
-    return <View></View>;
+    return <ActivityIndicator size={"large"} />;
   }
 
   return <Navigation />;
