@@ -18,7 +18,7 @@ export default function DetailProductComponent({
 }) {
   return (
     <ScrollView>
-      <View style={{ height: 200, flex: 1, justifyContent: "space-between" }}>
+      <View style={styles.innerContainer}>
         <PagerView initialPage={0} style={styles.image}>
           {selectedImage &&
             selectedImage.map((image, index) => {
@@ -87,6 +87,11 @@ export default function DetailProductComponent({
 }
 
 const styles = StyleSheet.create({
+  innerContainer: {
+    height: 200,
+    flex: 1,
+    justifyContent: "space-between",
+  },
   mapPreviewImage: {
     width: "100%",
     height: "100%",
