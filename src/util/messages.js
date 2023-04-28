@@ -5,7 +5,6 @@ const db = getDatabase();
 async function getMessage() {}
 
 export function sendMessage(params, message) {
-  console.log(params, message);
   let timestamp = new Date().getTime();
 
   const MessageListRef = ref(db, "messages");

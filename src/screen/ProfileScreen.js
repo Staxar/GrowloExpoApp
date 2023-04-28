@@ -2,8 +2,6 @@ import { Alert, Button, StyleSheet, Text, View } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import LeftIconInput from "../components/ui/LeftIconInput";
 import { useState } from "react";
-import { getAuth, updateProfile } from "firebase/auth";
-import { getDatabase, onValue, ref, set } from "firebase/database";
 function ProfileScreen() {
   const [email, setEmail] = useState("");
   const [enteredEmail, setEnteredEmail] = useState(email);
@@ -35,39 +33,7 @@ function ProfileScreen() {
       adress: enteredAdress,
       phone: enteredPhone,
     };
-
-    const auth = getAuth();
-    // const myUserId = auth.currentUser.uid; Get UserID
-    updateUserHandler(
-      payload.username
-      // payload.email,
-      // payload.adress,
-      // payload.phone
-    );
   }
-  function updateUserHandler(username) {
-    const auth = getAuth();
-    updateProfile(auth.currentUser, {
-      displayName: username,
-    })
-      .then(() => {
-        Alert.alert("Profile updated!");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-
-  // function writeUserData(userId, username, email, adress, phone) {
-  //   console.log("db");
-  //   const db = getDatabase();
-  //   set(ref(db, "users/" + userId), {
-  //     username: username,
-  //     email: email,
-  //     adress: adress,
-  //     phone: phone,
-  //   });
-  // }
 
   return (
     <View style={styles.rootContainer}>

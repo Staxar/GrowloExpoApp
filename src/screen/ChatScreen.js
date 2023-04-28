@@ -8,7 +8,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { TextInput } from "react-native";
 import OutlinedButton from "../components/ui/OutlinedButton";
 import { sendMessage } from "../util/messages";
-import { getUser } from "../util/getUser";
+import { getUser } from "../util/user";
 export default function ChatScreen({ navigation, route }) {
   const [routeParams, setRouteParams] = useState({});
   const [message, setMessage] = useState("");

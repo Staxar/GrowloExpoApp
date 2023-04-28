@@ -6,7 +6,9 @@ function TextButton({ type, titleButton, titleDescription }) {
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
-      <Text style={Typography.normalDescription}>{titleDescription}</Text>
+      <Text style={[Typography.smallDescription, { textAlign: "left" }]}>
+        {titleDescription}
+      </Text>
       <Pressable
         onPress={() =>
           navigation.navigate(type === "login" ? "Signup" : "Login")
@@ -24,6 +26,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
   },
   pressableText: {
     fontWeight: "bold",

@@ -27,6 +27,7 @@ function AuthForm({ type, onsubmit }) {
     onsubmit({
       email: enteredEmail,
       password: enteredPassword,
+      displayName: enteredUsername,
     });
   }
 
@@ -41,6 +42,7 @@ function AuthForm({ type, onsubmit }) {
             keyboardType="email-address"
             onUpdateValue={updateInputValueHandler.bind(this, "email")}
             value={enteredEmail}
+            autoCapitalize="none"
           />
 
           <LeftIconInput
@@ -50,6 +52,7 @@ function AuthForm({ type, onsubmit }) {
             secure={true}
             onUpdateValue={updateInputValueHandler.bind(this, "password")}
             value={enteredPassword}
+            autoCapitalize="none"
           />
           <View style={styles.outerContainer}>
             <Pressable>
@@ -74,6 +77,7 @@ function AuthForm({ type, onsubmit }) {
             keyboardType="email-address"
             onUpdateValue={updateInputValueHandler.bind(this, "email")}
             value={enteredEmail}
+            autoCapitalize="none"
           />
           <LeftIconInput
             textValue={"Username"}
@@ -89,6 +93,7 @@ function AuthForm({ type, onsubmit }) {
             secure={true}
             onUpdateValue={updateInputValueHandler.bind(this, "password")}
             value={enteredPassword}
+            autoCapitalize="none"
           />
           <View style={styles.outerContainer}>
             <TextButton

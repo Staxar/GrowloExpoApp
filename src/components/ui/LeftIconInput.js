@@ -13,6 +13,7 @@ function LeftIconInput({
   maxLength,
   multiline,
   placeholder,
+  autoCapitalize,
 }) {
   return (
     <TitleForm title={textValue}>
@@ -33,6 +34,7 @@ function LeftIconInput({
           multiline={multiline}
           placeholder={placeholder}
           placeholderTextColor={Colors.primary800}
+          autoCapitalize={autoCapitalize}
         />
       </View>
     </TitleForm>

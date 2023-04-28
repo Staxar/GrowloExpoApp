@@ -4,7 +4,7 @@ import { Typography } from "../../constans/styles";
 export default function TitleForm({ children, title }) {
   return (
     <View style={styles.container}>
-      <Text style={[Typography.bigDescription, { marginBottom: 4 }]}>
+      <Text style={[Typography.normalDescription, { marginBottom: 4 }]}>
         {title}
       </Text>
       {children}

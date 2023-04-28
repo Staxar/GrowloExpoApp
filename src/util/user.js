@@ -1,4 +1,15 @@
-import { child, get, getDatabase, ref } from "firebase/database";
+import { child, get, getDatabase, ref, set } from "firebase/database";
+
+export async function createUser(uid, email, displayName) {
+  const db = getDatabase();
+  set(ref(db, "users/" + uid), {
+    email: email,
+    phone: "",
+    displayName: displayName,
+  }).catch((e) => {
+    console.error(e);
+  });
+}
 
 export async function getUser(userId) {
   let result;
