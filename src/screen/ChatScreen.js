@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import UserAvatar from "../components/ui/UserAvatar";
 import { Colors, Typography } from "../constans/styles";
 import Message from "../components/ui/Message";
@@ -14,26 +14,36 @@ export default function ChatScreen({ navigation, route }) {
   const [message, setMessage] = useState("");
   const [recipient, setRecipiet] = useState({});
 
-  const getUser = async () => {
-    let user = await getUser(route.params.author)
-      .then((res) => console.log(res))
-      .catch((e) => console.log(e));
-    setRecipiet(user);
-  };
+  async function getData(recipient) {
+    await getUser(recipient)
+      .then((response) => setRecipiet(response))
+      .catch((e) => console.error(e));
+  }
+
   useEffect(() => {
-    console.log("UserEffect");
-    getUser();
-    console.log("UserEffect2");
-  }, []);
+    setRouteParams(route.params);
+    if (route.params) getData(route.params.author);
+  }, [navigation, route]);
 
   function sendMessageHandler() {
     sendMessage(routeParams, message);
     setMessage("");
   }
 
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => <UserAvatar userName={recipient.username} />,
+    });
+  }, [recipient]);
+
   return (
     <View style={styles.container}>
       <View style={styles.innerContainer}>
+        {recipient && (
+          <Text style={[Typography.bigTitle, { color: "black" }]}>
+            {recipient.username}
+          </Text>
+        )}
         <Message right={true} left={false} message={"Some message"} />
         <Message
           right={false}
