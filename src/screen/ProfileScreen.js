@@ -1,5 +1,4 @@
 import {
-  Alert,
   KeyboardAvoidingView,
   StyleSheet,
   TextInput,
@@ -11,7 +10,6 @@ import { getUser, updateUser } from "../util/user";
 import ImagePickerExample from "../components/ui/ImagePicker";
 import OutlinedButton from "../components/ui/OutlinedButton";
 import { uploadImage } from "../util/uploadImage";
-import { Text } from "react-native";
 import { ActivityIndicator } from "react-native";
 function ProfileScreen() {
   const [name, setName] = useState();
