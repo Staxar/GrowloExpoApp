@@ -6,7 +6,7 @@ import {
 } from "react-native";
 import { AuthContext } from "../store/auth-context";
 import { useContext, useEffect, useState } from "react";
-import { getUser, updateUser } from "../util/user";
+import { getUser, updateUserImage } from "../util/user";
 import ImagePickerExample from "../components/ui/ImagePicker";
 import OutlinedButton from "../components/ui/OutlinedButton";
 import { uploadImage } from "../util/uploadImage";
@@ -23,7 +23,7 @@ function ProfileScreen() {
       return;
     } else {
       let response = await uploadImage(photoUrl);
-      await updateUser(response);
+      await updateUserImage(response);
     }
   }
 

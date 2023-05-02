@@ -7,12 +7,16 @@ import { KeyboardAvoidingView } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { TextInput } from "react-native";
 import OutlinedButton from "../components/ui/OutlinedButton";
-import { sendMessage } from "../util/messages";
+import { createMessage, getMessages } from "../util/messages";
 import { getUser } from "../util/user";
+import { FlatList } from "react-native";
+import { ActivityIndicator } from "react-native";
 export default function ChatScreen({ navigation, route }) {
   const [routeParams, setRouteParams] = useState({});
   const [message, setMessage] = useState("");
   const [recipient, setRecipiet] = useState({});
+  const [messageData, setMessageData] = useState();
+  const [gettingData, setGetingData] = useState(false);
 
   async function getData(recipient) {
     await getUser(recipient)
@@ -20,93 +24,113 @@ export default function ChatScreen({ navigation, route }) {
       .catch((e) => console.error(e));
   }
 
+  // async function getMessagesData(params) {
+  //   console.log("getMessagesData: ", route.params);
+  //   await getMessages(params)
+  //     .then((res) => setMessageData(res))
+  //     .catch((err) => console.error(err));
+  // }
   useEffect(() => {
+    getMessages(route.params)
+      .then((res) => setMessageData(res))
+      .catch((err) => console.error(err));
+  }, []);
+
+  useEffect(() => {
+    setGetingData(false);
     setRouteParams(route.params);
-    if (route.params) getData(route.params.author);
+    if (route.params) getData(route.params.recipient);
+    setGetingData(true);
   }, [navigation, route]);
 
-  function sendMessageHandler() {
-    sendMessage(routeParams, message);
+  async function sendMessageHandler() {
+    await createMessage(routeParams, message);
     setMessage("");
+    getMessages(routeParams);
   }
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: () => <UserAvatar userName={recipient.username} />,
+      headerRight: () => (
+        <UserAvatar
+          userName={recipient.displayName}
+          userImage={recipient.photoURL}
+        />
+      ),
     });
   }, [recipient]);
 
-  return (
-    <View style={styles.container}>
-      <View style={styles.innerContainer}>
-        {recipient && (
-          <Text style={[Typography.bigTitle, { color: "black" }]}>
-            {recipient.username}
-          </Text>
-        )}
-        <Message right={true} left={false} message={"Some message"} />
-        <Message
-          right={false}
-          left={true}
-          message={
-            "When the component gets mounted, it starts a GET request to our API to receive the user data for the corresponding userId that we'll get from the props."
-          }
-        />
-        <Message right={false} left={true} message={"Some message"} />
-        <Message right={true} left={false} message={"Some message"} />
-        <Message
-          right={true}
-          left={false}
-          message={
-            "When the component gets mounted, it starts a GET request to our API to receive the user data for the corresponding userId that we'll get from the props."
-          }
-        />
-      </View>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-      >
-        <View
-          style={{
-            borderWidth: 0.7,
-            borderRadius: 8,
-            borderColor: Colors.primary800,
-            justifyContent: "center",
-            backgroundColor: "#ffff",
-          }}
+  let view = <ActivityIndicator size={"large"} />;
+
+  if (gettingData && messageData) {
+    view = (
+      <View style={styles.container}>
+        <View style={styles.innerContainer}>
+          {recipient && (
+            <Text style={[Typography.bigTitle, { color: "black" }]}>
+              {recipient.displayName}
+            </Text>
+          )}
+          {messageData && (
+            <FlatList
+              data={messageData}
+              renderItem={({ item }) => (
+                <Message
+                  message={item.content}
+                  right={item.author === route.params.author ? true : false}
+                />
+              )}
+              keyExtractor={(item) => item.id}
+            />
+          )}
+        </View>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
         >
           <View
             style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
+              borderWidth: 0.7,
+              borderRadius: 8,
+              borderColor: Colors.primary800,
+              justifyContent: "center",
+              backgroundColor: "#ffff",
             }}
           >
-            <TextInput
+            <View
               style={{
-                margin: 8,
-                width: "70%",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
               }}
-              placeholder="Type somethnig!"
-              multiline={true}
-              onChangeText={setMessage}
-              value={message}
-            />
-            <View style={{ flex: 1 }}>
-              <OutlinedButton onPress={sendMessageHandler}>
-                Send <Ionicons name="send" size={12} />
-              </OutlinedButton>
+            >
+              <TextInput
+                style={{
+                  margin: 8,
+                  width: "70%",
+                }}
+                placeholder="Type somethnig!"
+                multiline={true}
+                onChangeText={setMessage}
+                value={message}
+              />
+              <View style={{ flex: 1 }}>
+                <OutlinedButton onPress={sendMessageHandler}>
+                  Send <Ionicons name="send" size={12} />
+                </OutlinedButton>
+              </View>
             </View>
           </View>
-        </View>
-      </KeyboardAvoidingView>
-    </View>
-  );
+        </KeyboardAvoidingView>
+      </View>
+    );
+  }
+  return view;
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    marginHorizontal: "10%",
   },
   innerContainer: {
     flex: 1,

@@ -112,11 +112,9 @@ function ImagePickerExample({
     }
     return;
   }
-  console.log(placeholderImage);
   function ImagePreview() {
     let imagePreview;
     if (placeholderImage) {
-      console.log("placeholder");
       imagePreview = (
         <Image style={styles.imageAvatar} source={{ uri: placeholderImage }} />
       );

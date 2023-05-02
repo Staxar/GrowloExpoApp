@@ -30,9 +30,33 @@ export async function getUser(userId) {
   return result;
 }
 
-export async function updateUser(photoURL) {
-  console.log(photoURL);
+export async function getUsers() {
+  let result;
+  const dbRef = ref(getDatabase());
+  await get(child(dbRef, `users`))
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        const userArray = Object.keys(data).map((key) => ({
+          id: key,
+          ...data[key],
+        }));
+        result = userArray;
+        return result;
+      } else {
+        console.log("No data available");
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+  return result;
+}
+
+export async function updateUserImage(photoURL) {
+  console.log("updateUserImage", photoURL);
   const auth = getAuth();
+  console.log(auth);
   await updateProfile(auth.currentUser, {
     photoURL: photoURL,
   }).catch((error) => console.error(error));

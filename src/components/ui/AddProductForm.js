@@ -202,13 +202,7 @@ export default function AddProductForm({ update }) {
     }
   }
   return (
-    <View
-      style={{
-        width: "80%",
-        alignSelf: "center",
-        height: "100%",
-      }}
-    >
+    <View style={styles.outerContainer}>
       <Modal
         animationType="slide"
         transparent={true}
@@ -343,6 +337,11 @@ export default function AddProductForm({ update }) {
 }
 
 const styles = StyleSheet.create({
+  outerContainer: {
+    width: "80%",
+    alignSelf: "center",
+    height: "100%",
+  },
   innerContainer: {
     padding: 20,
     width: "100%",

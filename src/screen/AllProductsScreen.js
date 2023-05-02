@@ -49,6 +49,7 @@ export default function AllProductsScreen({ route, navigation }) {
               />
             )}
             style={{ width: "100%" }}
+            keyExtractor={(item) => item.id}
           />
         )}
       </View>
