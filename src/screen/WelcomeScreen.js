@@ -1,9 +1,27 @@
-import { StyleSheet, ScrollView } from "react-native";
+import { StyleSheet, ScrollView, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { DATA } from "../../assets/Data/DATA";
 import Banner from "../components/ui/Banner";
 import ProductGroup from "../components/ui/ProductGroup";
-function WelcomeScreen() {
+import { getLastProducts } from "../util/getProducts";
+import { useEffect, useState } from "react";
+import { Text } from "react-native";
+
+function WelcomeScreen({ navigation, route }) {
+  const [productData, setProductData] = useState({});
+  const [gettingData, setGettingData] = useState(false);
+  async function getData() {
+    setGettingData(false);
+    getLastProducts()
+      .then((res) => setProductData(res))
+      .then(() => setGettingData(true))
+      .catch((err) => console.error(err));
+    return;
+  }
+
+  useEffect(() => {
+    getData();
+    return;
+  }, [navigation, route]);
   return (
     <SafeAreaView style={styles.outerContainer}>
       <ScrollView style={styles.innerContainer}>
@@ -13,7 +31,11 @@ function WelcomeScreen() {
         <Banner
           imageSrc={require("../../assets/Images/Banners/WelcomeBanner.png")}
         />
-        <ProductGroup title={"Best Deals"} data={DATA} />
+        {gettingData ? (
+          <ProductGroup title={"Best Deals"} data={productData} />
+        ) : (
+          <ActivityIndicator size={"large"} />
+        )}
       </ScrollView>
     </SafeAreaView>
   );

@@ -24,15 +24,15 @@ function ProductGroup({ title, data }) {
       <View style={styles.contentContainer}>
         <FlatList
           horizontal
-          data={data.slice(0, 5)}
+          data={data}
           renderItem={({ item }) => (
             <ProductCard
-              productPrize={item.count}
+              productPrize={item.prize}
               productName={item.title}
               productUnit={item.unit}
-              productAmount={item.count}
-              productImage={item.img}
-              productSpecialPrize={item.specialPrize}
+              productAmount={item.amount}
+              productImage={item.selectedImage}
+              productId={item.id}
             />
           )}
           keyExtractor={(item) => item.id}
