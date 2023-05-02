@@ -1,93 +1,101 @@
-import { Alert, Button, StyleSheet, Text, View } from "react-native";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import LeftIconInput from "../components/ui/LeftIconInput";
-import { useState } from "react";
+import {
+  Alert,
+  KeyboardAvoidingView,
+  StyleSheet,
+  TextInput,
+  View,
+} from "react-native";
+import { AuthContext } from "../store/auth-context";
+import { useContext, useEffect, useState } from "react";
+import { getUser, updateUser } from "../util/user";
+import ImagePickerExample from "../components/ui/ImagePicker";
+import OutlinedButton from "../components/ui/OutlinedButton";
+import { uploadImage } from "../util/uploadImage";
+import { Text } from "react-native";
+import { ActivityIndicator } from "react-native";
 function ProfileScreen() {
-  const [email, setEmail] = useState("");
-  const [enteredEmail, setEnteredEmail] = useState(email);
-  const [enteredAdress, setenteredAdress] = useState("");
-  const [enteredUsername, setenteredUsername] = useState("");
-  const [enteredPhone, setenteredPhone] = useState("");
+  const [name, setName] = useState();
+  const [email, setEmail] = useState();
+  const [user, setUser] = useState();
+  const [photoUrl, setPhotoUrl] = useState();
+  const authCtx = useContext(AuthContext);
 
-  function updateInputValueHandler(inputType, enteredValue) {
-    switch (inputType) {
-      case "phone":
-        setenteredPhone(enteredValue);
-        break;
-      case "adress":
-        setenteredAdress(enteredValue);
-        break;
-      case "email":
-        setEnteredEmail(enteredValue);
-        break;
-      case "username":
-        setenteredUsername(enteredValue);
-        break;
+  async function submitHandler() {
+    if (photoUrl === undefined || photoUrl === "") {
+      return;
+    } else {
+      let response = await uploadImage(photoUrl);
+      await updateUser(response);
     }
   }
 
-  function submitHandler() {
-    const payload = {
-      username: enteredUsername,
-      email: enteredEmail,
-      adress: enteredAdress,
-      phone: enteredPhone,
-    };
+  useEffect(() => {
+    getUser(authCtx.uid).then((res) => setUser(res));
+  }, []);
+
+  function onTakeImageHandler(imageUri) {
+    setPhotoUrl(imageUri);
+  }
+  function onOneImageHandler(imageUri) {
+    setPhotoUrl(imageUri);
   }
 
-  return (
-    <View style={styles.rootContainer}>
-      <View style={styles.outerContainer}>
-        <View style={styles.userAvatar}>
-          <Ionicons name="person-circle-outline" size={70} />
-          <Text>UserName</Text>
+  if (user) {
+    return (
+      <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
+        <ImagePickerExample
+          onTakeImage={onTakeImageHandler}
+          takeOneImage={onOneImageHandler}
+          placeholderImage={user.photoURL}
+        />
+        <View style={styles.innerContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder={user.displayName}
+            value={name}
+            onChangeText={(text) => setName(text)}
+            editable={false}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder={user.email}
+            value={email}
+            onChangeText={(text) => setEmail(text)}
+            editable={false}
+          />
         </View>
-        <LeftIconInput
-          textValue={"Username"}
-          onUpdateValue={updateInputValueHandler.bind(this, "username")}
-          value={enteredUsername}
-          iconName={"person-outline"}
-        />
-        <LeftIconInput
-          textValue={"Mobile number"}
-          onUpdateValue={updateInputValueHandler.bind(this, "phone")}
-          value={enteredPhone}
-          iconName={"call-outline"}
-          contentType={"telephoneNumber"}
-        />
-        <LeftIconInput
-          textValue={"Adress"}
-          onUpdateValue={updateInputValueHandler.bind(this, "adress")}
-          value={enteredAdress}
-          iconName={"location-outline"}
-        />
-        <LeftIconInput
-          textValue={"Email"}
-          onUpdateValue={updateInputValueHandler.bind(this, "email")}
-          value={enteredEmail}
-          iconName={"mail-outline"}
-        />
-
-        <Button onPress={submitHandler} title="Submit" />
-      </View>
-    </View>
-  );
+        <View style={styles.buttonContainer}>
+          <OutlinedButton onPress={submitHandler}>Update</OutlinedButton>
+        </View>
+      </KeyboardAvoidingView>
+    );
+  } else {
+    return <ActivityIndicator size={"large"} />;
+  }
 }
 
 export default ProfileScreen;
 
 const styles = StyleSheet.create({
-  rootContainer: {
+  container: {
     flex: 1,
-  },
-  outerContainer: {
-    flexDirection: "column",
-    padding: 8,
-    margin: 8,
+    justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#F5FCFF",
+    padding: 20,
   },
-  userAvatar: {
-    alignItems: "center",
-    marginVertical: 24,
+  innerContainer: {
+    width: "100%",
+  },
+  input: {
+    height: 40,
+    width: "100%",
+    borderColor: "gray",
+    borderWidth: 1,
+    marginTop: 20,
+    paddingHorizontal: 10,
+  },
+  buttonContainer: {
+    marginVertical: 20,
   },
 });

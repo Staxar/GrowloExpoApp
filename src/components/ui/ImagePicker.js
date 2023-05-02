@@ -6,10 +6,16 @@ import { Colors } from "../../constans/styles";
 import PagerView from "react-native-pager-view";
 import ImageViewer from "./ImageViewer";
 import { manipulateAsync } from "expo-image-manipulator";
-function ImagePickerExample({ onTakeImage, onPickedImage }) {
+function ImagePickerExample({
+  onTakeImage,
+  onPickedImage,
+  takeOneImage,
+  placeholderImage,
+}) {
   const [cameraPermissionInformation, requestPermission] =
     ImagePicker.useCameraPermissions();
   const [takenImage, setTakenImage] = useState();
+  const [pickOneImage, setPickOneImage] = useState();
   const [pickedImage, setPickedImage] = useState([]);
 
   async function verifyPermissions() {
@@ -58,6 +64,26 @@ function ImagePickerExample({ onTakeImage, onPickedImage }) {
       onTakeImage(result.uri);
 
       return;
+    } else if (takeOneImage) {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsMultipleSelection: true,
+        selectionLimit: 1,
+        aspect: [4, 3],
+        quality: 0.1,
+      });
+      if (result.canceled) {
+        return;
+      } else {
+        setTakenImage(null);
+        setPickedImage([]);
+        const img = await manipulateAsync(result.assets[0].uri, [
+          { resize: { width: 640, height: 480 } },
+        ]);
+        setPickOneImage(img.uri);
+        takeOneImage(img.uri);
+      }
+      return;
     } else if (props === "image") {
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -86,13 +112,26 @@ function ImagePickerExample({ onTakeImage, onPickedImage }) {
     }
     return;
   }
-
+  console.log(placeholderImage);
   function ImagePreview() {
-    let imagePreview = <Text>No image taken yet.</Text>;
+    let imagePreview;
+    if (placeholderImage) {
+      console.log("placeholder");
+      imagePreview = (
+        <Image style={styles.imageAvatar} source={{ uri: placeholderImage }} />
+      );
+    } else {
+      imagePreview = (
+        <Text style={{ textAlign: "center" }}>No image taken.</Text>
+      );
+    }
 
     if (takenImage) {
       return (imagePreview = (
-        <Image style={styles.image} source={{ uri: takenImage }} />
+        <Image
+          style={takeOneImage ? styles.avatarPreview : styles.image}
+          source={{ uri: takenImage }}
+        />
       ));
     } else if (pickedImage.length > 0) {
       return (imagePreview = (
@@ -107,6 +146,10 @@ function ImagePickerExample({ onTakeImage, onPickedImage }) {
           })}
         </PagerView>
       ));
+    } else if (pickOneImage) {
+      return (imagePreview = (
+        <Image style={styles.imageAvatar} source={{ uri: pickOneImage }} />
+      ));
     }
     return imagePreview;
   }
@@ -119,7 +162,9 @@ function ImagePickerExample({ onTakeImage, onPickedImage }) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.imagePreview}>{ImagePreview()}</View>
+      <View style={takeOneImage ? styles.avatarPreview : styles.imagePreview}>
+        {ImagePreview()}
+      </View>
       <OutlinedButton icon="camera" onPress={() => takeImageHandler("camera")}>
         Take Image
       </OutlinedButton>
@@ -128,7 +173,7 @@ function ImagePickerExample({ onTakeImage, onPickedImage }) {
         icon="image-outline"
         onPress={() => takeImageHandler("image")}
       >
-        Take Image
+        Pick Image
       </OutlinedButton>
     </View>
   );
@@ -139,6 +184,7 @@ export default ImagePickerExample;
 const styles = StyleSheet.create({
   container: {
     width: "100%",
+    alignItems: "center",
   },
   imagePreview: {
     width: "100%",
@@ -148,6 +194,19 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: Colors.primary800,
     borderRadius: 8,
+  },
+  avatarPreview: {
+    height: 100,
+    width: 100,
+    borderRadius: 100 / 2,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: Colors.primary800,
+  },
+  imageAvatar: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
   },
   image: {
     width: "100%",
