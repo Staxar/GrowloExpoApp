@@ -2,6 +2,7 @@ import {
   child,
   get,
   getDatabase,
+  onChildAdded,
   onValue,
   push,
   ref,
@@ -10,29 +11,33 @@ import {
 
 const db = getDatabase();
 
-async function getGroupMessage(params) {
+export async function getGroupMessage(params) {
   let result;
-  console.log("getGroupMessage", params);
-  const messageRef = ref(db, "messages");
-  onValue(messageRef, (snapshot) => {
-    snapshot.forEach((childSnapshot) => {
-      const childKey = childSnapshot.key;
-      const childData = childSnapshot.val();
-      if (
-        (childData.author === params.author &&
-          childData.recipient === params.recipient) ||
-        (childData.author === params.recipient &&
-          childData.recipient === params.author)
-      ) {
-        result = childKey;
-        return result;
+  const dbRef = ref(db);
+  await get(child(dbRef, "messages/"))
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        snapshot.forEach((childSnapshot) => {
+          const childKey = childSnapshot.key;
+          const childData = childSnapshot.val();
+          if (
+            (childData.author === params.author &&
+              childData.recipient === params.recipient) ||
+            (childData.author === params.recipient &&
+              childData.recipient === params.author)
+          ) {
+            result = childKey;
+            return result;
+          } else {
+            result = false;
+            return result;
+          }
+        });
       } else {
-        result = false;
-        return result;
+        console.error(snapshot.val());
       }
-    });
-  });
-
+    })
+    .catch((err) => console.error(err));
   return result;
 }
 
@@ -56,48 +61,47 @@ export async function createGroupMessage(params) {
   let timestamp = new Date().getTime();
   const MessageListRef = ref(db, `messages/`);
   const newMessageRef = push(MessageListRef);
-  set(newMessageRef, {
+  const response = await set(newMessageRef, {
     author: params.author,
     recipient: params.recipient,
     timestamp: timestamp,
   })
     .then(() => {
-      getGroupMessage(params, message);
-      return;
+      return newMessageRef.key;
     })
     .catch((e) => {
       console.error(e);
     });
-  return;
+  return response;
 }
-export async function getMessages(params) {
-  console.log("getMessages", params);
-  let result;
-  const messageRef = ref(db, "messages");
-  onValue(messageRef, (snapshot) => {
-    snapshot.forEach((childSnapshot) => {
-      const childKey = childSnapshot.key;
-      const childData = childSnapshot.val();
-      if (
-        (childData.author === params.author &&
-          childData.recipient === params.recipient) ||
-        (childData.author === params.recipient &&
-          childData.recipient === params.author)
-      ) {
-        result = childData.message;
-        const messageArray = Object.keys(result).map((key) => ({
-          id: key,
-          ...result[key],
-        }));
-        result = messageArray;
-        return result;
-      } else {
-        result = false;
-        return result;
-      }
-    });
+export async function getMessages(groupId) {
+  const dbRef = ref(getDatabase());
+  const result = await get(child(dbRef, `messages/${groupId}/message`));
+  if (result) {
+    const data = result.val();
+    const messageArray = Object.keys(data).map((key) => ({
+      id: key,
+      ...data[key],
+    }));
+    return messageArray;
+  } else {
+    console.log("error");
+  }
+}
+
+export async function listenMessages(groupId) {
+  console.log("listenMessages:", groupId);
+  if (!groupId) {
+    return;
+  }
+  let data;
+  const messagesRef = ref(db, "messages/" + groupId + "/message/");
+  onChildAdded(messagesRef, (response) => {
+    data = response.val();
+    data = Object.assign(data, { id: response.key });
+    return data;
   });
-  return result;
+  return data;
 }
 
 export async function createMessage(params, message) {
@@ -107,6 +111,7 @@ export async function createMessage(params, message) {
     await createGroupMessage(params, message);
   } else {
     await sendMessage(params, message, result);
+    listenMessages();
   }
   return;
 }

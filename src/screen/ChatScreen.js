@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import UserAvatar from "../components/ui/UserAvatar";
 import { Colors, Typography } from "../constans/styles";
 import Message from "../components/ui/Message";
@@ -7,16 +7,23 @@ import { KeyboardAvoidingView } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { TextInput } from "react-native";
 import OutlinedButton from "../components/ui/OutlinedButton";
-import { createMessage, getMessages } from "../util/messages";
+import {
+  createGroupMessage,
+  getGroupMessage,
+  getMessages,
+  listenMessages,
+  sendMessage,
+} from "../util/messages";
 import { getUser } from "../util/user";
 import { FlatList } from "react-native";
 import { ActivityIndicator } from "react-native";
 export default function ChatScreen({ navigation, route }) {
   const [routeParams, setRouteParams] = useState({});
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState();
   const [recipient, setRecipiet] = useState({});
   const [messageData, setMessageData] = useState();
-  const [gettingData, setGetingData] = useState(false);
+  const [gettingData, setGettingData] = useState(false);
+  const [groupId, setGroupId] = useState();
 
   async function getData(recipient) {
     await getUser(recipient)
@@ -24,29 +31,38 @@ export default function ChatScreen({ navigation, route }) {
       .catch((e) => console.error(e));
   }
 
-  // async function getMessagesData(params) {
-  //   console.log("getMessagesData: ", route.params);
-  //   await getMessages(params)
-  //     .then((res) => setMessageData(res))
-  //     .catch((err) => console.error(err));
-  // }
   useEffect(() => {
-    getMessages(route.params)
-      .then((res) => setMessageData(res))
-      .catch((err) => console.error(err));
+    const chatMessageHandler = async () => {
+      let result = await getGroupMessage(route.params);
+      if (!result) {
+        let groupId = await createGroupMessage(route.params);
+        setGroupId(groupId);
+        getMessages(groupId)
+          .then((res) => setMessageData(res))
+          .catch((err) => console.error(err));
+      } else {
+        setGroupId(result);
+        getMessages(result)
+          .then((res) => setMessageData(res))
+          .catch((err) => console.error(err));
+      }
+    };
+
+    chatMessageHandler().catch((err) => console.error(err));
+    setGettingData(true);
+    return;
   }, []);
 
   useEffect(() => {
-    setGetingData(false);
     setRouteParams(route.params);
     if (route.params) getData(route.params.recipient);
-    setGetingData(true);
   }, [navigation, route]);
 
   async function sendMessageHandler() {
-    await createMessage(routeParams, message);
-    setMessage("");
-    getMessages(routeParams);
+    await sendMessage(routeParams, message, groupId);
+    listenMessages(groupId).then((res) =>
+      setMessageData((prevState) => [...prevState, res])
+    );
   }
 
   useLayoutEffect(() => {
@@ -61,7 +77,6 @@ export default function ChatScreen({ navigation, route }) {
   }, [recipient]);
 
   let view = <ActivityIndicator size={"large"} />;
-
   if (gettingData && messageData) {
     view = (
       <View style={styles.container}>
@@ -71,6 +86,7 @@ export default function ChatScreen({ navigation, route }) {
               {recipient.displayName}
             </Text>
           )}
+          <Text>x</Text>
           {messageData && (
             <FlatList
               data={messageData}
