@@ -2,9 +2,15 @@ import { StyleSheet, Text, View } from "react-native";
 import { Image } from "react-native";
 import { Typography } from "../../constans/styles";
 
-export default function UserAvatar({ userName, userImage }) {
+export default function UserAvatar({
+  userName,
+  userImage,
+  placeholderImageSource,
+}) {
   const imageSource =
-    userImage !== null ? { uri: userImage } : placeholderImageSource;
+    userImage === undefined
+      ? require("../../../assets/Images/avatarPlaceHolder.png")
+      : { uri: userImage };
   return (
     <View style={styles.container}>
       <Image source={imageSource} style={styles.img} />

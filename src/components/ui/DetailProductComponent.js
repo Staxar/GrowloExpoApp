@@ -52,7 +52,7 @@ export default function DetailProductComponent({
           </Text>
         </View>
 
-        <Text>Description:</Text>
+        <Text style={Typography.smallDescription}>Description:</Text>
         <Text style={Typography.normalDescription}>{description}</Text>
       </View>
       <View
@@ -70,7 +70,8 @@ export default function DetailProductComponent({
       {pickedLocation && (
         <View style={{ gap: 5 }}>
           <Text style={Typography.normalDescription}>
-            Location: {pickedLocation.address}
+            Location:{" "}
+            <Text style={{ fontWeight: "bold" }}>{pickedLocation.address}</Text>
           </Text>
 
           <View style={styles.mapPreview}>

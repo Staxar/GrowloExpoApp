@@ -154,7 +154,7 @@ function AuthenticatedStack() {
               <Ionicons
                 size={24}
                 name="heart-outline"
-                style={{ marginRight: 15, color: "#000" }}
+                style={{ marginRight: 15, color: "grey" }}
               />
             </Pressable>
           ),

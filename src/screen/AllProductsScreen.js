@@ -11,15 +11,15 @@ export default function AllProductsScreen({ route, navigation }) {
   const [data, setData] = useState([]);
   const [category, setCategory] = useState("");
 
-  async function getData() {
-    await getProducts()
-      .then((res) => setData(res))
-      .catch((e) => console.error(e));
-  }
-
   useEffect(() => {
     setCategory(route.params.itemParams);
-    getData();
+    const getData = async () => {
+      await getProducts()
+        .then((res) => setData(res))
+        .catch((e) => console.error(e));
+    };
+
+    getData().catch((err) => console.error(err));
   }, [navigation, route]);
 
   const filteredProducts = data.filter((product) =>
@@ -28,7 +28,7 @@ export default function AllProductsScreen({ route, navigation }) {
   return (
     <SafeAreaView style={styles.outerContainer}>
       <View style={{ padding: 20 }}>
-        {category != "" && (
+        {category !== "" && (
           <Text style={Typography.smallTitle}>Category: {category}</Text>
         )}
       </View>
@@ -48,7 +48,7 @@ export default function AllProductsScreen({ route, navigation }) {
                 productImage={item.selectedImage}
               />
             )}
-            style={{ width: "100%" }}
+            style={styles.fullWidth}
             keyExtractor={(item) => item.id}
           />
         )}
@@ -66,5 +66,8 @@ const styles = StyleSheet.create({
     padding: 10,
     alignItems: "center",
     marginLeft: "6%",
+  },
+  fullWidth: {
+    width: "100%",
   },
 });

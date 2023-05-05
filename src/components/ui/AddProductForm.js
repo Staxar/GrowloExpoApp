@@ -277,16 +277,12 @@ export default function AddProductForm({ update }) {
             data={DATA_CATEGORY}
             search={true}
             save="value"
-            boxStyles={{
-              borderWidth: 0.5,
-              padding: 0,
-              margin: 0,
-            }}
+            boxStyles={styles.boxStyles}
             arrowicon={<Ionicons name={"chevron-down-outline"} size={24} />}
-            dropdownStyles={{ borderWidth: 0 }}
-            dropdownItemStyles={{ borderBottomWidth: 0.5 }}
-            dropdownTextStyles={{ fontSize: 20, color: Colors.primary600 }}
-            inputStyles={{ fontSize: 20, color: Colors.primary600 }}
+            dropdownStyles={styles.dropdownStyles}
+            dropdownItemStyles={styles.dropdownItemStyles}
+            dropdownTextStyles={styles.dropdownTextStyles}
+            inputStyles={styles.inputStyles}
           />
         </TitleForm>
         <TitleForm title={"Unit"}>
@@ -295,16 +291,12 @@ export default function AddProductForm({ update }) {
             data={data}
             search={true}
             save="value"
-            boxStyles={{
-              borderWidth: 0.5,
-              padding: 0,
-              margin: 0,
-            }}
+            boxStyles={styles.boxStyles}
             arrowicon={<Ionicons name={"chevron-down-outline"} size={24} />}
-            dropdownStyles={{ borderWidth: 0 }}
-            dropdownItemStyles={{ borderBottomWidth: 0.5 }}
-            dropdownTextStyles={{ fontSize: 20, color: Colors.primary600 }}
-            inputStyles={{ fontSize: 20, color: Colors.primary600 }}
+            dropdownStyles={styles.dropdownStyles}
+            dropdownItemStyles={styles.dropdownItemStyles}
+            dropdownTextStyles={styles.dropdownTextStyles}
+            inputStyles={styles.inputStyles}
           />
         </TitleForm>
 
@@ -392,5 +384,24 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: "center",
+  },
+  dropdownStyles: {
+    borderWidth: 0,
+  },
+  dropdownItemStyles: {
+    borderBottomWidth: 0.5,
+  },
+  dropdownTextStyles: {
+    fontSize: 20,
+    color: Colors.primary600,
+  },
+  inputStyles: {
+    fontSize: 20,
+    color: Colors.primary600,
+  },
+  boxStyles: {
+    borderWidth: 0.7,
+    padding: 0,
+    margin: 0,
   },
 });
