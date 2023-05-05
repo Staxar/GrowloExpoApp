@@ -17,14 +17,15 @@ import {
 import { getUser } from "../util/user";
 import { FlatList } from "react-native";
 import { ActivityIndicator } from "react-native";
+import { getDatabase, onChildAdded, ref } from "firebase/database";
 export default function ChatScreen({ navigation, route }) {
   const [routeParams, setRouteParams] = useState({});
   const [message, setMessage] = useState();
   const [recipient, setRecipiet] = useState({});
-  const [messageData, setMessageData] = useState();
+  const [messageData, setMessageData] = useState([]);
   const [gettingData, setGettingData] = useState(false);
   const [groupId, setGroupId] = useState();
-
+  const db = getDatabase();
   async function getData(recipient) {
     await getUser(recipient)
       .then((response) => setRecipiet(response))
@@ -35,22 +36,27 @@ export default function ChatScreen({ navigation, route }) {
     const chatMessageHandler = async () => {
       let result = await getGroupMessage(route.params);
       if (!result) {
-        let groupId = await createGroupMessage(route.params);
-        setGroupId(groupId);
-        getMessages(groupId)
-          .then((res) => setMessageData(res))
-          .catch((err) => console.error(err));
+        let groupID = await createGroupMessage(route.params);
+        setGroupId(groupID);
+        const messagesRef = ref(db, "messages/" + groupID + "/message/");
+        onChildAdded(messagesRef, (response) => {
+          let data = Object.assign(response.val(), { id: response.key });
+          setMessageData((prevState) => [...prevState, data]);
+        });
       } else {
         setGroupId(result);
-        getMessages(result)
-          .then((res) => setMessageData(res))
-          .catch((err) => console.error(err));
+        const messagesRef = ref(db, "messages/" + result + "/message/");
+
+        onChildAdded(messagesRef, (response) => {
+          let data = Object.assign(response.val(), { id: response.key });
+          setMessageData((prevState) => [...prevState, data]);
+        });
       }
+      return;
     };
 
     chatMessageHandler().catch((err) => console.error(err));
     setGettingData(true);
-    return;
   }, []);
 
   useEffect(() => {
@@ -60,9 +66,8 @@ export default function ChatScreen({ navigation, route }) {
 
   async function sendMessageHandler() {
     await sendMessage(routeParams, message, groupId);
-    listenMessages(groupId).then((res) =>
-      setMessageData((prevState) => [...prevState, res])
-    );
+
+    setMessage("");
   }
 
   useLayoutEffect(() => {
@@ -75,18 +80,11 @@ export default function ChatScreen({ navigation, route }) {
       ),
     });
   }, [recipient]);
-
   let view = <ActivityIndicator size={"large"} />;
-  if (gettingData && messageData) {
+  if (gettingData) {
     view = (
       <View style={styles.container}>
         <View style={styles.innerContainer}>
-          {recipient && (
-            <Text style={[Typography.bigTitle, { color: "black" }]}>
-              {recipient.displayName}
-            </Text>
-          )}
-          <Text>x</Text>
           {messageData && (
             <FlatList
               data={messageData}

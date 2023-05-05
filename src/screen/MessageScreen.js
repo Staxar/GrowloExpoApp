@@ -44,6 +44,7 @@ export default function MessageScreen({ navigation, route }) {
       navigation.navigate("Chat", { author: author, recipient: recipient });
     }
   }
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.innerContainer}>

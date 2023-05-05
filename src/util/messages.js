@@ -42,7 +42,6 @@ export async function getGroupMessage(params) {
 }
 
 export async function sendMessage(params, message, groupId) {
-  console.log("sendMessage: ", params, message, groupId);
   let timestamp = new Date().getTime();
 
   const MessageListRef = ref(db, `messages/${groupId}/message`);
@@ -57,7 +56,7 @@ export async function sendMessage(params, message, groupId) {
 }
 
 export async function createGroupMessage(params) {
-  console.log("createGroupMessage: ", params);
+  console.log("createGroupMessage", params);
   let timestamp = new Date().getTime();
   const MessageListRef = ref(db, `messages/`);
   const newMessageRef = push(MessageListRef);
@@ -79,6 +78,9 @@ export async function getMessages(groupId) {
   const result = await get(child(dbRef, `messages/${groupId}/message`));
   if (result) {
     const data = result.val();
+    if (data === null || data === undefined) {
+      return;
+    }
     const messageArray = Object.keys(data).map((key) => ({
       id: key,
       ...data[key],
@@ -90,12 +92,15 @@ export async function getMessages(groupId) {
 }
 
 export async function listenMessages(groupId) {
-  console.log("listenMessages:", groupId);
+  console.log("groupId", groupId);
   if (!groupId) {
     return;
   }
   let data;
-  const messagesRef = ref(db, "messages/" + groupId + "/message/");
+  const messagesRef = ref(
+    db,
+    "messages/" + "-NU_rPMtWln3d3ngqTSf" + "/message/"
+  );
   onChildAdded(messagesRef, (response) => {
     data = response.val();
     data = Object.assign(data, { id: response.key });
@@ -105,7 +110,6 @@ export async function listenMessages(groupId) {
 }
 
 export async function createMessage(params, message) {
-  console.log("createMessage", params, message);
   let result = await getGroupMessage(params);
   if (!result) {
     await createGroupMessage(params, message);
