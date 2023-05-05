@@ -9,7 +9,6 @@ import {
 import React, { useContext, useEffect, useState } from "react";
 import SearchBar from "../components/ui/SearchBar";
 import { Typography } from "../constans/styles";
-import { USERS } from "../../assets/Data/Users";
 import UserAvatar from "../components/ui/UserAvatar";
 import ChatItem from "../components/ui/ChatItem";
 import { Pressable } from "react-native";
@@ -31,28 +30,25 @@ export default function MessageScreen({ navigation, route }) {
 
   useEffect(() => {
     setGettingData(false);
-    const usersData = async () => {
-      await getUsers()
-        .then((res) => setUserData(res))
-        .catch((err) => console.error(err));
-    };
+    // const usersData = async () => {
+    //   await getUsers()
+    //     .then((res) => setUserData(res))
+    //     .catch((err) => console.error(err));
+    // };
     const messageData = async () => {
       await getChatsGroupMessage(authCtx.uid)
         .then((res) => {
           res.map((item) => {
-            getLastMessages(item)
-              .then((response) => {
-                if (response !== undefined)
-                  setMessages((prevState) => [...prevState, response]);
-              })
-              .catch((err) => console.error(err));
+            if (item !== undefined) {
+              setMessages((prevState) => [...prevState, item]);
+            }
           });
         })
         .catch((err) => console.error(err))
         .finally(() => setGettingData(true));
     };
     setUserUID(authCtx.uid);
-    usersData();
+    // usersData();
     messageData();
     return;
   }, [navigation, route]);
@@ -63,11 +59,10 @@ export default function MessageScreen({ navigation, route }) {
       navigation.navigate("Chat", { author: author, recipient: recipient });
     }
   }
-  console.log(messages);
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.innerContainer}>
-        <Text style={[Typography.normalTitle, { textAlign: "center" }]}>
+        {/* <Text style={[Typography.normalTitle, { textAlign: "center" }]}>
           Chat
         </Text>
         <SearchBar placeholder={"Search users..."} />
@@ -96,19 +91,20 @@ export default function MessageScreen({ navigation, route }) {
           ) : (
             <ActivityIndicator size={"large"} />
           )}
-        </View>
+        </View> */}
 
         {gettingData && messages ? (
           <FlatList
             data={messages}
             renderItem={({ item }) => (
-              <>
-                <Text>{Object(item).author}</Text>
-                <Text>{Object(item).content}</Text>
-                <Text>{Object(item).timestamp}</Text>
-              </>
+              <ChatItem
+                author={item.author}
+                recipient={item.recipient}
+                messages={[item.message]}
+                uid={authCtx.uid}
+              />
             )}
-            keyExtractor={(item, index) => index}
+            keyExtractor={(item) => item.id}
           />
         ) : (
           <ActivityIndicator size={"large"} />

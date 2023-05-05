@@ -42,9 +42,9 @@ export async function getChatsGroupMessage(uid) {
           return;
         }
 
-        messageArray = Object.keys(data).map((item) => {
-          if (data[item].author === uid || data[item].recipient === uid) {
-            return item;
+        messageArray = Object.keys(data).map((key) => {
+          if (data[key].author === uid || data[key].recipient === uid) {
+            return { id: key, ...data[key] };
           }
         });
         return messageArray;
