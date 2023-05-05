@@ -16,25 +16,44 @@ import { Pressable } from "react-native";
 import { getUsers } from "../util/user";
 import { AuthContext } from "../store/auth-context";
 import { Alert } from "react-native";
+import {
+  getChatsGroupMessage,
+  getLastMessages,
+  getMessages,
+} from "../util/messages";
 
 export default function MessageScreen({ navigation, route }) {
-  const [userData, setUserData] = useState([{}]);
+  const [userData, setUserData] = useState([]);
   const [gettingData, setGettingData] = useState(false);
+  const [messages, setMessages] = useState([]);
   const [userUID, setUserUID] = useState();
   const authCtx = useContext(AuthContext);
 
-  async function usersData() {
-    getUsers()
-      .then((res) => setUserData(res))
-      .catch((err) => console.error(err))
-      .finally(() => setGettingData(true));
-  }
-
   useEffect(() => {
     setGettingData(false);
-    usersData();
+    const usersData = async () => {
+      await getUsers()
+        .then((res) => setUserData(res))
+        .catch((err) => console.error(err));
+    };
+    const messageData = async () => {
+      await getChatsGroupMessage(authCtx.uid)
+        .then((res) => {
+          res.map((item) => {
+            getLastMessages(item)
+              .then((response) => {
+                if (response !== undefined)
+                  setMessages((prevState) => [...prevState, response]);
+              })
+              .catch((err) => console.error(err));
+          });
+        })
+        .catch((err) => console.error(err))
+        .finally(() => setGettingData(true));
+    };
     setUserUID(authCtx.uid);
-
+    usersData();
+    messageData();
     return;
   }, [navigation, route]);
   function navigationHandler(author, recipient) {
@@ -44,7 +63,7 @@ export default function MessageScreen({ navigation, route }) {
       navigation.navigate("Chat", { author: author, recipient: recipient });
     }
   }
-
+  console.log(messages);
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.innerContainer}>
@@ -57,17 +76,20 @@ export default function MessageScreen({ navigation, route }) {
           {gettingData ? (
             <FlatList
               data={userData}
-              renderItem={({ item }) => (
-                <Pressable onPress={() => navigationHandler(userUID, item.id)}>
-                  <UserAvatar
-                    userName={item.displayName}
-                    userImage={item.photoURL}
-                    placeholderImageSource={
-                      "D:ProjectsGrowloExpoAppassetsImagesimagePlaceholder.webp"
-                    }
-                  />
-                </Pressable>
-              )}
+              renderItem={({ item }) => {
+                if (item.id !== userUID) {
+                  return (
+                    <Pressable
+                      onPress={() => navigationHandler(userUID, item.id)}
+                    >
+                      <UserAvatar
+                        userName={item.displayName}
+                        userImage={item.photoURL}
+                      />
+                    </Pressable>
+                  );
+                }
+              }}
               keyExtractor={(item) => item.id}
               horizontal={true}
             />
@@ -76,18 +98,17 @@ export default function MessageScreen({ navigation, route }) {
           )}
         </View>
 
-        {gettingData ? (
+        {gettingData && messages ? (
           <FlatList
-            data={userData}
+            data={messages}
             renderItem={({ item }) => (
-              <ChatItem
-                userName={item.displayName}
-                userImage={item.photoURL}
-                message={item.message}
-                status={item.status}
-              />
+              <>
+                <Text>{Object(item).author}</Text>
+                <Text>{Object(item).content}</Text>
+                <Text>{Object(item).timestamp}</Text>
+              </>
             )}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item, index) => index}
           />
         ) : (
           <ActivityIndicator size={"large"} />

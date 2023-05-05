@@ -1,13 +1,4 @@
-import {
-  child,
-  get,
-  getDatabase,
-  onChildAdded,
-  onValue,
-  push,
-  ref,
-  set,
-} from "firebase/database";
+import { child, get, getDatabase, push, ref, set } from "firebase/database";
 
 const db = getDatabase();
 
@@ -40,6 +31,30 @@ export async function getGroupMessage(params) {
     .catch((err) => console.error(err));
   return result;
 }
+export async function getChatsGroupMessage(uid) {
+  let messageArray;
+  const dbRef = ref(db);
+  await get(child(dbRef, "messages/"))
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        if (data === null || data === undefined) {
+          return;
+        }
+
+        messageArray = Object.keys(data).map((item) => {
+          if (data[item].author === uid || data[item].recipient === uid) {
+            return item;
+          }
+        });
+        return messageArray;
+      } else {
+        console.error(snapshot.val());
+      }
+    })
+    .catch((err) => console.error(err));
+  return messageArray;
+}
 
 export async function sendMessage(params, message, groupId) {
   let timestamp = new Date().getTime();
@@ -56,7 +71,6 @@ export async function sendMessage(params, message, groupId) {
 }
 
 export async function createGroupMessage(params) {
-  console.log("createGroupMessage", params);
   let timestamp = new Date().getTime();
   const MessageListRef = ref(db, `messages/`);
   const newMessageRef = push(MessageListRef);
@@ -91,23 +105,43 @@ export async function getMessages(groupId) {
   }
 }
 
-export async function listenMessages(groupId) {
-  console.log("groupId", groupId);
-  if (!groupId) {
+export async function getLastMessages(groupId) {
+  if (groupId === undefined) {
     return;
   }
-  let data;
-  const messagesRef = ref(
-    db,
-    "messages/" + "-NU_rPMtWln3d3ngqTSf" + "/message/"
-  );
-  onChildAdded(messagesRef, (response) => {
-    data = response.val();
-    data = Object.assign(data, { id: response.key });
-    return data;
-  });
-  return data;
+  const dbRef = ref(getDatabase());
+  const result = await get(child(dbRef, `messages/${groupId}/message`));
+  if (result) {
+    const data = result.val();
+    if (data === null || data === undefined) {
+      return;
+    }
+    let keyNumber = Object.keys(data).length;
+    const messageArray = Object.values(data)[keyNumber - 1];
+    return messageArray;
+  } else {
+    console.log("error");
+  }
+  return messageArray;
 }
+
+// export async function listenMessages(groupId) {
+//   console.log("groupId", groupId);
+//   if (!groupId) {
+//     return;
+//   }
+//   let data;
+//   const messagesRef = ref(
+//     db,
+//     "messages/" + "-NU_rPMtWln3d3ngqTSf" + "/message/"
+//   );
+//   onChildAdded(messagesRef, (response) => {
+//     data = response.val();
+//     data = Object.assign(data, { id: response.key });
+//     return data;
+//   });
+//   return data;
+// }
 
 export async function createMessage(params, message) {
   let result = await getGroupMessage(params);
