@@ -52,6 +52,7 @@ export default function MessageScreen({ navigation, route }) {
     messageData();
     return;
   }, [navigation, route]);
+
   function navigationHandler(author, recipient) {
     if (author === recipient) {
       Alert.alert("You can't send message to yourself!");
@@ -59,18 +60,19 @@ export default function MessageScreen({ navigation, route }) {
       navigation.navigate("Chat", { author: author, recipient: recipient });
     }
   }
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.innerContainer}>
         {/* <Text style={[Typography.normalTitle, { textAlign: "center" }]}>
           Chat
         </Text>
-        <SearchBar placeholder={"Search users..."} />
-        <View style={styles.avatarsContainer}>
+        <SearchBar placeholder={"Search users..."} /> */}
+        {/* <View style={styles.avatarsContainer}>
           <Text>Active Now</Text>
-          {gettingData ? (
+          {gettingData && messages ? (
             <FlatList
-              data={userData}
+              data={messages}
               renderItem={({ item }) => {
                 if (item.id !== userUID) {
                   return (
@@ -102,6 +104,7 @@ export default function MessageScreen({ navigation, route }) {
                 recipient={item.recipient}
                 messages={[item.message]}
                 uid={authCtx.uid}
+                timestamp={item.timestamp}
               />
             )}
             keyExtractor={(item) => item.id}

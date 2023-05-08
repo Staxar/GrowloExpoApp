@@ -3,10 +3,23 @@ import { Colors, Typography } from "../../constans/styles";
 import UserAvatar from "./UserAvatar";
 import { useEffect, useState } from "react";
 import { getUser } from "../../util/user";
-// userName, userImage, message, status
-export default function ChatItem({ author, recipient, messages, uid }) {
+
+export default function ChatItem({
+  author,
+  recipient,
+  messages,
+  uid,
+  timestamp,
+}) {
   const [user, setUser] = useState();
   const [dataAviable, setDataAviable] = useState(false);
+  const [lastMsg, setLastMsg] = useState("");
+
+  function lastMessageHandler() {
+    let keys = Object.keys(messages[0]).length;
+    let lastMsg = Object.values(messages[0]);
+    setLastMsg(lastMsg[keys - 1].content);
+  }
 
   useEffect(() => {
     setDataAviable(false);
@@ -18,6 +31,7 @@ export default function ChatItem({ author, recipient, messages, uid }) {
     };
 
     usersData();
+    lastMessageHandler();
   }, []);
 
   let view = <ActivityIndicator size={"large"} />;
@@ -25,12 +39,12 @@ export default function ChatItem({ author, recipient, messages, uid }) {
   if (dataAviable) {
     view = (
       <View style={styles.container}>
-        {/* <UserAvatar userImage={userImage} /> */}
-        <View style={{ width: "65%", marginHorizontal: 10 }}>
+        <UserAvatar userImage={user.photoURL ? user.photoURL : undefined} />
+        <View style={styles.innerContainer}>
           <Text>{user.displayName}</Text>
-          {/* <Text numberOfLines={1} style={Typography.smallDescription}>
-      {message}
-    </Text> */}
+          <Text numberOfLines={1} style={Typography.smallDescription}>
+            {lastMsg}
+          </Text>
         </View>
         {/* {status ? (
     <View style={styles.active}></View>
@@ -54,6 +68,10 @@ const styles = StyleSheet.create({
     marginVertical: 6,
     borderRadius: 8,
     alignItems: "center",
+  },
+  innerContainer: {
+    width: "65%",
+    marginHorizontal: 10,
   },
   active: {
     height: 10,
