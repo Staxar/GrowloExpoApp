@@ -17,7 +17,6 @@ import { Alert } from "react-native";
 import { getChatsGroupMessage } from "../util/messages";
 
 export default function MessageScreen({ navigation, route }) {
-  const [userData, setUserData] = useState([]);
   const [gettingData, setGettingData] = useState(false);
   const [messages, setMessages] = useState([]);
   const [userUID, setUserUID] = useState();
