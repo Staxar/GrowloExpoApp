@@ -3,7 +3,13 @@ import { Colors, Typography } from "../../constans/styles";
 import UserAvatar from "./UserAvatar";
 import { useEffect, useState } from "react";
 import { getUser } from "../../util/user";
-import { getDatabase, onChildAdded, ref } from "firebase/database";
+import {
+  getDatabase,
+  limitToLast,
+  onChildAdded,
+  query,
+  ref,
+} from "firebase/database";
 
 export default function ChatItem({
   author,
@@ -26,11 +32,15 @@ export default function ChatItem({
     };
 
     const db = getDatabase();
-    const messagesRef = ref(db, "messages/" + messageID + "/message/");
+    const messagesRef = query(
+      ref(db, "messages/" + messageID + "/message/"),
+      limitToLast(1)
+    );
 
     onChildAdded(messagesRef, (response) => {
       let data = Object.assign(response.val(), { id: response.key });
-      setMessageData((prevState) => [...prevState, data]);
+      console.log("DATA :", data.content);
+      setMessageData(data.content);
     });
     setDataAviable(true);
     usersData();
@@ -38,19 +48,13 @@ export default function ChatItem({
 
   let view = <ActivityIndicator size={"large"} />;
   if (dataAviable && user && messageData) {
-    if (messageData[0] === undefined) {
-      return;
-    }
-    let keys = Object.keys(messageData).length;
-    let lastMessage = messageData[keys - 1].content;
-
     view = (
       <View style={styles.container}>
         <UserAvatar userImage={user.photoURL ? user.photoURL : undefined} />
         <View style={styles.innerContainer}>
           <Text>{user.displayName}</Text>
           <Text numberOfLines={1} style={Typography.smallDescription}>
-            {lastMessage}
+            {messageData}
           </Text>
         </View>
         {/* {status ? (

@@ -1,4 +1,14 @@
-import { child, get, getDatabase, ref, set, update } from "firebase/database";
+import {
+  child,
+  equalTo,
+  get,
+  getDatabase,
+  orderByChild,
+  query,
+  ref,
+  set,
+  update,
+} from "firebase/database";
 import { getAuth, updateProfile } from "firebase/auth";
 
 export async function createUser(uid, email, displayName) {
