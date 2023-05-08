@@ -54,6 +54,7 @@ export default function MessageScreen({ navigation, route }) {
   }, [navigation, route]);
 
   function navigationHandler(author, recipient) {
+    console.log("author: ", author, "recipient: ", recipient);
     if (author === recipient) {
       Alert.alert("You can't send message to yourself!");
     } else {
@@ -64,25 +65,34 @@ export default function MessageScreen({ navigation, route }) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.innerContainer}>
-        {/* <Text style={[Typography.normalTitle, { textAlign: "center" }]}>
+        <Text style={[Typography.normalTitle, { textAlign: "center" }]}>
           Chat
         </Text>
-        <SearchBar placeholder={"Search users..."} /> */}
-        {/* <View style={styles.avatarsContainer}>
+        <SearchBar placeholder={"Search users..."} />
+        <View style={styles.avatarsContainer}>
           <Text>Active Now</Text>
           {gettingData && messages ? (
             <FlatList
               data={messages}
               renderItem={({ item }) => {
-                if (item.id !== userUID) {
+                if (item.author !== userUID) {
                   return (
                     <Pressable
-                      onPress={() => navigationHandler(userUID, item.id)}
+                      onPress={() =>
+                        navigationHandler(item.recipient, item.author)
+                      }
                     >
-                      <UserAvatar
-                        userName={item.displayName}
-                        userImage={item.photoURL}
-                      />
+                      <UserAvatar userUID={item.author} />
+                    </Pressable>
+                  );
+                } else {
+                  return (
+                    <Pressable
+                      onPress={() =>
+                        navigationHandler(item.author, item.recipient)
+                      }
+                    >
+                      <UserAvatar userUID={item.recipient} />
                     </Pressable>
                   );
                 }
@@ -93,19 +103,27 @@ export default function MessageScreen({ navigation, route }) {
           ) : (
             <ActivityIndicator size={"large"} />
           )}
-        </View> */}
+        </View>
 
         {gettingData && messages ? (
           <FlatList
             data={messages}
             renderItem={({ item }) => (
-              <ChatItem
-                author={item.author}
-                recipient={item.recipient}
-                messages={[item.message]}
-                uid={authCtx.uid}
-                timestamp={item.timestamp}
-              />
+              <Pressable
+                onPress={() =>
+                  item.author !== userUID
+                    ? navigationHandler(item.recipient, item.author)
+                    : navigationHandler(item.author, item.recipient)
+                }
+              >
+                <ChatItem
+                  author={item.author}
+                  recipient={item.recipient}
+                  messages={[item.message]}
+                  uid={authCtx.uid}
+                  timestamp={item.timestamp}
+                />
+              </Pressable>
             )}
             keyExtractor={(item) => item.id}
           />
