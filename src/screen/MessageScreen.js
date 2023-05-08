@@ -30,11 +30,6 @@ export default function MessageScreen({ navigation, route }) {
 
   useEffect(() => {
     setGettingData(false);
-    // const usersData = async () => {
-    //   await getUsers()
-    //     .then((res) => setUserData(res))
-    //     .catch((err) => console.error(err));
-    // };
     const messageData = async () => {
       await getChatsGroupMessage(authCtx.uid)
         .then((res) => {
@@ -75,27 +70,21 @@ export default function MessageScreen({ navigation, route }) {
             <FlatList
               data={messages}
               renderItem={({ item }) => {
-                if (item.author !== userUID) {
-                  return (
-                    <Pressable
-                      onPress={() =>
-                        navigationHandler(item.recipient, item.author)
+                return (
+                  <Pressable
+                    onPress={() =>
+                      item.author !== userUID
+                        ? navigationHandler(item.recipient, item.author)
+                        : navigationHandler(item.author, item.recipient)
+                    }
+                  >
+                    <UserAvatar
+                      userUID={
+                        item.author !== userUID ? item.author : item.recipient
                       }
-                    >
-                      <UserAvatar userUID={item.author} />
-                    </Pressable>
-                  );
-                } else {
-                  return (
-                    <Pressable
-                      onPress={() =>
-                        navigationHandler(item.author, item.recipient)
-                      }
-                    >
-                      <UserAvatar userUID={item.recipient} />
-                    </Pressable>
-                  );
-                }
+                    />
+                  </Pressable>
+                );
               }}
               keyExtractor={(item) => item.id}
               horizontal={true}
@@ -108,7 +97,7 @@ export default function MessageScreen({ navigation, route }) {
         {gettingData && messages ? (
           <FlatList
             data={messages}
-            renderItem={({ item, index }) => (
+            renderItem={({ item }) => (
               <Pressable
                 onPress={() =>
                   item.author !== userUID
