@@ -12,14 +12,9 @@ import { Typography } from "../constans/styles";
 import UserAvatar from "../components/ui/UserAvatar";
 import ChatItem from "../components/ui/ChatItem";
 import { Pressable } from "react-native";
-import { getUsers } from "../util/user";
 import { AuthContext } from "../store/auth-context";
 import { Alert } from "react-native";
-import {
-  getChatsGroupMessage,
-  getLastMessages,
-  getMessages,
-} from "../util/messages";
+import { getChatsGroupMessage } from "../util/messages";
 
 export default function MessageScreen({ navigation, route }) {
   const [userData, setUserData] = useState([]);
@@ -43,7 +38,6 @@ export default function MessageScreen({ navigation, route }) {
         .finally(() => setGettingData(true));
     };
     setUserUID(authCtx.uid);
-    // usersData();
     messageData();
     return;
   }, [navigation, route]);
