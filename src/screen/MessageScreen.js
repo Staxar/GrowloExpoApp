@@ -108,7 +108,7 @@ export default function MessageScreen({ navigation, route }) {
         {gettingData && messages ? (
           <FlatList
             data={messages}
-            renderItem={({ item }) => (
+            renderItem={({ item, index }) => (
               <Pressable
                 onPress={() =>
                   item.author !== userUID
@@ -120,6 +120,7 @@ export default function MessageScreen({ navigation, route }) {
                   author={item.author}
                   recipient={item.recipient}
                   messages={[item.message]}
+                  messageID={item.id}
                   uid={authCtx.uid}
                   timestamp={item.timestamp}
                 />

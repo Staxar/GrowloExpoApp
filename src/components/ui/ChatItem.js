@@ -3,6 +3,7 @@ import { Colors, Typography } from "../../constans/styles";
 import UserAvatar from "./UserAvatar";
 import { useEffect, useState } from "react";
 import { getUser } from "../../util/user";
+import { getDatabase, onChildAdded, ref } from "firebase/database";
 
 export default function ChatItem({
   author,
@@ -10,40 +11,47 @@ export default function ChatItem({
   messages,
   uid,
   timestamp,
+  messageID,
 }) {
   const [user, setUser] = useState();
   const [dataAviable, setDataAviable] = useState(false);
   const [lastMsg, setLastMsg] = useState("");
-
-  function lastMessageHandler() {
-    let keys = Object.keys(messages[0]).length;
-    let lastMsg = Object.values(messages[0]);
-    setLastMsg(lastMsg[keys - 1].content);
-  }
+  const [messageData, setMessageData] = useState([]);
 
   useEffect(() => {
     setDataAviable(false);
     const usersData = async () => {
       await getUser(author === uid ? recipient : author)
         .then((res) => setUser(res))
-        .catch((err) => console.error(err))
-        .finally(() => setDataAviable(true));
+        .catch((err) => console.error(err));
     };
 
+    const db = getDatabase();
+    const messagesRef = ref(db, "messages/" + messageID + "/message/");
+
+    onChildAdded(messagesRef, (response) => {
+      let data = Object.assign(response.val(), { id: response.key });
+      setMessageData((prevState) => [...prevState, data]);
+    });
+    setDataAviable(true);
     usersData();
-    lastMessageHandler();
   }, []);
 
   let view = <ActivityIndicator size={"large"} />;
+  if (dataAviable && user && messageData) {
+    if (messageData[0] === undefined) {
+      return;
+    }
+    let keys = Object.keys(messageData).length;
+    let lastMessage = messageData[keys - 1].content;
 
-  if (dataAviable) {
     view = (
       <View style={styles.container}>
         <UserAvatar userImage={user.photoURL ? user.photoURL : undefined} />
         <View style={styles.innerContainer}>
           <Text>{user.displayName}</Text>
           <Text numberOfLines={1} style={Typography.smallDescription}>
-            {lastMsg}
+            {lastMessage}
           </Text>
         </View>
         {/* {status ? (

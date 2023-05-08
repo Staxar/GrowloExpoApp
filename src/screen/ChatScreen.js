@@ -10,8 +10,6 @@ import OutlinedButton from "../components/ui/OutlinedButton";
 import {
   createGroupMessage,
   getGroupMessage,
-  getMessages,
-  listenMessages,
   sendMessage,
 } from "../util/messages";
 import { getUser } from "../util/user";
