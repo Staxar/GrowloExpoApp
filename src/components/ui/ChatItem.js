@@ -14,7 +14,6 @@ import {
 export default function ChatItem({
   author,
   recipient,
-  messages,
   uid,
   timestamp,
   messageID,
@@ -39,7 +38,6 @@ export default function ChatItem({
 
     onChildAdded(messagesRef, (response) => {
       let data = Object.assign(response.val(), { id: response.key });
-      console.log("DATA :", data.content);
       setMessageData(data.content);
     });
     setDataAviable(true);

@@ -42,7 +42,6 @@ export default function MessageScreen({ navigation, route }) {
   }, [navigation, route]);
 
   function navigationHandler(author, recipient) {
-    console.log("author: ", author, "recipient: ", recipient);
     if (author === recipient) {
       Alert.alert("You can't send message to yourself!");
     } else {
@@ -56,7 +55,7 @@ export default function MessageScreen({ navigation, route }) {
         <Text style={[Typography.normalTitle, { textAlign: "center" }]}>
           Chat
         </Text>
-        <SearchBar placeholder={"Search users..."} />
+        {/* <SearchBar placeholder={"Search users..."} /> */}
         <View style={styles.avatarsContainer}>
           <Text>Active Now</Text>
           {gettingData && messages ? (
@@ -101,7 +100,6 @@ export default function MessageScreen({ navigation, route }) {
                 <ChatItem
                   author={item.author}
                   recipient={item.recipient}
-                  messages={[item.message]}
                   messageID={item.id}
                   uid={authCtx.uid}
                   timestamp={item.timestamp}
