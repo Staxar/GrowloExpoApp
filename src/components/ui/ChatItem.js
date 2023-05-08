@@ -15,7 +15,6 @@ export default function ChatItem({
 }) {
   const [user, setUser] = useState();
   const [dataAviable, setDataAviable] = useState(false);
-  const [lastMsg, setLastMsg] = useState("");
   const [messageData, setMessageData] = useState([]);
 
   useEffect(() => {
