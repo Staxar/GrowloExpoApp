@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { get, getDatabase, query, ref } from "firebase/database";
 import { FlatList, SafeAreaView } from "react-native";
 import { StyleSheet, View } from "react-native";
 import ProductCard from "../components/ui/ProductCard";

@@ -10,20 +10,22 @@ import { AuthContext } from "../store/auth-context";
 export default function ProductDetailsScreen({ navigation, route }) {
   const [data, setData] = useState([]);
   const [id, setId] = useState(route.params);
+  const [gettingData, setGettingData] = useState(false);
   const authCtx = useContext(AuthContext);
-
   useEffect(() => {
     const fetchData = async () => {
+      setGettingData(false);
       await getProduct(id)
         .then((res) => setData(res))
-        .catch((err) => console.error(err));
+        .catch((err) => console.error(err))
+        .finally(() => setGettingData(true));
     };
     fetchData().catch((err) => console.error(err));
   }, [navigation, route]);
 
   function sendMessageHandler() {
     const author = authCtx.uid;
-    const recipient = data.uid;
+    const recipient = data.data.uid;
     if (recipient === author) {
       Alert.alert("You can't send message to yourself!");
     } else {
@@ -34,26 +36,22 @@ export default function ProductDetailsScreen({ navigation, route }) {
   let mountComponent = (
     <ActivityIndicator color={Colors.primary100} size={"large"} />
   );
-
-  if (data === []) {
-    console.log("Something goes wrong!", data);
-  } else {
+  if (gettingData) {
     mountComponent = (
       <DetailProductComponent
-        id={id}
-        title={data.title}
-        prize={data.prize}
-        unit={data.unit}
-        description={data.description}
-        pickedLocation={data.pickedLocation}
-        selectedImage={data.selectedImage}
+        id={data.id}
+        title={data.data.title}
+        prize={data.data.prize}
+        unit={data.data.unit}
+        description={data.data.description}
+        pickedLocation={data.data.pickedLocation}
+        selectedImage={data.data.selectedImage}
         sendMessage={sendMessageHandler}
       />
     );
   }
   return <View style={styles.container}>{mountComponent}</View>;
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

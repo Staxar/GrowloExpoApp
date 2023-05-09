@@ -24,6 +24,7 @@ export default function MessageScreen({ navigation, route }) {
 
   useEffect(() => {
     setGettingData(false);
+    setMessages([]);
     const messageData = async () => {
       await getChatsGroupMessage(authCtx.uid)
         .then((res) => {
