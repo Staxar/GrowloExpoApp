@@ -1,7 +1,6 @@
 import {
   KeyboardAvoidingView,
   StyleSheet,
-  Text,
   TextInput,
   View,
 } from "react-native";
@@ -12,14 +11,13 @@ import ImagePickerExample from "../components/ui/ImagePicker";
 import OutlinedButton from "../components/ui/OutlinedButton";
 import { uploadImage } from "../util/uploadImage";
 import { ActivityIndicator } from "react-native";
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import { getAuth } from "firebase/auth";
 function AboutMeScreen({ navigation, route }) {
   const [name, setName] = useState();
   const [email, setEmail] = useState();
   const [user, setUser] = useState();
   const [photoUrl, setPhotoUrl] = useState();
   const authCtx = useContext(AuthContext);
-  const TopTab = createMaterialTopTabNavigator();
 
   async function submitHandler() {
     if (photoUrl === undefined || photoUrl === "") {
