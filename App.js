@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { Button, Pressable, View } from "react-native";
+import { Pressable } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -10,7 +10,6 @@ import AuthContextProvider, { AuthContext } from "./src/store/auth-context";
 import LoginScreen from "./src/screen/auth/LoginScreen";
 import SignupScreen from "./src/screen/auth/SignupScreen";
 import WelcomeScreen from "./src/screen/WelcomeScreen";
-import ProfileScreen from "./src/screen/ProfileScreen";
 import AddProductScreen from "./src/screen/AddProductScreen";
 import { Colors } from "./src/constans/styles";
 import MapScreen from "./src/screen/MapScreen";
@@ -20,9 +19,13 @@ import ProductDetailsScreen from "./src/screen/ProductDetailsScreen";
 import { ActivityIndicator } from "react-native";
 import MessageScreen from "./src/screen/MessageScreen";
 import ChatScreen from "./src/screen/ChatScreen";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import AboutMeScreen from "./src/screen/AboutMeScreen";
+import PantryScreen from "./src/screen/PantryScreen";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
+const TopTab = createMaterialTopTabNavigator();
 function AuthStack() {
   return (
     <Stack.Navigator>
@@ -39,6 +42,15 @@ function AuthStack() {
     </Stack.Navigator>
   );
 }
+
+const TopTapNavigator = () => {
+  return (
+    <TopTab.Navigator>
+      <TopTab.Screen name="About me" component={AboutMeScreen} />
+      <TopTab.Screen name="Pantry" component={PantryScreen} />
+    </TopTab.Navigator>
+  );
+};
 
 function RootTabNavigators() {
   const authCtx = useContext(AuthContext);
@@ -115,7 +127,7 @@ function RootTabNavigators() {
       />
       <Tab.Screen
         name="Profile"
-        component={ProfileScreen}
+        component={TopTapNavigator}
         options={{
           tabBarIcon: () => <Ionicons name="person-outline" size={18} />,
           headerStyle: {

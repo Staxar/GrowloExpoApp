@@ -1,7 +1,9 @@
 import {
+  equalTo,
   get,
   getDatabase,
   limitToFirst,
+  onChildAdded,
   orderByChild,
   query,
   ref,
@@ -29,6 +31,15 @@ export async function getProducts() {
     .catch((error) => {
       return error(error);
     });
+  return result;
+}
+
+export async function getUserProducts(uid) {
+  let result;
+  const getFilteredProductsRef = ref(db, `users/${uid}/products/`);
+  onChildAdded(getFilteredProductsRef, (data) => {
+    result = data.val();
+  });
   return result;
 }
 
@@ -63,7 +74,7 @@ export async function getProduct(id) {
   await get(getCategoryData)
     .then((snapshot) => {
       if (snapshot.exists()) {
-        result = snapshot.val();
+        result = { id: snapshot.key, data: snapshot.val() };
         return;
       } else {
         console.log("No data available");

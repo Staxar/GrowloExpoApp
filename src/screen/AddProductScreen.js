@@ -29,7 +29,7 @@ function AddProductScreen({ navigation, route }) {
         prize: props.prize,
         title: props.enteredTitle,
       };
-      await uploadProduct(payload, imageUrl);
+      await uploadProduct(payload, authCtx.uid);
       setUploading(false);
       navigation.navigate("Welcome");
     } catch (e) {
