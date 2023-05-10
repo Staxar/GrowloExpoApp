@@ -11,20 +11,28 @@ import ImagePickerExample from "../components/ui/ImagePicker";
 import OutlinedButton from "../components/ui/OutlinedButton";
 import { uploadImage } from "../util/uploadImage";
 import { ActivityIndicator } from "react-native";
-import { getAuth } from "firebase/auth";
+import {
+  AuthCredential,
+  EmailAuthCredential,
+  EmailAuthProvider,
+  getAuth,
+  onAuthStateChanged,
+  reauthenticateWithCredential,
+} from "firebase/auth";
+import ModalForm from "../components/Auth/ModalForm";
 function AboutMeScreen({ navigation, route }) {
   const [name, setName] = useState();
   const [email, setEmail] = useState();
   const [user, setUser] = useState();
   const [photoUrl, setPhotoUrl] = useState();
+  const [modalVisible, setModalVisible] = useState(false);
   const authCtx = useContext(AuthContext);
 
   async function submitHandler() {
     if (photoUrl === undefined || photoUrl === "") {
       return;
     } else {
-      let response = await uploadImage(photoUrl);
-      await updateUserImage(response);
+      await updateUserImage(photoUrl, authCtx.uid);
     }
   }
 

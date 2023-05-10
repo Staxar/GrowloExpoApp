@@ -1,12 +1,13 @@
 import {
   ActivityIndicator,
   FlatList,
+  RefreshControl,
   SafeAreaView,
   StyleSheet,
   Text,
   View,
 } from "react-native";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import SearchBar from "../components/ui/SearchBar";
 import { Typography } from "../constans/styles";
 import UserAvatar from "../components/ui/UserAvatar";
@@ -20,7 +21,13 @@ export default function MessageScreen({ navigation, route }) {
   const [gettingData, setGettingData] = useState(false);
   const [messages, setMessages] = useState([]);
   const [userUID, setUserUID] = useState();
+  const [refreshing, setRefreshing] = useState(false);
   const authCtx = useContext(AuthContext);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setRefreshing(false);
+  }, []);
 
   useEffect(() => {
     setGettingData(false);
@@ -40,7 +47,7 @@ export default function MessageScreen({ navigation, route }) {
     setUserUID(authCtx.uid);
     messageData();
     return;
-  }, [navigation, route]);
+  }, [navigation, route, refreshing]);
 
   function navigationHandler(author, recipient) {
     if (author === recipient) {
@@ -108,6 +115,9 @@ export default function MessageScreen({ navigation, route }) {
               </Pressable>
             )}
             keyExtractor={(item) => item.id}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
           />
         ) : (
           <ActivityIndicator size={"large"} />

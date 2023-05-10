@@ -1,15 +1,7 @@
-import {
-  child,
-  equalTo,
-  get,
-  getDatabase,
-  orderByChild,
-  query,
-  ref,
-  set,
-  update,
-} from "firebase/database";
-import { getAuth, updateProfile } from "firebase/auth";
+import { child, get, getDatabase, ref, set, update } from "firebase/database";
+
+import { Alert } from "react-native";
+import { uploadImage } from "./uploadImage";
 
 export async function createUser(uid, email, displayName) {
   const db = getDatabase();
@@ -62,15 +54,10 @@ export async function getUsers() {
     });
   return result;
 }
-
-export async function updateUserImage(photoURL) {
-  console.log("updateUserImage", photoURL);
-  const auth = getAuth();
-  console.log(auth);
-  await updateProfile(auth.currentUser, {
-    photoURL: photoURL,
-  }).catch((error) => console.error(error));
+export async function updateUserImage(photoURL, uid) {
+  let response = await uploadImage(photoURL);
   const db = getDatabase();
-  update(ref(db, `users/${auth.currentUser.uid}`), { photoURL: photoURL });
-  return;
+  await update(ref(db, `users/${uid}`), { photoURL: response })
+    .then(() => Alert.alert("Update successfully!"))
+    .catch((err) => console.error(err));
 }
