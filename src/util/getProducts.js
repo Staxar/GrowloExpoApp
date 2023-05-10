@@ -3,8 +3,10 @@ import {
   get,
   getDatabase,
   limitToFirst,
+  limitToLast,
   onChildAdded,
   orderByChild,
+  orderByKey,
   query,
   ref,
 } from "firebase/database";
@@ -45,7 +47,7 @@ export async function getUserProducts(uid) {
 
 export async function getLastProducts() {
   let result;
-  const getCategoryData = query(ref(db, "products"), limitToFirst(5));
+  const getCategoryData = query(ref(db, "products"), limitToLast(5));
 
   await get(getCategoryData)
     .then((snapshot) => {
@@ -55,7 +57,7 @@ export async function getLastProducts() {
           id: key,
           ...data[key],
         }));
-        result = productArray;
+        result = productArray.reverse();
         return;
       } else {
         console.log("No data available");

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Alert, Linking, StyleSheet, Text, View } from "react-native";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import UserAvatar from "../components/ui/UserAvatar";
 import { Colors, Typography } from "../constans/styles";
@@ -31,6 +31,7 @@ export default function ChatScreen({ navigation, route }) {
   }
 
   useEffect(() => {
+    setMessageData([]);
     const chatMessageHandler = async () => {
       let result = await getGroupMessage(route.params);
       if (!result) {
@@ -71,10 +72,33 @@ export default function ChatScreen({ navigation, route }) {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <UserAvatar
-          userName={recipient.displayName}
-          userImage={recipient.photoURL}
-        />
+        <View
+          style={{
+            flexDirection: "row",
+            gap: 10,
+            alignItems: "center",
+            flex: 0.9,
+            justifyContent: "space-between",
+          }}
+        >
+          <UserAvatar
+            userName={recipient.displayName}
+            userImage={recipient.photoURL}
+          />
+          <View style={{ flexDirection: "row", gap: 10 }}>
+            <Ionicons
+              name="call-outline"
+              size={20}
+              onPress={() => Linking.openURL("tel://111111111")}
+            />
+            <Ionicons
+              name="mail-outline"
+              size={20}
+              style={{ color: "grey" }}
+              // onPress={() => Linking.openURL("mailto:marcin.kepno@gmail.com")}
+            />
+          </View>
+        </View>
       ),
     });
   }, [recipient]);

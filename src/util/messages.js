@@ -1,4 +1,5 @@
 import { child, get, getDatabase, push, ref, set } from "firebase/database";
+import { Alert } from "react-native";
 
 const db = getDatabase();
 
@@ -28,7 +29,7 @@ export async function getGroupMessage(params) {
         console.error(snapshot.val());
       }
     })
-    .catch((err) => console.error(err));
+    .catch((err) => console.log(err));
   return result;
 }
 export async function getChatsGroupMessage(uid) {
@@ -38,6 +39,7 @@ export async function getChatsGroupMessage(uid) {
     .then((snapshot) => {
       if (snapshot.exists()) {
         const data = snapshot.val();
+        console.log("DATA: ", data);
         if (data === null || data === undefined) {
           return;
         }
@@ -49,6 +51,7 @@ export async function getChatsGroupMessage(uid) {
         });
         return messageArray;
       } else {
+        return;
         console.error(snapshot.val());
       }
     })

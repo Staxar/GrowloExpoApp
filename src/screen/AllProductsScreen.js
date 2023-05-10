@@ -1,16 +1,25 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FlatList, SafeAreaView } from "react-native";
 import { StyleSheet, View } from "react-native";
 import ProductCard from "../components/ui/ProductCard";
 import { Text } from "react-native";
 import { Typography } from "../constans/styles";
 import { getProducts } from "../util/getProducts";
+import { RefreshControl } from "react-native";
+import { ScrollView } from "react-native";
 
 export default function AllProductsScreen({ route, navigation }) {
   const [data, setData] = useState([]);
   const [category, setCategory] = useState("");
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setRefreshing(false);
+  }, []);
 
   useEffect(() => {
+    setData([]);
     setCategory(route.params.itemParams);
     const getData = async () => {
       await getProducts()
@@ -19,11 +28,12 @@ export default function AllProductsScreen({ route, navigation }) {
     };
 
     getData().catch((err) => console.error(err));
-  }, [navigation, route]);
+  }, [navigation, route, refreshing]);
 
   const filteredProducts = data.filter((product) =>
     category === "" ? product : product.category === category
   );
+
   return (
     <SafeAreaView style={styles.outerContainer}>
       <View style={{ padding: 20 }}>

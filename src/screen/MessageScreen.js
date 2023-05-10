@@ -35,11 +35,13 @@ export default function MessageScreen({ navigation, route }) {
     const messageData = async () => {
       await getChatsGroupMessage(authCtx.uid)
         .then((res) => {
-          res.map((item) => {
-            if (item !== undefined) {
-              setMessages((prevState) => [...prevState, item]);
-            }
-          });
+          if (res !== undefined) {
+            res.map((item) => {
+              if (item !== undefined) {
+                setMessages((prevState) => [...prevState, item]);
+              }
+            });
+          }
         })
         .catch((err) => console.error(err))
         .finally(() => setGettingData(true));

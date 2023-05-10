@@ -35,7 +35,6 @@ function LoginScreen({ navigation, route }) {
           "Authentication failed!",
           "Could not log you in. Please check your credentials or try again later!"
         );
-        console.error(error);
       });
     setIsAuthenticating(false);
     "CONTEXT LOGNI: ", authCtx;
