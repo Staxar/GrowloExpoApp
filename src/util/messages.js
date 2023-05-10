@@ -39,7 +39,6 @@ export async function getChatsGroupMessage(uid) {
     .then((snapshot) => {
       if (snapshot.exists()) {
         const data = snapshot.val();
-        console.log("DATA: ", data);
         if (data === null || data === undefined) {
           return;
         }
