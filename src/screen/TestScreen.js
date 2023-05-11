@@ -16,8 +16,14 @@ export default function TestScreen() {
       }
 
       let location = await Location.getCurrentPositionAsync({});
-      console.log(location);
       setLocation(location);
+      let backGroundStatus = await Location.requestBackgroundPermissionsAsync();
+      console.log(backGroundStatus);
+      if (backGroundStatus.status !== "granted") {
+        console.log("Not granted!");
+        setErrorMsg("Permission to background location was denied");
+        return;
+      }
       TaskManager.defineTask(
         "REGION_LOCATION",
         ({ data: { eventType, region }, error }) => {
@@ -26,9 +32,9 @@ export default function TestScreen() {
             return;
           }
           if (eventType === Location.GeofencingEventType.Enter) {
-            console.log("You've entered region:", region);
+            console.log("You've entered region:");
           } else if (eventType === Location.GeofencingEventType.Exit) {
-            console.log("You've left region:", region);
+            console.log("You've left region:");
           }
         }
       );
