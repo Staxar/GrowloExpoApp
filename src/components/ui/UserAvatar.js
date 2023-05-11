@@ -34,8 +34,12 @@ export default function UserAvatar({ userName, userImage, userUID }) {
     view = (
       <View style={styles.container}>
         <Image source={imageSource} style={styles.img} />
-        {userName && (
+        {userName ? (
           <Text style={Typography.smallDescription}>{userName}</Text>
+        ) : (
+          <Text style={Typography.smallDescription}>
+            {userData.displayName}
+          </Text>
         )}
       </View>
     );
