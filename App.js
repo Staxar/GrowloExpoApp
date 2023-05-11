@@ -22,6 +22,7 @@ import ChatScreen from "./src/screen/ChatScreen";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import AboutMeScreen from "./src/screen/AboutMeScreen";
 import PantryScreen from "./src/screen/PantryScreen";
+import TestScreen from "./src/screen/TestScreen";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -139,6 +140,7 @@ function RootTabNavigators() {
           headerTitle: "Profile",
         }}
       />
+      <Tab.Screen name="Test" component={TestScreen} />
     </Tab.Navigator>
   );
 }
