@@ -59,6 +59,9 @@ export default function AllProductsScreen({ route, navigation }) {
             )}
             style={styles.fullWidth}
             keyExtractor={(item) => item.id}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
           />
         )}
       </View>

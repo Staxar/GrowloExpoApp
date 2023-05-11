@@ -36,10 +36,12 @@ export default function UserAvatar({ userName, userImage, userUID }) {
         <Image source={imageSource} style={styles.img} />
         {userName ? (
           <Text style={Typography.smallDescription}>{userName}</Text>
-        ) : (
+        ) : userUID ? (
           <Text style={Typography.smallDescription}>
             {userData.displayName}
           </Text>
+        ) : (
+          <></>
         )}
       </View>
     );
