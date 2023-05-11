@@ -22,6 +22,10 @@ import ChatScreen from "./src/screen/ChatScreen";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import AboutMeScreen from "./src/screen/AboutMeScreen";
 import PantryScreen from "./src/screen/PantryScreen";
+import SettingScreen from "./src/screen/SettingScreen";
+import AddressSettingsScreen from "./src/screen/AddressSettingsScreen";
+import NotificationSettingsScreen from "./src/screen/NotificationSettingsScreen";
+import LanguageSettingsScreen from "./src/screen/LanguageSettingsScreen";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -48,6 +52,7 @@ const TopTapNavigator = () => {
     <TopTab.Navigator>
       <TopTab.Screen name="About me" component={AboutMeScreen} />
       <TopTab.Screen name="Pantry" component={PantryScreen} />
+      <TopTab.Screen name="Settings" component={SettingScreen} />
     </TopTab.Navigator>
   );
 };
@@ -175,6 +180,27 @@ function AuthenticatedStack() {
       <Stack.Screen
         name="Chat"
         component={ChatScreen}
+        options={{
+          title: "",
+        }}
+      />
+      <Stack.Screen
+        name="AddressSettingsScreen"
+        component={AddressSettingsScreen}
+        options={{
+          title: "",
+        }}
+      />
+      <Stack.Screen
+        name="NotificationSettingsScreen"
+        component={NotificationSettingsScreen}
+        options={{
+          title: "",
+        }}
+      />
+      <Stack.Screen
+        name="LanguageSettingsScreen"
+        component={LanguageSettingsScreen}
         options={{
           title: "",
         }}
