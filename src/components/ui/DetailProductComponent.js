@@ -16,6 +16,7 @@ export default function DetailProductComponent({
   id,
   pickedLocation,
   sendMessage,
+  amount,
 }) {
   return (
     <ScrollView>
@@ -46,12 +47,12 @@ export default function DetailProductComponent({
             <Ionicons name="send" size={12} color={Colors.primary100} />
           </OutlinedButton>
         </View>
-        <View style={{ flexDirection: "row", gap: 5 }}>
-          <Text style={Typography.normalTitle}>
-            Prize: ${prize} [ {unit} ]
-          </Text>
-        </View>
 
+        <Text style={Typography.normalTitle}>Prize: ${prize}</Text>
+
+        <Text style={Typography.normalTitle}>
+          Amount: {amount} [ {unit} ]
+        </Text>
         <Text style={Typography.smallDescription}>Description:</Text>
         <Text style={Typography.normalDescription}>{description}</Text>
       </View>

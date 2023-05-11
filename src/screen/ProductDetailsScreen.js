@@ -42,6 +42,7 @@ export default function ProductDetailsScreen({ navigation, route }) {
         id={data.id}
         title={data.data.title}
         prize={data.data.prize}
+        amount={data.data.amount}
         unit={data.data.unit}
         description={data.data.description}
         pickedLocation={data.data.pickedLocation}
