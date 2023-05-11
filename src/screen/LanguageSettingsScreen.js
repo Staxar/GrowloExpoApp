@@ -1,10 +1,10 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 
-export default function CheckboxLeftIcon() {
+export default function LanguageSettingsScreen() {
   return (
     <View>
-      <Text>CheckboxLeftIcon</Text>
+      <Text>LanguageSettingsScreen</Text>
     </View>
   );
 }
