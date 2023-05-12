@@ -12,6 +12,8 @@ const data = [
 export default function LanguageSettingsScreen() {
   const [isChecked, setChecked] = useState(data);
 
+  // Add data to db
+
   const changeHandler = (id) => {
     let temp = isChecked.map((item) => {
       if (id === item.id) {

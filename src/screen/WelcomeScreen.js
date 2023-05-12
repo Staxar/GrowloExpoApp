@@ -34,7 +34,7 @@ function WelcomeScreen({ navigation, route }) {
         {gettingData ? (
           <ProductGroup title={"Best Deals"} data={productData} />
         ) : (
-          <ActivityIndicator size={"large"} />
+          <ActivityIndicator size={"large"} testID="loading-indicator" />
         )}
       </ScrollView>
     </SafeAreaView>
