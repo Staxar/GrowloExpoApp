@@ -258,7 +258,10 @@ export default function AddProductForm({ update }) {
           onTakeImage={takeImageHandler}
           onPickedImage={pickImageHandler}
         />
-        <LocationPicker onPickLocation={pickLocationHandler} />
+        <LocationPicker
+          onPickLocation={pickLocationHandler}
+          link={"Add Product"}
+        />
         <LeftIconInput
           textValue={"title"}
           placeholder={"Carrots"}
