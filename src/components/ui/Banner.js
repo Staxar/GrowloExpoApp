@@ -2,8 +2,8 @@ import { Image, StyleSheet, View } from "react-native";
 
 function Banner({ imageSrc }) {
   return (
-    <View style={styles.container}>
-      <Image source={imageSrc} style={styles.image} />
+    <View style={styles.container} testID="banner-container">
+      <Image source={imageSrc} style={styles.image} testID="banner-image" />
     </View>
   );
 }
