@@ -20,7 +20,7 @@ export default function DetailProductComponent({
 }) {
   return (
     <ScrollView>
-      <View style={styles.innerContainer}>
+      <View style={styles.innerContainer} testID="detail-innerContainer">
         <PagerView initialPage={0} style={styles.image}>
           {selectedImage &&
             selectedImage.map((image, index) => {
@@ -75,7 +75,7 @@ export default function DetailProductComponent({
             <Text style={{ fontWeight: "bold" }}>{pickedLocation.address}</Text>
           </Text>
 
-          <View style={styles.mapPreview}>
+          <View style={styles.mapPreview} testID="detail-mapPreview">
             <Image
               source={{
                 uri: getMapPreview(pickedLocation.lat, pickedLocation.lng),
