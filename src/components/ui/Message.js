@@ -3,15 +3,28 @@ import { Colors, Typography } from "../../constans/styles";
 
 export default function Message({ message, right, left }) {
   return (
-    <View style={styles.container}>
-      <View style={[styles.innerContainer, right && styles.right]}>
+    <View style={styles.container} testID="message-container">
+      <View
+        style={[styles.innerContainer, right && styles.right]}
+        testID="message-innerContainer"
+      >
         {right ? (
-          <View style={[styles.text, styles.textRight]}>
-            <Text style={Typography.normalDescription}>{message}</Text>
+          <View
+            style={[styles.text, styles.textRight]}
+            testID="message-rightContainer"
+          >
+            <Text style={Typography.normalDescription} testID="message-text">
+              {message}
+            </Text>
           </View>
         ) : (
-          <View style={[styles.text, styles.textLeft]}>
-            <Text style={Typography.normalDescription}>{message}</Text>
+          <View
+            style={[styles.text, styles.textLeft]}
+            testID="message-leftContainer"
+          >
+            <Text style={Typography.normalDescription} testID="message-text">
+              {message}
+            </Text>
           </View>
         )}
       </View>
