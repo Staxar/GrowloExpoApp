@@ -1,36 +1,77 @@
 import { Alert, StyleSheet, View } from "react-native";
 import TitleWithDescription from "../ui/TitleWithDescription";
 import AuthForm from "./AuthForm";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getUserByName } from "../../util/user";
 
 function AuthContent({ title, description, type, onAuthenticate }) {
-  const [credentialsInvalid, setCredentialsInvalid] = useState({
-    email: false,
-    password: false,
-    displayName: false,
-  });
+  function emailValidation(email) {
+    let mailFormat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if (!email.includes("@")) {
+      return Alert.alert("Email should includes @ character!");
+    }
+    if (!email.match(mailFormat)) {
+      return Alert.alert("It looks you type wrong email format!");
+    }
+    return true;
+  }
+  function passwordValidation(password, confirmPassword) {
+    let passwordFormat =
+      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/;
+    if (confirmPassword !== undefined) {
+      if (password !== confirmPassword) {
+        return Alert.alert("Passwords are not equal!");
+      }
+    }
 
-  function submitHandler(credencials) {
-    let { email, password, displayName } = credencials;
-
-    email.trim();
-    password.trim();
-    displayName.trim();
-
-    const emailIsValid = email.includes("@");
-    const passwordIsValid = password.length > 6;
-    const displayNameValid = displayName.length > 3;
-
-    setCredentialsInvalid({
-      email: !emailIsValid,
-      password: !passwordIsValid,
-      displayName: !displayNameValid,
-    });
-    //Validation
-
-    onAuthenticate({ email, password, displayName });
+    if (!password.match(passwordFormat)) {
+      return Alert.alert(
+        "It looks you type wrong password format!",
+        "Password should have between 8 to 15 characters which contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character"
+      );
+    }
+    return true;
   }
 
+  async function displayNameValidation(displayName) {
+    if (displayName !== undefined) {
+      if (displayName.length < 4) {
+        return Alert.alert("Username should have at list 4 characters!");
+      }
+      if (!isNaN(displayName)) {
+        return Alert.alert("Username should't be numeric!");
+      }
+      let response = await getUserByName(displayName);
+      if (!response) {
+        return false;
+      } else {
+        return true;
+      }
+    } else {
+      return true;
+    }
+  }
+
+  async function submitHandler(credencials) {
+    let { email, password, confirmPassword, displayName } = credencials;
+    if (email) {
+      email = email.trim().toLowerCase();
+    } else if (password) {
+      password = password.trim();
+    } else if (confirmPassword) {
+      confirmPassword = confirmPassword.trim();
+    } else if (displayName) {
+      displayName = displayName.trim();
+    }
+
+    let emailIsOK = emailValidation(email);
+    let passwordIsOK = passwordValidation(password, confirmPassword);
+    let displayNameIsOK = await displayNameValidation(displayName);
+
+    if (emailIsOK && passwordIsOK && displayNameIsOK) {
+      onAuthenticate({ email, password, displayName });
+    }
+  }
   return (
     <View style={styles.rootContainer}>
       <TitleWithDescription title={title} description={description} />

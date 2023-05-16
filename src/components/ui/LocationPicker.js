@@ -7,7 +7,7 @@ import { getAddress, getMapPreview } from "../../util/location";
 import { useIsFocused, useNavigation, useRoute } from "@react-navigation/core";
 import { ActivityIndicator } from "react-native";
 
-function LocationPicker({ onPickLocation }) {
+function LocationPicker({ onPickLocation, link }) {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [locating, setLocating] = useState(false);
@@ -59,7 +59,7 @@ function LocationPicker({ onPickLocation }) {
   }
 
   function pickOnMapHandler() {
-    navigation.navigate("Map");
+    navigation.navigate("Map", { link: link });
   }
 
   let locationPreview = <Text>{text}</Text>;

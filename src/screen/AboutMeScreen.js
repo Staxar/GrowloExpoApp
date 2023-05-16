@@ -24,6 +24,7 @@ function AboutMeScreen({ navigation, route }) {
   const [name, setName] = useState();
   const [email, setEmail] = useState();
   const [user, setUser] = useState();
+  const [phoneNumber, setPhoneNumber] = useState();
   const [photoUrl, setPhotoUrl] = useState();
   const [modalVisible, setModalVisible] = useState(false);
   const authCtx = useContext(AuthContext);
@@ -68,6 +69,13 @@ function AboutMeScreen({ navigation, route }) {
             placeholder={user.email}
             value={email}
             onChangeText={(text) => setEmail(text)}
+            editable={false}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder={"phoneNumber"}
+            value={phoneNumber}
+            onChangeText={(text) => setPhoneNumber(text)}
             editable={false}
           />
         </View>

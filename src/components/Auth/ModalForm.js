@@ -19,7 +19,6 @@ export default function ModalForm({
       transparent={true}
       visible={modalVisible}
       onRequestClose={() => {
-        Alert.alert("Modal has been closed.");
         onPress;
       }}
     >

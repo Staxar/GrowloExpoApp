@@ -6,8 +6,11 @@ function Button({ onPress, children }) {
     <Pressable
       style={({ pressed }) => [styles.button, pressed && styles.pressed]}
       onPress={onPress}
+      testID="button-pressable"
     >
-      <Text style={styles.text}>{children}</Text>
+      <Text style={styles.text} testID="button-text">
+        {children}
+      </Text>
     </Pressable>
   );
 }

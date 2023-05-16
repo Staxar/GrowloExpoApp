@@ -25,14 +25,7 @@ const PhoneInputForm = ({
           textContentType={contentType}
           value={value}
           placeholder={placeholder}
-          style={{
-            marginLeft: 20,
-            flex: 1,
-            width: "100%",
-            alignContent: "center",
-            alignItems: "center",
-            fontSize: 24,
-          }}
+          style={styles.textInput}
           inputMode="numeric"
         />
       </View>
@@ -49,5 +42,13 @@ const styles = StyleSheet.create({
     alignContent: "center",
     alignItems: "center",
     gap: 10,
+  },
+  textInput: {
+    marginLeft: 20,
+    flex: 1,
+    width: "100%",
+    alignContent: "center",
+    alignItems: "center",
+    fontSize: 24,
   },
 });

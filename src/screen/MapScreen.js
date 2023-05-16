@@ -3,9 +3,8 @@ import { View, Text, StyleSheet, Alert } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 import IconButton from "../components/ui/IconButton";
 
-export default function MapScreen({ navigation }) {
+export default function MapScreen({ navigation, route }) {
   const [selectedLocation, setSelectedLocation] = useState();
-
   const region = {
     latitude: 37.78825,
     longitude: -122.4324,
@@ -28,10 +27,11 @@ export default function MapScreen({ navigation }) {
       );
       return;
     }
-    navigation.navigate("Add Product", {
-      pickedLat: selectedLocation.lat,
-      pickedLng: selectedLocation.lng,
-    });
+    if (route.params)
+      navigation.navigate(route.params.link, {
+        pickedLat: selectedLocation.lat,
+        pickedLng: selectedLocation.lng,
+      });
   }, [navigation, selectedLocation]);
 
   useLayoutEffect(() => {

@@ -16,10 +16,11 @@ export default function DetailProductComponent({
   id,
   pickedLocation,
   sendMessage,
+  amount,
 }) {
   return (
     <ScrollView>
-      <View style={styles.innerContainer}>
+      <View style={styles.innerContainer} testID="detail-innerContainer">
         <PagerView initialPage={0} style={styles.image}>
           {selectedImage &&
             selectedImage.map((image, index) => {
@@ -46,12 +47,12 @@ export default function DetailProductComponent({
             <Ionicons name="send" size={12} color={Colors.primary100} />
           </OutlinedButton>
         </View>
-        <View style={{ flexDirection: "row", gap: 5 }}>
-          <Text style={Typography.normalTitle}>
-            Prize: ${prize} [ {unit} ]
-          </Text>
-        </View>
 
+        <Text style={Typography.normalTitle}>Prize: ${prize}</Text>
+
+        <Text style={Typography.normalTitle}>
+          Amount: {amount} [ {unit} ]
+        </Text>
         <Text style={Typography.smallDescription}>Description:</Text>
         <Text style={Typography.normalDescription}>{description}</Text>
       </View>
@@ -74,7 +75,7 @@ export default function DetailProductComponent({
             <Text style={{ fontWeight: "bold" }}>{pickedLocation.address}</Text>
           </Text>
 
-          <View style={styles.mapPreview}>
+          <View style={styles.mapPreview} testID="detail-mapPreview">
             <Image
               source={{
                 uri: getMapPreview(pickedLocation.lat, pickedLocation.lng),

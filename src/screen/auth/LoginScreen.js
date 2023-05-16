@@ -31,8 +31,9 @@ function LoginScreen({ navigation, route }) {
           .catch((e) => Alert.alert("'Could't get user data!", e));
       })
       .catch((error) => {
+        setIsAuthenticating(false);
         Alert.alert(
-          "Authentication failed!",
+          `Authentication failed! ${error.code}`,
           "Could not log you in. Please check your credentials or try again later!"
         );
       });

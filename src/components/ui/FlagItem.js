@@ -1,12 +1,15 @@
-import { View } from "react-native";
-import { StyleSheet, Text } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import CountryFlag from "react-native-country-flag";
 const FlagItem = ({ isoCode, dial, countryName }) => {
   return (
-    <View style={styles.container}>
+    <View style={styles.container} testID="flag-container">
       <CountryFlag isoCode={isoCode} size={24} style={{ width: 35 }} />
-      <Text style={{ width: 45 }}>{dial}</Text>
-      <Text style={{ flex: 1 }}>{countryName}</Text>
+      <Text style={{ width: 45 }} testID="flat-text-dial">
+        {dial}
+      </Text>
+      <Text style={{ flex: 1 }} testID="flat-text-countryName">
+        {countryName}
+      </Text>
     </View>
   );
 };

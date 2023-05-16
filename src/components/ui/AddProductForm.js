@@ -89,60 +89,48 @@ export default function AddProductForm({ update }) {
   }
 
   function validateFormHandler(payload, phoneNumberLenght) {
-    let selectedImage = payload.selectedImage;
-    let pickedLocation = payload.pickedLocation;
-    let selectedUnit = payload.selectedUnit;
-    let amount = payload.amount;
-    let phoneNumber = {
-      number: payload.phoneNumber.number,
-      code: payload.phoneNumber.code,
+    let arr = [
+      payload.prize,
+      payload.phoneNumber.number,
+      payload.amount,
+      payload.selectedUnit,
+      payload.selectedCategory,
+      payload.enteredTitle,
+      payload.description,
+    ];
+    const isNullOrUndefinedOrEmptyString = (item) => {
+      return item === null || item === "" || item === undefined;
     };
-    let prize = payload.prize;
-    let enteredTitle = payload.enteredTitle;
-    let description = payload.description;
-    let selectedCategory = payload.selectedCategory;
-
-    if (isNaN(prize) || isNaN(phoneNumber.number) || isNaN(amount)) {
-      Alert.alert("You enter a NaN value!");
-    } else if (+prize < 0 || +phoneNumber.number < 0 || +amount < 0) {
-      Alert.alert("You enter a negative number!");
-    } else if (
-      //TO FIX!
-      prize === null ||
-      prize === undefined ||
-      prize === "" ||
-      phoneNumber.number === null ||
-      phoneNumber.number === undefined ||
-      phoneNumber.number === "" ||
-      amount === null ||
-      amount === undefined ||
-      amount === "" ||
-      selectedUnit === null ||
-      selectedUnit === undefined ||
-      selectedUnit === "" ||
-      selectedCategory === null ||
-      selectedCategory === undefined ||
-      selectedCategory === "" ||
-      enteredTitle === null ||
-      enteredTitle === undefined ||
-      enteredTitle === "" ||
-      description === null ||
-      description === undefined ||
-      description === ""
+    arr.map((item) => {
+      if (isNullOrUndefinedOrEmptyString(item)) {
+        Alert.alert(`Some input is null, empty, or undefined`);
+        return false;
+      }
+    });
+    if (
+      isNaN(payload.prize) ||
+      isNaN(payload.phoneNumber.number) ||
+      isNaN(payload.amount)
     ) {
-      Alert.alert("You left some input!");
+      Alert.alert("You enter a NaN value!");
+    } else if (
+      +payload.prize < 0 ||
+      +payload.phoneNumber.number < 0 ||
+      +payload.amount < 0
+    ) {
+      Alert.alert("You enter a negative number!");
     } else if (phoneNumberLenght < 9) {
       Alert.alert("Phone number should have 9 digits!");
     } else if (
-      pickedLocation === null ||
-      pickedLocation === undefined ||
-      pickedLocation === ""
+      payload.pickedLocation === null ||
+      payload.pickedLocation === undefined ||
+      payload.pickedLocation === ""
     ) {
       Alert.alert("No location taken yet!");
     } else if (
-      selectedImage === null ||
-      selectedImage === undefined ||
-      selectedImage === ""
+      payload.selectedImage === null ||
+      payload.selectedImage === undefined ||
+      payload.selectedImage === ""
     ) {
       Alert.alert("No image taken yet!");
     } else {
@@ -258,7 +246,10 @@ export default function AddProductForm({ update }) {
           onTakeImage={takeImageHandler}
           onPickedImage={pickImageHandler}
         />
-        <LocationPicker onPickLocation={pickLocationHandler} />
+        <LocationPicker
+          onPickLocation={pickLocationHandler}
+          link={"Add Product"}
+        />
         <LeftIconInput
           textValue={"title"}
           placeholder={"Carrots"}
