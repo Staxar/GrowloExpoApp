@@ -61,3 +61,30 @@ export async function updateUserImage(photoURL, uid) {
     .then(() => Alert.alert("Update successfully!"))
     .catch((err) => console.error(err));
 }
+
+export async function getUserByName(displayName) {
+  let response = true;
+  const dbRef = ref(getDatabase());
+  await get(child(dbRef, "users"))
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        snapshot.forEach((childSnapshot) => {
+          const uid = childSnapshot.key;
+          const userData = childSnapshot.val();
+          if (
+            userData.displayName.toLowerCase() === displayName.toLowerCase()
+          ) {
+            response = false;
+            Alert.alert("User already exist!");
+            return response;
+          }
+        });
+      } else {
+        console.log("No data available");
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  return response;
+}

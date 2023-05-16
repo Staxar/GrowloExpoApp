@@ -14,11 +14,11 @@ import { ActivityIndicator } from "react-native";
 function SignupScreen({ navigation, route }) {
   const [isAuthenticating, setIsAuthenticating] = useState(false);
 
-  function signupHandler({ email, password, displayName }) {
+  async function signupHandler({ email, password, displayName }) {
     setIsAuthenticating(true);
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
-    createUserWithEmailAndPassword(auth, email, password)
+    await createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
@@ -28,7 +28,7 @@ function SignupScreen({ navigation, route }) {
         }).catch((e) => console.log(e));
       })
       .catch((error) => {
-        Alert.alert(
+        return Alert.alert(
           "Authentication failed!",
           "Could not log you in. Please check your credentials or try again later!",
           console.error(error.code, error.message)

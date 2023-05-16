@@ -8,6 +8,7 @@ function AuthForm({ type, onsubmit }) {
   const [enteredEmail, setEnteredEmail] = useState("");
   const [enteredUsername, setEnteredUsername] = useState("");
   const [enteredPassword, setEnteredPassword] = useState("");
+  const [enteredConfirmPassword, setEnteredConfirmPassword] = useState("");
 
   function updateInputValueHandler(inputType, enteredValue) {
     switch (inputType) {
@@ -20,6 +21,9 @@ function AuthForm({ type, onsubmit }) {
       case "password":
         setEnteredPassword(enteredValue);
         break;
+      case "confirmPassword":
+        setEnteredConfirmPassword(enteredValue);
+        break;
     }
   }
 
@@ -27,6 +31,7 @@ function AuthForm({ type, onsubmit }) {
     onsubmit({
       email: enteredEmail,
       password: enteredPassword,
+      confirmPassword: enteredConfirmPassword,
       displayName: enteredUsername,
     });
   }
@@ -54,6 +59,7 @@ function AuthForm({ type, onsubmit }) {
             value={enteredPassword}
             autoCapitalize="none"
           />
+
           <View style={styles.outerContainer}>
             <Pressable>
               <Text>Forgot password?"</Text>
@@ -93,6 +99,18 @@ function AuthForm({ type, onsubmit }) {
             secure={true}
             onUpdateValue={updateInputValueHandler.bind(this, "password")}
             value={enteredPassword}
+            autoCapitalize="none"
+          />
+          <LeftIconInput
+            textValue={"Confirm password"}
+            iconName={"lock-open-outline"}
+            contentType={"password"}
+            secure={true}
+            onUpdateValue={updateInputValueHandler.bind(
+              this,
+              "confirmPassword"
+            )}
+            value={enteredConfirmPassword}
             autoCapitalize="none"
           />
           <View style={styles.outerContainer}>
