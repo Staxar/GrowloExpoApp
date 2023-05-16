@@ -5,12 +5,6 @@ import { useEffect, useState } from "react";
 import { getUserByName } from "../../util/user";
 
 function AuthContent({ title, description, type, onAuthenticate }) {
-  const [credentialsInvalid, setCredentialsInvalid] = useState({
-    email: false,
-    password: false,
-    displayName: false,
-  });
-
   function emailValidation(email) {
     let mailFormat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     if (!email.includes("@")) {
@@ -24,9 +18,13 @@ function AuthContent({ title, description, type, onAuthenticate }) {
   function passwordValidation(password, confirmPassword) {
     let passwordFormat =
       /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/;
-    if (password !== confirmPassword) {
-      return Alert.alert("Passwords are not equal!");
-    } else if (!password.match(passwordFormat)) {
+    if (confirmPassword !== undefined) {
+      if (password !== confirmPassword) {
+        return Alert.alert("Passwords are not equal!");
+      }
+    }
+
+    if (!password.match(passwordFormat)) {
       return Alert.alert(
         "It looks you type wrong password format!",
         "Password should have between 8 to 15 characters which contain at least one lowercase letter, one uppercase letter, one numeric digit, and one special character"
@@ -36,15 +34,19 @@ function AuthContent({ title, description, type, onAuthenticate }) {
   }
 
   async function displayNameValidation(displayName) {
-    if (displayName.length < 4) {
-      return Alert.alert("Username should have at list 4 characters!");
-    }
-    if (!isNaN(displayName)) {
-      return Alert.alert("Username should't be numeric!");
-    }
-    let response = await getUserByName(displayName);
-    if (!response) {
-      return false;
+    if (displayName !== undefined) {
+      if (displayName.length < 4) {
+        return Alert.alert("Username should have at list 4 characters!");
+      }
+      if (!isNaN(displayName)) {
+        return Alert.alert("Username should't be numeric!");
+      }
+      let response = await getUserByName(displayName);
+      if (!response) {
+        return false;
+      } else {
+        return true;
+      }
     } else {
       return true;
     }
@@ -52,11 +54,15 @@ function AuthContent({ title, description, type, onAuthenticate }) {
 
   async function submitHandler(credencials) {
     let { email, password, confirmPassword, displayName } = credencials;
-
-    email = email.trim().toLowerCase();
-    password = password.trim();
-    confirmPassword = confirmPassword.trim();
-    displayName = displayName.trim();
+    if (email) {
+      email = email.trim().toLowerCase();
+    } else if (password) {
+      password = password.trim();
+    } else if (confirmPassword) {
+      confirmPassword = confirmPassword.trim();
+    } else if (displayName) {
+      displayName = displayName.trim();
+    }
 
     let emailIsOK = emailValidation(email);
     let passwordIsOK = passwordValidation(password, confirmPassword);

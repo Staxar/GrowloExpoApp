@@ -27,7 +27,14 @@ function AuthForm({ type, onsubmit }) {
     }
   }
 
-  function submitHandler() {
+  function submitSignInHandler() {
+    onsubmit({
+      email: enteredEmail,
+      password: enteredPassword,
+    });
+  }
+
+  function submitSignUpHandler() {
     onsubmit({
       email: enteredEmail,
       password: enteredPassword,
@@ -65,7 +72,10 @@ function AuthForm({ type, onsubmit }) {
               <Text>Forgot password?"</Text>
             </Pressable>
 
-            <CustomButton titleButton={"Sign In"} onPress={submitHandler} />
+            <CustomButton
+              titleButton={"Sign In"}
+              onPress={submitSignInHandler}
+            />
 
             <TextButton
               titleButton={"Sign Up"}
@@ -119,7 +129,10 @@ function AuthForm({ type, onsubmit }) {
               titleButton={"Term & Condition"}
             />
 
-            <CustomButton titleButton={"Sign Up"} onPress={submitHandler} />
+            <CustomButton
+              titleButton={"Sign Up"}
+              onPress={submitSignUpHandler}
+            />
 
             <TextButton
               titleButton={"Sign In"}

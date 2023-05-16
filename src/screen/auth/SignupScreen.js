@@ -19,24 +19,31 @@ function SignupScreen({ navigation, route }) {
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     await createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
+      .then(async (userCredential) => {
         // Signed in
         const user = userCredential.user;
 
-        updateProfile(user, {
+        await updateProfile(user, {
           displayName: displayName,
-        }).catch((e) => console.log(e));
+        })
+          .then(() => {
+            setIsAuthenticating(false);
+            navigation.navigate("Login");
+            Alert.alert("Account created!");
+          })
+          .catch((e) => {
+            setIsAuthenticating(false);
+            return console.log("Error", e);
+          });
       })
       .catch((error) => {
+        setIsAuthenticating(false);
         return Alert.alert(
-          "Authentication failed!",
+          `Authentication failed! ${error.code}`,
           "Could not log you in. Please check your credentials or try again later!",
           console.error(error.code, error.message)
         );
       });
-    setIsAuthenticating(false);
-    navigation.navigate("Login");
-    Alert.alert("Account created!");
   }
 
   return (
