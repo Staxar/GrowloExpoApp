@@ -144,7 +144,6 @@ function RootTabNavigators() {
           headerTitle: "Profile",
         }}
       />
-      <Tab.Screen name="Test" component={TestScreen} />
     </Tab.Navigator>
   );
 }
