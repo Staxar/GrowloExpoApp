@@ -28,8 +28,10 @@ export default function LanguageSettingsScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={Typography.normalTitle}>Change your preferred language</Text>
       <View style={styles.innerContainer}>
+        <Text style={Typography.normalTitle}>
+          Change your preferred language
+        </Text>
         <FlatList
           data={data}
           renderItem={({ item }) => (
@@ -58,6 +60,8 @@ const styles = StyleSheet.create({
   innerContainer: {
     padding: 40,
     alignItems: "center",
+    marginVertical: 20,
+    gap: 20,
   },
   itemContainer: {
     padding: 20,
