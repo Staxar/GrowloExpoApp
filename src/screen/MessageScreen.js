@@ -26,7 +26,9 @@ export default function MessageScreen({ navigation, route }) {
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-    setRefreshing(false);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 100);
   }, []);
 
   useEffect(() => {
@@ -57,6 +59,7 @@ export default function MessageScreen({ navigation, route }) {
     } else {
       navigation.navigate("Chat", { author: author, recipient: recipient });
     }
+    return;
   }
 
   return (
@@ -90,6 +93,9 @@ export default function MessageScreen({ navigation, route }) {
               }}
               keyExtractor={(item) => item.id}
               horizontal={true}
+              refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+              }
             />
           ) : (
             <ActivityIndicator size={"large"} />

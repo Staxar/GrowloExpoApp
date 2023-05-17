@@ -41,7 +41,9 @@ export default function DetailProductComponent({
             alignItems: "center",
           }}
         >
-          <Text style={Typography.bigDescription}>{title}</Text>
+          <Text style={[Typography.bigDescription, { flex: 0.9 }]}>
+            {title}
+          </Text>
           <OutlinedButton onPress={sendMessage}>
             Send message{" "}
             <Ionicons name="send" size={12} color={Colors.primary100} />
