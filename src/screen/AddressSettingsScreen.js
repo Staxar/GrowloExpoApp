@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, FlatList } from "react-native";
+import { StyleSheet, Text, View, FlatList, Alert } from "react-native";
 import { useCallback, useEffect, useState } from "react";
 import LocationPicker from "../components/ui/LocationPicker";
 import { Colors, Typography } from "../constans/styles";
@@ -13,10 +13,15 @@ export default function AddressSettingsScreen() {
 
   function saveLocationHandler() {
     if (pickedLocation) {
-      setAddresses((prevState) => [...prevState, pickedLocation]);
+      if (addresses.length < 1) {
+        setAddresses((prevState) => [...prevState, pickedLocation]);
+      } else if (addresses.find((e) => e.address !== pickedLocation.address)) {
+        setAddresses((prevState) => [...prevState, pickedLocation]);
+      } else {
+        Alert.alert("Address already exist!");
+      }
     }
   }
-
   return (
     <View style={styles.container}>
       <LocationPicker

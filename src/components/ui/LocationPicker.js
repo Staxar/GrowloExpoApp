@@ -54,7 +54,7 @@ function LocationPicker({ onPickLocation, link }) {
   let text = "No location taken yet.";
   if (errorMsg) {
     text = errorMsg;
-  } else if (location) {
+  } else if (locating) {
     text = "Waiting...";
   }
 
