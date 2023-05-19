@@ -1,4 +1,13 @@
-import { getDatabase, push, ref, set } from "firebase/database";
+import {
+  equalTo,
+  getDatabase,
+  orderByChild,
+  push,
+  query,
+  ref,
+  remove,
+  set,
+} from "firebase/database";
 
 export async function uploadProduct(payload, uid) {
   const db = getDatabase();
@@ -19,4 +28,27 @@ export async function uploadProduct(payload, uid) {
       return false;
     });
   return true;
+}
+
+export async function setFavorites(productId, uid, favorite, favoriteKey) {
+  console.log(productId, uid, favorite, favoriteKey);
+  let result;
+  const db = getDatabase();
+  const ProductFavListRef = ref(db, `products/${productId}/favorites`);
+  const ProductFavRemoveListRef = ref(
+    db,
+    `products/${productId}/favorites/${favoriteKey}`
+  );
+  if (!favorite) {
+    console.log("Adding to DB");
+    await push(ProductFavListRef, uid)
+      .then((snapshot) => {
+        result = snapshot.key;
+        console.log("User added to favorites Successfully!");
+      })
+      .catch((err) => console.log("Error adding user to favorites!", err));
+  } else {
+    remove(ProductFavRemoveListRef);
+  }
+  return result;
 }

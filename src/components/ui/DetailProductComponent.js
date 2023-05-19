@@ -1,5 +1,5 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { Colors, Typography } from "../../constans/styles";
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "react-native";
@@ -17,6 +17,7 @@ export default function DetailProductComponent({
   pickedLocation,
   sendMessage,
   amount,
+  isFavorite,
 }) {
   return (
     <ScrollView>

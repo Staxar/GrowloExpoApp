@@ -162,21 +162,7 @@ function AuthenticatedStack() {
         options={{ headerShown: true }}
       />
       <Stack.Screen name="AllProducts" component={AllProductsScreen} />
-      <Stack.Screen
-        name="Details"
-        component={ProductDetailsScreen}
-        options={{
-          headerRight: () => (
-            <Pressable>
-              <Ionicons
-                size={24}
-                name="heart-outline"
-                style={{ marginRight: 15, color: "grey" }}
-              />
-            </Pressable>
-          ),
-        }}
-      />
+      <Stack.Screen name="Details" component={ProductDetailsScreen} />
       <Stack.Screen
         name="Chat"
         component={ChatScreen}

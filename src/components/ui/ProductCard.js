@@ -2,6 +2,8 @@ import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import { Typography } from "../../constans/styles";
 import AddCustomButton from "./AddCustomButton";
 import { useNavigation } from "@react-navigation/native";
+import { useContext } from "react";
+import { AuthContext } from "../../store/auth-context";
 
 function ProductCard({
   productPrize,
@@ -11,12 +13,30 @@ function ProductCard({
   productUnit,
   productSpecialPrize,
   productId,
+  productFavorites,
 }) {
   const navigation = useNavigation();
+  const authCtx = useContext(AuthContext);
+
   function navigateToDetailsHandler(id) {
     navigation.navigate("Details", id);
   }
+  function favoritesHandler() {
+    console.log("add");
+  }
   let image = productImage[0];
+  let isFavorite;
+  if (productFavorites) {
+    let keys = Object.keys(productFavorites);
+    let values = Object.values(productFavorites);
+
+    values.map((item, index) => {
+      if (item === authCtx.uid) {
+        isFavorite = keys[index];
+        return isFavorite;
+      }
+    });
+  }
   return (
     <View style={styles.rootContainer}>
       <Pressable
@@ -66,7 +86,11 @@ function ProductCard({
               <Text style={Typography.smallDescription}>
                 {productAmount} {productUnit}
               </Text>
-              <AddCustomButton />
+              <AddCustomButton
+                onPress={favoritesHandler}
+                isFavorite={isFavorite}
+                productId={productId}
+              />
             </View>
           </View>
         </View>

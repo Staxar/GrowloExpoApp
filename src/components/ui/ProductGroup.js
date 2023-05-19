@@ -9,6 +9,7 @@ function ProductGroup({ title, data }) {
   function nav() {
     navigation.navigate("AllProducts", { itemParams: "" });
   }
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -33,6 +34,8 @@ function ProductGroup({ title, data }) {
               productAmount={item.amount}
               productImage={item.selectedImage}
               productId={item.id}
+              productFavorites={item.favorites}
+              productAuthor={item.uid}
             />
           )}
           keyExtractor={(item) => item.id}
