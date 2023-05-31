@@ -130,6 +130,7 @@ export default function ChatScreen({ navigation, route }) {
               borderColor: Colors.primary800,
               justifyContent: "center",
               backgroundColor: "#ffff",
+              marginBottom: 20,
             }}
           >
             <View
