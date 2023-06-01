@@ -51,7 +51,7 @@ export default function MessageScreen({ navigation, route }) {
     setUserUID(authCtx.uid);
     messageData();
     return;
-  }, [navigation, route, refreshing]);
+  }, [refreshing]);
 
   function navigationHandler(author, recipient) {
     if (author === recipient) {
