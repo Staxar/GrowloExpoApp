@@ -20,5 +20,53 @@ Growlo is a mobile application that allows users to auction surplus food and han
 
    
 ## Screenshots
-![Register](https://ibb.co/Wcm1spY](https://i.ibb.co/sF8rtJM/IMG-0481.png)https://i.ibb.co/sF8rtJM/IMG-0481.png)
-![text](https://ibb.co/CVMwZXb](https://i.ibb.co/qmWDf4N/IMG-0482.png)https://i.ibb.co/qmWDf4N/IMG-0482.png)
+- Register
+  
+![register](https://i.ibb.co/bKV8fyG/IMG-0481.png)
+![register](https://i.ibb.co/f83mkPG/IMG-0482.png)
+
+- Home
+  
+![home](https://i.ibb.co/kgSXfnS/IMG-0483.png)
+
+- All products
+
+![allproducts](https://i.ibb.co/ZY77jMz/IMG-0484.png)
+
+- Category
+
+![category](https://i.ibb.co/74b209P/IMG-0485.png)
+
+- By category
+
+![bycategory](https://i.ibb.co/mb4rhzD/IMG-0486.png)
+
+- Add product
+
+![addproduct](https://i.ibb.co/Tt9Gr4L/IMG-0487.png)
+![addproduct](https://i.ibb.co/L5QsX8n/IMG-0489.png)
+![addproduct](https://i.ibb.co/7NcKzNZ/IMG-0490.png)
+![addproduct](https://i.ibb.co/6XyL69r/IMG-0488.png)
+
+- Messanger
+
+![messenger](https://i.ibb.co/KL8y4Rt/IMG-0492.png)
+![messenger](https://i.ibb.co/PCwYpLy/IMG-0491.png)
+
+- Profile
+  - About me
+    
+    ![aboutme](https://i.ibb.co/5RTp89D/IMG-0493.png)
+    ![aboutme](https://i.ibb.co/Chk38TG/IMG-0494.png)
+
+    - Pantry
+    
+    ![pantry](https://i.ibb.co/GdLJ653/IMG-0495.png)
+
+    - Settings
+    
+    ![settings](https://i.ibb.co/Rj6HJGz/IMG-0496.png)
+    ![settings](https://i.ibb.co/2vG9Fcg/IMG-0497.png)
+    ![settings](https://i.ibb.co/Nj9nMb4/IMG-0498.png)
+
+    
