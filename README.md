@@ -20,3 +20,5 @@ Growlo is a mobile application that allows users to auction surplus food and han
 
    
 ## Screenshots
+![Register](https://ibb.co/Wcm1spY](https://i.ibb.co/sF8rtJM/IMG-0481.png)https://i.ibb.co/sF8rtJM/IMG-0481.png)
+![text](https://ibb.co/CVMwZXb](https://i.ibb.co/qmWDf4N/IMG-0482.png)https://i.ibb.co/qmWDf4N/IMG-0482.png)
