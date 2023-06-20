@@ -161,8 +161,30 @@ function AuthenticatedStack() {
         component={MapScreen}
         options={{ headerShown: true }}
       />
-      <Stack.Screen name="AllProducts" component={AllProductsScreen} />
-      <Stack.Screen name="Details" component={ProductDetailsScreen} />
+      <Stack.Screen
+        name="AllProducts"
+        component={AllProductsScreen}
+        options={{
+          headerStyle: {
+            backgroundColor: Colors.primary100,
+            height: 85,
+            borderRadius: 8,
+          },
+          headerTintColor: "#FFFFFF",
+        }}
+      />
+      <Stack.Screen
+        name="Details"
+        component={ProductDetailsScreen}
+        options={{
+          headerStyle: {
+            backgroundColor: Colors.primary100,
+            height: 85,
+            borderRadius: 8,
+          },
+          headerTintColor: "#FFFFFF",
+        }}
+      />
       <Stack.Screen
         name="Chat"
         component={ChatScreen}
@@ -174,21 +196,39 @@ function AuthenticatedStack() {
         name="AddressSettingsScreen"
         component={AddressSettingsScreen}
         options={{
-          title: "",
+          title: "Addresses",
+          headerStyle: {
+            backgroundColor: Colors.primary100,
+            height: 85,
+            borderRadius: 8,
+          },
+          headerTintColor: "#FFFFFF",
         }}
       />
       <Stack.Screen
         name="NotificationSettingsScreen"
         component={NotificationSettingsScreen}
         options={{
-          title: "",
+          title: "Notifications",
+          headerStyle: {
+            backgroundColor: Colors.primary100,
+            height: 85,
+            borderRadius: 8,
+          },
+          headerTintColor: "#FFFFFF",
         }}
       />
       <Stack.Screen
         name="LanguageSettingsScreen"
         component={LanguageSettingsScreen}
         options={{
-          title: "",
+          title: "Language Settings",
+          headerStyle: {
+            backgroundColor: Colors.primary100,
+            height: 85,
+            borderRadius: 8,
+          },
+          headerTintColor: "#FFFFFF",
         }}
       />
     </Stack.Navigator>
