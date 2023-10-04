@@ -10,13 +10,20 @@ export default function AddCustomButton({ onPress, isFavorite, productId }) {
   const [favoriteKey, setFavoriteKey] = useState(isFavorite);
   const authCtx = useContext(AuthContext);
 
-  function manageFavoritesHandler() {
-    setFavorites(productId, authCtx.uid, favorite, favoriteKey).then((res) => {
+  const manageFavoritesHandler = async () => {
+    try {
+      const res = await setFavorites(
+        productId,
+        authCtx.uid,
+        favorite,
+        favoriteKey
+      );
       setFavoriteKey(res);
-    });
-    setFavorite(!favorite);
-    return;
-  }
+      setFavorite(!favorite);
+    } catch (error) {
+      console.error("Error managing favorites:", error);
+    }
+  };
   return (
     <Pressable style={styles.container} onPress={manageFavoritesHandler}>
       {favorite ? (

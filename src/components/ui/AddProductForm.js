@@ -43,7 +43,7 @@ export default function AddProductForm({ update }) {
 
   useEffect(() => {
     setFilteredData(phoneCodes);
-  }, []);
+  }, [selectedPhoneCode]);
   const onSearch = useCallback(
     (query) => {
       if (query) {
@@ -64,9 +64,12 @@ export default function AddProductForm({ update }) {
     [filteredData]
   );
 
-  const pickLocationHandler = useCallback((location) => {
-    setPickedLocation(location);
-  }, []);
+  const pickLocationHandler = useCallback(
+    (location) => {
+      setPickedLocation(location);
+    },
+    [pickedLocation]
+  );
 
   //Take one Image
   function takeImageHandler(imageUri) {

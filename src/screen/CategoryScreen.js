@@ -34,7 +34,7 @@ export default function CategoryScreen({ navigation, route }) {
 const styles = StyleSheet.create({
   outerContainer: {
     flex: 1,
-    padding: 20,
+    paddingVertical: 20,
     margin: 5,
   },
   innerContainer: {

@@ -35,6 +35,7 @@ function ImagePickerExample({
         "Insufficient Permissions!",
         "You need to grant camera permissions to use this app."
       );
+      await ImagePicker.requestCameraPermissionsAsync();
       return false;
     }
 
@@ -44,7 +45,7 @@ function ImagePickerExample({
   async function takeImageHandler(props) {
     const hasPermission = await verifyPermissions();
     if (!hasPermission) {
-      return;
+      return Alert.alert("No permissions");
     }
     if (props === "camera") {
       let image = await ImagePicker.launchCameraAsync({

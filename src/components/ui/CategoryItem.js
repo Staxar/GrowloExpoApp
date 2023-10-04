@@ -17,8 +17,8 @@ export default function CategoryItem({ id, category, icon_name, nav }) {
 
 const styles = StyleSheet.create({
   container: {
-    height: 100,
-    width: 100,
+    height: 95,
+    width: 95,
     borderWidth: 1,
     borderRadius: 8,
     margin: 10,
