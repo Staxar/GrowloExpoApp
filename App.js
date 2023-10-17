@@ -26,6 +26,7 @@ import SettingScreen from "./src/screen/SettingScreen";
 import AddressSettingsScreen from "./src/screen/AddressSettingsScreen";
 import NotificationSettingsScreen from "./src/screen/NotificationSettingsScreen";
 import LanguageSettingsScreen from "./src/screen/LanguageSettingsScreen";
+import AddNewProductScreen from "./src/screen/AddNewProductScreen";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -112,6 +113,20 @@ function RootTabNavigators() {
           },
           headerTintColor: "#FFFFFF",
           headerTitle: "Add Product",
+        }}
+      />
+      <Tab.Screen
+        name="Add New Product"
+        component={AddNewProductScreen}
+        options={{
+          tabBarIcon: () => <Ionicons name="add-circle-outline" size={18} />,
+          headerStyle: {
+            backgroundColor: Colors.primary100,
+            height: 85,
+            borderRadius: 8,
+          },
+          headerTintColor: "#FFFFFF",
+          headerTitle: "Add New Product",
         }}
       />
       <Tab.Screen
