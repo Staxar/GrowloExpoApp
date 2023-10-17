@@ -1,19 +1,17 @@
 import {
-  equalTo,
   get,
   getDatabase,
-  limitToFirst,
   limitToLast,
   onChildAdded,
-  orderByChild,
-  orderByKey,
   query,
   ref,
 } from "firebase/database";
-const db = getDatabase();
 
 export async function getProducts() {
+  const db = getDatabase();
+
   let result = "";
+
   const getCategoryData = query(ref(db, "products"));
 
   await get(getCategoryData)
@@ -37,6 +35,7 @@ export async function getProducts() {
 }
 
 export async function getUserProducts(uid) {
+  const db = getDatabase();
   let result;
   const getFilteredProductsRef = ref(db, `users/${uid}/products/`);
   onChildAdded(getFilteredProductsRef, (data) => {
@@ -46,9 +45,10 @@ export async function getUserProducts(uid) {
 }
 
 export async function getLastProducts() {
+  const db = getDatabase();
+
   let result;
   const getCategoryData = query(ref(db, "products"), limitToLast(5));
-
   await get(getCategoryData)
     .then((snapshot) => {
       if (snapshot.exists()) {
@@ -70,9 +70,9 @@ export async function getLastProducts() {
 }
 
 export async function getProduct(id) {
+  const db = getDatabase();
   let result;
   const getCategoryData = query(ref(db, "products/" + id));
-
   await get(getCategoryData)
     .then((snapshot) => {
       if (snapshot.exists()) {

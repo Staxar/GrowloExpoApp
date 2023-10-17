@@ -1,27 +1,32 @@
+import { useEffect, useState, useContext } from "react";
 import { StyleSheet, ScrollView, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Banner from "../components/ui/Banner";
 import ProductGroup from "../components/ui/ProductGroup";
 import { getLastProducts } from "../util/getProducts";
-import { useEffect, useState } from "react";
-import { Text } from "react-native";
+import { AuthContext } from "../store/auth-context";
 
 function WelcomeScreen({ navigation, route }) {
   const [productData, setProductData] = useState({});
   const [gettingData, setGettingData] = useState(false);
+  const authCtx = useContext(AuthContext);
   async function getData() {
     setGettingData(false);
     getLastProducts()
       .then((res) => setProductData(res))
-      .then(() => setGettingData(true))
-      .catch((err) => console.error(err));
+      .then(() => setGettingData(true));
     return;
   }
 
   useEffect(() => {
-    getData();
+    if (authCtx.isAuthenticated) {
+      getData();
+    } else {
+      navigation.navigate("Login");
+    }
+
     return;
-  }, [navigation, route]);
+  }, [navigation, route, authCtx]);
   return (
     <SafeAreaView style={styles.outerContainer}>
       <ScrollView style={styles.innerContainer}>

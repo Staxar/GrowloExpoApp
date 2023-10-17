@@ -82,9 +82,9 @@ function LocationPicker({ onPickLocation, link }) {
     <View>
       <View style={styles.mapPreview}>{locationPreview}</View>
       <View style={styles.actions}>
-        <OutlinedButton icon="location" onPress={getLocationHandler}>
+        {/* <OutlinedButton icon="location" onPress={getLocationHandler}>
           Locate User
-        </OutlinedButton>
+        </OutlinedButton> */}
         <OutlinedButton icon="map" onPress={pickOnMapHandler}>
           Pick on Map
         </OutlinedButton>

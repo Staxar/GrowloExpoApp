@@ -44,7 +44,7 @@ export async function setFavorites(productId, uid, favorite, favoriteKey) {
     await push(ProductFavListRef, uid)
       .then((snapshot) => {
         result = snapshot.key;
-        console.log("User added to favorites Successfully!");
+        alert("User added to favorites Successfully!");
       })
       .catch((err) => console.log("Error adding user to favorites!", err));
   } else {

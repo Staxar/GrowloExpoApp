@@ -1,4 +1,9 @@
-import { ActivityIndicator, SafeAreaView, StyleSheet } from "react-native";
+import {
+  ActivityIndicator,
+  SafeAreaView,
+  StyleSheet,
+  View,
+} from "react-native";
 import AddProductForm from "../components/ui/AddProductForm";
 import { AuthContext } from "../store/auth-context";
 import { useContext, useState } from "react";
@@ -6,9 +11,9 @@ import { ScrollView } from "react-native";
 import { uploadImages } from "../util/uploadImage";
 import { uploadProduct } from "../util/uploadProduct";
 import { Colors } from "../constans/styles";
-import { View } from "react-native";
 
 function AddProductScreen({ navigation, route }) {
+  console.log("addProduct");
   const authCtx = useContext(AuthContext);
   const [uploading, setUploading] = useState(false);
   async function updateValues(props) {
