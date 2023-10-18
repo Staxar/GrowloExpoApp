@@ -14,7 +14,7 @@ export default function TitleForm({ children, title }) {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 8,
+    padding: 4,
     margin: 8,
     width: "100%",
   },

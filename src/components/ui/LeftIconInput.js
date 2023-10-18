@@ -22,7 +22,7 @@ function LeftIconInput({
         <TextInput
           style={[
             styles.inputText,
-            Typography.bigDescription,
+            Typography.normalTitle,
             multiline ? styles.multiline : null,
           ]}
           textContentType={contentType}
@@ -52,8 +52,9 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: "row",
     alignItems: "center",
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.primary500,
+    borderWidth: 0.7,
+    borderColor: Colors.primary600,
+    borderRadius: 8,
   },
   inputText: {
     padding: 4,
