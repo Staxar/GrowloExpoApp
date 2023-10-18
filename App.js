@@ -27,7 +27,7 @@ import AddressSettingsScreen from "./src/screen/AddressSettingsScreen";
 import NotificationSettingsScreen from "./src/screen/NotificationSettingsScreen";
 import LanguageSettingsScreen from "./src/screen/LanguageSettingsScreen";
 import AddNewProductScreen from "./src/screen/AddNewProductScreen";
-
+import { PaperProvider } from "react-native-paper";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const TopTab = createMaterialTopTabNavigator();
@@ -290,7 +290,9 @@ export default function App() {
     <>
       <StatusBar style="light" />
       <AuthContextProvider>
-        <Root />
+        <PaperProvider>
+          <Root />
+        </PaperProvider>
       </AuthContextProvider>
     </>
   );
