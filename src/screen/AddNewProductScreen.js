@@ -11,9 +11,19 @@ import LeftIconInput from "../components/ui/LeftIconInput";
 import { TextInput } from "react-native-paper";
 import { Colors } from "../constans/styles";
 import { List } from "react-native-paper";
-
+import { DATA_CATEGORY } from "../../assets/Data/DATA_CATEGORY";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { data } from "../../assets/Data/Unit";
 function AddNewProductScreen({ navigation, route }) {
   const [text, setText] = useState("");
+  const [category, setCategory] = useState({
+    value: "Pick product category",
+    icon: "",
+  });
+
+  const handlePress = (value, icon) => {
+    setCategory({ value: value, icon: icon });
+  };
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.innerContainer}>
@@ -26,6 +36,7 @@ function AddNewProductScreen({ navigation, route }) {
             activeOutlineColor={Colors.primary100}
             value={text}
             onChangeText={(text) => setText(text)}
+            maxLength={255}
           />
           <TextInput
             label={"Product description"}
@@ -36,16 +47,50 @@ function AddNewProductScreen({ navigation, route }) {
             multiline
             inputMode="text"
             style={{ minHeight: 100, justifyContent: "center" }}
+            maxLength={500}
           />
-          <List.Section title="Category">
+          <TextInput
+            label={"Product prize"}
+            keyboardType="numeric"
+            inputMode="numeric"
+            maxLength={10}
+            mode="outlined"
+            placeholder="eg. 125.6"
+            placeholderTextColor={"grey"}
+            outlineColor={Colors.primary100}
+            activeOutlineColor={Colors.primary100}
+            value={text}
+            onChangeText={(text) => setText(text)}
+          />
+          <TextInput
+            label={"Product amount"}
+            placeholderTextColor={"grey"}
+            mode="outlined"
+            keyboardType="numeric"
+            inputMode="numeric"
+            maxLength={10}
+            placeholder="eg. amount"
+            outlineColor={Colors.primary100}
+            activeOutlineColor={Colors.primary100}
+            value={text}
+            onChangeText={(text) => setText(text)}
+          />
+          <List.AccordionGroup>
             <List.Accordion
-              title={"Pick product category"}
-              left={(props) => <List.Icon {...props} icon="folder" />}
+              title="Pick product category"
+              id="0"
+              rippleColor={Colors.primary100}
             >
-              <List.Item title="First item" />
-              <List.Item title="Second item" />
+              <List.Item title="Item 1" />
             </List.Accordion>
-          </List.Section>
+            <List.Accordion
+              title="Pick product unit"
+              id="1"
+              rippleColor={Colors.primary100}
+            >
+              <List.Item title="Item 2" />
+            </List.Accordion>
+          </List.AccordionGroup>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -66,6 +111,6 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     flexDirection: "column",
-    gap: 20,
+    gap: 14,
   },
 });
