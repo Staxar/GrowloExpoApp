@@ -6,6 +6,7 @@ import {
   Text,
   ScrollView,
   StatusBar,
+  Pressable,
 } from "react-native";
 import LeftIconInput from "../components/ui/LeftIconInput";
 import { TextInput } from "react-native-paper";
@@ -14,20 +15,37 @@ import { List } from "react-native-paper";
 import { DATA_CATEGORY } from "../../assets/Data/DATA_CATEGORY";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { data } from "../../assets/Data/Unit";
+import ImagePickerExample from "../components/ui/ImagePicker";
+import LocationPicker from "../components/ui/LocationPicker";
+import CountryFlag from "react-native-country-flag";
 function AddNewProductScreen({ navigation, route }) {
   const [text, setText] = useState("");
+  const [selectedImage, setSelectedImage] = useState([]);
   const [category, setCategory] = useState({
     value: "Pick product category",
     icon: "",
   });
 
-  const handlePress = (value, icon) => {
-    setCategory({ value: value, icon: icon });
-  };
+  //Take one Image
+  function takeImageHandler(imageUri) {
+    setSelectedImage([]);
+    return setSelectedImage((current) => [...current, imageUri]);
+  }
+  //Take image from Image Gallery - max 3
+  function pickImageHandler(imageUri) {
+    setSelectedImage([]);
+    return setSelectedImage(imageUri);
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.innerContainer}>
         <View style={styles.contentContainer}>
+          <ImagePickerExample
+            onTakeImage={takeImageHandler}
+            onPickedImage={pickImageHandler}
+          />
+          <LocationPicker />
           <TextInput
             label={"Product to sell"}
             mode="outlined"
@@ -80,6 +98,11 @@ function AddNewProductScreen({ navigation, route }) {
               title="Pick product category"
               id="0"
               rippleColor={Colors.primary100}
+              style={{
+                borderWidth: 1,
+                borderColor: Colors.primary100,
+                borderRadius: 4,
+              }}
             >
               <List.Item title="Item 1" />
             </List.Accordion>
@@ -87,10 +110,35 @@ function AddNewProductScreen({ navigation, route }) {
               title="Pick product unit"
               id="1"
               rippleColor={Colors.primary100}
+              style={{
+                borderWidth: 1,
+                borderColor: Colors.primary100,
+                borderRadius: 4,
+              }}
             >
               <List.Item title="Item 2" />
             </List.Accordion>
           </List.AccordionGroup>
+
+          <View>
+            <Text>Phone number</Text>
+            <View style={{ flexDirection: "row", gap: 14 }}>
+              <Pressable
+                style={{ flexDirection: "row", gap: 14, alignItems: "center" }}
+              >
+                <CountryFlag isoCode="AF" size={24} />
+                <Text>(+48)</Text>
+              </Pressable>
+              <TextInput
+                style={{ flex: 1 }}
+                mode="outlined"
+                outlineColor={Colors.primary100}
+                activeOutlineColor={Colors.primary100}
+                keyboardType="phone-pad"
+                textContentType="telephoneNumber"
+              />
+            </View>
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -109,8 +157,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
   },
   contentContainer: {
-    flex: 1,
     flexDirection: "column",
     gap: 14,
+    paddingBottom: StatusBar.currentHeight,
   },
 });

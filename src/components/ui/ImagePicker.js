@@ -1,6 +1,6 @@
 import { Alert, Image, StyleSheet, Text, View } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import OutlinedButton from "./OutlinedButton";
 import { Colors } from "../../constans/styles";
 import PagerView from "react-native-pager-view";
@@ -18,13 +18,12 @@ function ImagePickerExample({
   const [pickOneImage, setPickOneImage] = useState();
   const [pickedImage, setPickedImage] = useState([]);
 
-  async function verifyPermissions() {
+  const verifyPermissions = async () => {
     if (
       cameraPermissionInformation.status ===
       ImagePicker.PermissionStatus.UNDETERMINED
     ) {
       const permissionResponse = await requestPermission();
-
       return permissionResponse.granted;
     }
 
@@ -40,92 +39,91 @@ function ImagePickerExample({
     }
 
     return true;
-  }
+  };
 
-  async function takeImageHandler(props) {
-    const hasPermission = await verifyPermissions();
-    if (!hasPermission) {
-      return Alert.alert("No permissions");
-    }
-    if (props === "camera") {
-      let image = await ImagePicker.launchCameraAsync({
-        allowsEditing: true,
-        aspect: [16, 9],
-        quality: 0.5,
-      });
-
-      if (image.canceled) {
-        return;
+  const takeImageHandler = useCallback(
+    async (props) => {
+      const hasPermission = await verifyPermissions();
+      if (!hasPermission) {
+        return Alert.alert("No permissions");
       }
-      setPickedImage([]);
-      const result = await manipulateAsync(image.assets[0].uri, [
-        { resize: { width: 640, height: 480 } },
-      ]);
-      setTakenImage(result.uri);
-      onTakeImage(result.uri);
+      if (props === "camera") {
+        let image = await ImagePicker.launchCameraAsync({
+          allowsEditing: true,
+          aspect: [16, 9],
+          quality: 0.5,
+        });
 
-      return;
-    } else if (takeOneImage) {
-      let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsMultipleSelection: true,
-        selectionLimit: 1,
-        aspect: [4, 3],
-        quality: 0.1,
-      });
-      if (result.canceled) {
-        return;
-      } else {
-        setTakenImage(null);
+        if (image.canceled) {
+          return;
+        }
         setPickedImage([]);
-        const img = await manipulateAsync(result.assets[0].uri, [
+        const result = await manipulateAsync(image.assets[0].uri, [
           { resize: { width: 640, height: 480 } },
         ]);
-        setPickOneImage(img.uri);
-        takeOneImage(img.uri);
+        setTakenImage(result.uri);
+        onTakeImage(result.uri);
+
+        return;
+      } else if (takeOneImage) {
+        let result = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.Images,
+          allowsMultipleSelection: true,
+          selectionLimit: 1,
+          aspect: [4, 3],
+          quality: 0.1,
+        });
+        if (result.canceled) {
+          return;
+        } else {
+          setTakenImage(null);
+          setPickedImage([]);
+          const img = await manipulateAsync(result.assets[0].uri, [
+            { resize: { width: 640, height: 480 } },
+          ]);
+          setPickOneImage(img.uri);
+          takeOneImage(img.uri);
+        }
+        return;
+      } else if (props === "image") {
+        let result = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.Images,
+          allowsMultipleSelection: true,
+          selectionLimit: 3,
+          aspect: [4, 3],
+          quality: 0.1,
+        });
+        if (result.canceled) {
+          return;
+        } else {
+          setTakenImage(null);
+          setPickedImage([]);
+
+          {
+            result.assets.map(async (image) => {
+              const result = await manipulateAsync(image.uri, [
+                { resize: { width: 640, height: 480 } },
+              ]);
+              return setPickedImage((current) => [...current, result.uri]);
+            });
+          }
+        }
+      } else {
+        throw new Error("Something went wrong!");
       }
       return;
-    } else if (props === "image") {
-      let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsMultipleSelection: true,
-        selectionLimit: 3,
-        aspect: [4, 3],
-        quality: 0.1,
-      });
-      if (result.canceled) {
-        return;
-      } else {
-        setTakenImage(null);
-        setPickedImage([]);
-
-        {
-          result.assets.map(async (image) => {
-            const result = await manipulateAsync(image.uri, [
-              { resize: { width: 640, height: 480 } },
-            ]);
-            return setPickedImage((current) => [...current, result.uri]);
-          });
-        }
-      }
-    } else {
-      throw new Error("Something went wrong!");
-    }
-    return;
-  }
-  function ImagePreview() {
-    let imagePreview;
+    },
+    [verifyPermissions, onTakeImage, setPickedImage, takeOneImage]
+  );
+  const renderImagePreview = useCallback(() => {
+    let imagePreview = (
+      <Text style={{ textAlign: "center" }}>No image taken.</Text>
+    );
     if (placeholderImage) {
       imagePreview = (
         <Image style={styles.imageAvatar} source={{ uri: placeholderImage }} />
       );
-    } else {
-      imagePreview = (
-        <Text style={{ textAlign: "center" }}>No image taken.</Text>
-      );
-    }
-
-    if (takenImage) {
+    } else if (takenImage) {
       return (imagePreview = (
         <Image
           style={takeOneImage ? styles.avatarPreview : styles.image}
@@ -151,18 +149,20 @@ function ImagePickerExample({
       ));
     }
     return imagePreview;
-  }
+  }, [placeholderImage, takenImage, pickedImage, pickOneImage]);
 
   useEffect(() => {
     if (pickedImage.length > 0) {
       onPickedImage(pickedImage);
     }
-  }, [pickedImage, takenImage, takeImageHandler, setPickedImage]);
+  }, [pickedImage, onPickedImage]);
+
+  console.log("RENDER");
 
   return (
     <View style={styles.container}>
       <View style={takeOneImage ? styles.avatarPreview : styles.imagePreview}>
-        {ImagePreview()}
+        {renderImagePreview()}
       </View>
       <OutlinedButton icon="camera" onPress={() => takeImageHandler("camera")}>
         Take Image
