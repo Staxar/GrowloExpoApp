@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import {
   SafeAreaView,
   StyleSheet,
@@ -9,7 +9,7 @@ import {
   Pressable,
 } from "react-native";
 import LeftIconInput from "../components/ui/LeftIconInput";
-import { TextInput } from "react-native-paper";
+import { Button, TextInput } from "react-native-paper";
 import { Colors } from "../constans/styles";
 import { List } from "react-native-paper";
 import { DATA_CATEGORY } from "../../assets/Data/DATA_CATEGORY";
@@ -20,22 +20,32 @@ import LocationPicker from "../components/ui/LocationPicker";
 import CountryFlag from "react-native-country-flag";
 function AddNewProductScreen({ navigation, route }) {
   const [text, setText] = useState("");
+  const [prize, setPrize] = useState();
+  const [amount, setAmount] = useState();
+  const [phoneNumber, setPhoneNumber] = useState();
   const [selectedImage, setSelectedImage] = useState([]);
+
   const [category, setCategory] = useState({
     value: "Pick product category",
     icon: "",
   });
 
   //Take one Image
-  function takeImageHandler(imageUri) {
-    setSelectedImage([]);
-    return setSelectedImage((current) => [...current, imageUri]);
-  }
+  const takeImageHandler = useCallback(
+    (imageUri) => {
+      setSelectedImage([]);
+      return setSelectedImage((current) => [...current, imageUri]);
+    },
+    [selectedImage]
+  );
   //Take image from Image Gallery - max 3
-  function pickImageHandler(imageUri) {
-    setSelectedImage([]);
-    return setSelectedImage(imageUri);
-  }
+  const pickImageHandler = useCallback(
+    (imageUri) => {
+      setSelectedImage([]);
+      return setSelectedImage(imageUri);
+    },
+    [selectedImage]
+  );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -77,8 +87,8 @@ function AddNewProductScreen({ navigation, route }) {
             placeholderTextColor={"grey"}
             outlineColor={Colors.primary100}
             activeOutlineColor={Colors.primary100}
-            value={text}
-            onChangeText={(text) => setText(text)}
+            value={prize}
+            onChangeText={(prize) => setPrize(prize)}
           />
           <TextInput
             label={"Product amount"}
@@ -90,8 +100,8 @@ function AddNewProductScreen({ navigation, route }) {
             placeholder="eg. amount"
             outlineColor={Colors.primary100}
             activeOutlineColor={Colors.primary100}
-            value={text}
-            onChangeText={(text) => setText(text)}
+            value={amount}
+            onChangeText={(amount) => setAmount(amount)}
           />
           <List.AccordionGroup>
             <List.Accordion
@@ -136,9 +146,19 @@ function AddNewProductScreen({ navigation, route }) {
                 activeOutlineColor={Colors.primary100}
                 keyboardType="phone-pad"
                 textContentType="telephoneNumber"
+                value={phoneNumber}
+                onChangeText={(phone) => setPhoneNumber(phone)}
               />
             </View>
           </View>
+          <Button
+            icon="export"
+            mode="contained"
+            style={{ backgroundColor: Colors.primary100, height: 40 }}
+            onPress={() => console.log("Pressed")}
+          >
+            Add new product
+          </Button>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -159,6 +179,6 @@ const styles = StyleSheet.create({
   contentContainer: {
     flexDirection: "column",
     gap: 14,
-    paddingBottom: StatusBar.currentHeight,
+    paddingBottom: StatusBar.currentHeight + 20,
   },
 });

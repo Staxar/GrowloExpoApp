@@ -157,8 +157,6 @@ function ImagePickerExample({
     }
   }, [pickedImage, onPickedImage]);
 
-  console.log("RENDER");
-
   return (
     <View style={styles.container}>
       <View style={takeOneImage ? styles.avatarPreview : styles.imagePreview}>

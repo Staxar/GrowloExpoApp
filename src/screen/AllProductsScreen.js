@@ -27,7 +27,7 @@ export default function AllProductsScreen({ route, navigation }) {
         .catch((e) => console.error(e));
     };
 
-    getData().catch((err) => console.error(err));
+    getData();
   }, [navigation, route, refreshing]);
 
   const filteredProducts = data.filter((product) =>
@@ -46,6 +46,7 @@ export default function AllProductsScreen({ route, navigation }) {
         {filteredProducts && (
           <FlatList
             data={filteredProducts}
+            onEndReachedThreshold={0.1}
             numColumns={2}
             renderItem={({ item }) => (
               <ProductCard
