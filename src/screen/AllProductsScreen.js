@@ -83,7 +83,7 @@ export default function AllProductsScreen({ route, navigation }) {
             renderItem={({ item }) => (
               <ProductCard
                 productName={item.title}
-                productPrice={item.price}
+                productPrize={item.prize}
                 productUnit={item.unit}
                 productAmount={item.amount}
                 productId={item.id}

@@ -288,7 +288,7 @@ function Root() {
 export default function App() {
   return (
     <>
-      <StatusBar style="light" />
+      <StatusBar />
       <AuthContextProvider>
         <PaperProvider>
           <Root />
