@@ -90,19 +90,6 @@ function AddNewProductScreen({ navigation, route }) {
             value={prize}
             onChangeText={(prize) => setPrize(prize)}
           />
-          <TextInput
-            label={"Product amount"}
-            placeholderTextColor={"grey"}
-            mode="outlined"
-            keyboardType="numeric"
-            inputMode="numeric"
-            maxLength={10}
-            placeholder="eg. amount"
-            outlineColor={Colors.primary100}
-            activeOutlineColor={Colors.primary100}
-            value={amount}
-            onChangeText={(amount) => setAmount(amount)}
-          />
           <List.AccordionGroup>
             <List.Accordion
               title="Pick product category"
@@ -129,8 +116,21 @@ function AddNewProductScreen({ navigation, route }) {
               <List.Item title="Item 2" />
             </List.Accordion>
           </List.AccordionGroup>
+          <TextInput
+            label={"Product amount"}
+            placeholderTextColor={"grey"}
+            mode="outlined"
+            keyboardType="numeric"
+            inputMode="numeric"
+            maxLength={10}
+            placeholder="eg. amount"
+            outlineColor={Colors.primary100}
+            activeOutlineColor={Colors.primary100}
+            value={amount}
+            onChangeText={(amount) => setAmount(amount)}
+          />
 
-          <View>
+          <View style={{ paddingVertical: 2 }}>
             <Text>Phone number</Text>
             <View style={{ flexDirection: "row", gap: 14 }}>
               <Pressable
@@ -152,9 +152,9 @@ function AddNewProductScreen({ navigation, route }) {
             </View>
           </View>
           <Button
-            icon="export"
+            icon="send"
             mode="contained"
-            style={{ backgroundColor: Colors.primary100, height: 40 }}
+            style={styles.button}
             onPress={() => console.log("Pressed")}
           >
             Add new product
@@ -180,5 +180,9 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     gap: 14,
     paddingBottom: StatusBar.currentHeight + 20,
+  },
+  button: {
+    backgroundColor: Colors.primary100,
+    height: 40,
   },
 });

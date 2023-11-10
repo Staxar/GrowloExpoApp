@@ -22,7 +22,7 @@ function WelcomeScreen({ navigation, route }) {
     if (authCtx.isAuthenticated) {
       getData();
     } else {
-      navigation.navigate("Login");
+      console.log("Something goes wrong!");
     }
 
     return;
